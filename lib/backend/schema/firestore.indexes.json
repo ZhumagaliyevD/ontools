@@ -1,0 +1,60 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "Tools",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "created_by",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "notes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "created_by",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "Tools",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "inSale",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "Price",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "Tools",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "inSale",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ]
+}
