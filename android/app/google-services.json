@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "877737337331",
+    "project_id": "ontools-c43b9",
+    "storage_bucket": "ontools-c43b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877737337331:android:b02ee36ed85766ca5cb286",
+        "android_client_info": {
+          "package_name": "com.weloveflutterflow.ontools"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "877737337331-tpc8b4qjqfv0q4rlkju4hndpq507n3tm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCr3PgclZ9dhBeLo12M2Lsx_ki3jTDTycw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "877737337331-tpc8b4qjqfv0q4rlkju4hndpq507n3tm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "877737337331-7800u93f7gueg1gr6qb388hpjhk8s6vq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.weloveflutterflow.ontools"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
