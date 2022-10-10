@@ -120,9 +120,9 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                   if (uploadedFileUrl != null && uploadedFileUrl != '') {
                     final photoNotePointCreateData =
                         createPhotoNotePointRecordData(
-                      dx: 167.66665649414062,
-                      dy: 171.3333282470703,
-                      description: 'tataq',
+                      dx: 170.1,
+                      dy: 120.21,
+                      description: 'from ff',
                     );
                     var photoNotePointRecordReference =
                         PhotoNotePointRecord.collection.doc();

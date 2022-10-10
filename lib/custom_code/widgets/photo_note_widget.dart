@@ -6,9 +6,12 @@ import 'index.dart'; // Imports other custom widgets
 import '../actions/index.dart'; // Imports custom actions
 import 'package:flutter/material.dart';
 // Begin custom widget code
-import 'package:just_the_tooltip/just_the_tooltip.dart';
-import '../../backend/backend.dart';
+// Automatic FlutterFlow imports
+import 'package:on_tools/backend/backend.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
+import '../../backend/backend.dart';
+import 'package:flutter/material.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 typedef VoidCallback = void Function();
 
@@ -56,14 +59,17 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
     if (widget.points != null) {
       final snapshot = await widget.points![0].get();
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-      print(data['description']);
+      photoNotes.add(PhotoNote(data['dx'], data['dy'], data['description']));
     }
+    setState(() {});
+    print(photoNotes.length);
   }
 
   @override
   void initState() {
     super.initState();
     getData();
+    FFAppState().photoNotePoints.clear();
   }
 
   @override
@@ -250,14 +256,36 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: GestureDetector(
-                                          onTap: () {
+                                          onTap: () async {
                                             photoNotes.add(PhotoNote(x, y,
                                                 _textFieldController.text));
-                                            _textFieldController.clear();
                                             setState(() {
                                               showNewPoint = false;
                                             });
                                             FFAppState();
+
+                                            final photoNotePointCreateData =
+                                                createPhotoNotePointRecordData(
+                                              dx: x,
+                                              dy: y,
+                                              description:
+                                                  _textFieldController.text,
+                                            );
+                                            var photoNotePointRecordReference =
+                                                PhotoNotePointRecord.collection
+                                                    .doc();
+
+                                            await photoNotePointRecordReference
+                                                .set(photoNotePointCreateData);
+
+                                            FFAppState().photoNotePoints.add(
+                                                PhotoNotePointRecord
+                                                        .getDocumentFromData(
+                                                            photoNotePointCreateData,
+                                                            photoNotePointRecordReference)
+                                                    .reference);
+
+                                            _textFieldController.clear();
                                           },
                                           child: Icon(
                                             Icons.arrow_circle_up_rounded,
