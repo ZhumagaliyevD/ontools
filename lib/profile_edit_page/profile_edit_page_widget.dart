@@ -75,7 +75,8 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
           onPressed: () async {
             setState(() => FFAppState().birthday = null);
             setState(() => FFAppState().address = null);
-            setState(() => FFAppState().profileimg = '');
+            setState(() => FFAppState().profileimg =
+                'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png');
             context.pop();
           },
         ),
@@ -520,7 +521,8 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                         );
                         setState(() => FFAppState().birthday = null);
                         setState(() => FFAppState().address = null);
-                        setState(() => FFAppState().profileimg = '');
+                        setState(() => FFAppState().profileimg =
+                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png');
 
                         context.pushNamed('ProfileHomePage');
                       },
@@ -549,7 +551,8 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                       onPressed: () async {
                         setState(() => FFAppState().birthday = null);
                         setState(() => FFAppState().address = null);
-                        setState(() => FFAppState().profileimg = '');
+                        setState(() => FFAppState().profileimg =
+                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png');
                         GoRouter.of(context).prepareAuthEvent();
                         await signOut();
 

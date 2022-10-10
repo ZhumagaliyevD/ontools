@@ -8,6 +8,7 @@ import 'notes_record.dart';
 import 'bullets_record.dart';
 import 'chats_record.dart';
 import 'photo_notes_record.dart';
+import 'photo_note_point_record.dart';
 
 import 'index.dart';
 
@@ -25,6 +26,7 @@ const kDocumentReferenceField = 'Document__Reference__Field';
   BulletsRecord,
   ChatsRecord,
   PhotoNotesRecord,
+  PhotoNotePointRecord,
   AddressStruct,
   PhotoNoteDataStruct,
 ])

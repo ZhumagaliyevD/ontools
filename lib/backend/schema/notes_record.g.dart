@@ -62,10 +62,10 @@ class _$NotesRecordSerializer implements StructuredSerializer<NotesRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(DateTime)));
     }
-    value = object.photoNotes;
+    value = object.notePoints;
     if (value != null) {
       result
-        ..add('photo_notes')
+        ..add('note_points')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(BuiltList, const [
               const FullType(
@@ -120,8 +120,8 @@ class _$NotesRecordSerializer implements StructuredSerializer<NotesRecord> {
           result.createdAt = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime?;
           break;
-        case 'photo_notes':
-          result.photoNotes.replace(serializers.deserialize(value,
+        case 'note_points':
+          result.notePoints.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltList, const [
                 const FullType(
                     DocumentReference, const [const FullType.nullable(Object)])
@@ -154,7 +154,7 @@ class _$NotesRecord extends NotesRecord {
   @override
   final DateTime? createdAt;
   @override
-  final BuiltList<DocumentReference<Object?>>? photoNotes;
+  final BuiltList<DocumentReference<Object?>>? notePoints;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -168,7 +168,7 @@ class _$NotesRecord extends NotesRecord {
       this.image,
       this.createdBy,
       this.createdAt,
-      this.photoNotes,
+      this.notePoints,
       this.ffRef})
       : super._();
 
@@ -189,7 +189,7 @@ class _$NotesRecord extends NotesRecord {
         image == other.image &&
         createdBy == other.createdBy &&
         createdAt == other.createdAt &&
-        photoNotes == other.photoNotes &&
+        notePoints == other.notePoints &&
         ffRef == other.ffRef;
   }
 
@@ -205,7 +205,7 @@ class _$NotesRecord extends NotesRecord {
                         image.hashCode),
                     createdBy.hashCode),
                 createdAt.hashCode),
-            photoNotes.hashCode),
+            notePoints.hashCode),
         ffRef.hashCode));
   }
 
@@ -218,7 +218,7 @@ class _$NotesRecord extends NotesRecord {
           ..add('image', image)
           ..add('createdBy', createdBy)
           ..add('createdAt', createdAt)
-          ..add('photoNotes', photoNotes)
+          ..add('notePoints', notePoints)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -252,11 +252,11 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
   DateTime? get createdAt => _$this._createdAt;
   set createdAt(DateTime? createdAt) => _$this._createdAt = createdAt;
 
-  ListBuilder<DocumentReference<Object?>>? _photoNotes;
-  ListBuilder<DocumentReference<Object?>> get photoNotes =>
-      _$this._photoNotes ??= new ListBuilder<DocumentReference<Object?>>();
-  set photoNotes(ListBuilder<DocumentReference<Object?>>? photoNotes) =>
-      _$this._photoNotes = photoNotes;
+  ListBuilder<DocumentReference<Object?>>? _notePoints;
+  ListBuilder<DocumentReference<Object?>> get notePoints =>
+      _$this._notePoints ??= new ListBuilder<DocumentReference<Object?>>();
+  set notePoints(ListBuilder<DocumentReference<Object?>>? notePoints) =>
+      _$this._notePoints = notePoints;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -275,7 +275,7 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
       _image = $v.image;
       _createdBy = $v.createdBy;
       _createdAt = $v.createdAt;
-      _photoNotes = $v.photoNotes?.toBuilder();
+      _notePoints = $v.notePoints?.toBuilder();
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -307,13 +307,13 @@ class NotesRecordBuilder implements Builder<NotesRecord, NotesRecordBuilder> {
               image: image,
               createdBy: createdBy,
               createdAt: createdAt,
-              photoNotes: _photoNotes?.build(),
+              notePoints: _notePoints?.build(),
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
       try {
-        _$failedField = 'photoNotes';
-        _photoNotes?.build();
+        _$failedField = 'notePoints';
+        _notePoints?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'NotesRecord', _$failedField, e.toString());

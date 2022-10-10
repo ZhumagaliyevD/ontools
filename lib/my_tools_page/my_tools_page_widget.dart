@@ -179,17 +179,6 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                      child: Text(
-                        'Выберите период',
-                        style: FlutterFlowTheme.of(context).bodyText1.override(
-                              fontFamily: 'Montserrat',
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                      ),
-                    ),
-                    Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
                       child: StreamBuilder<List<ToolsRecord>>(
                         stream: queryToolsRecord(

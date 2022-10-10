@@ -82,6 +82,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => EntryPageWidget(),
             ),
             FFRoute(
+              name: 'PhoneEntryPage',
+              path: 'phoneEntryPage',
+              builder: (context, params) => PhoneEntryPageWidget(),
+            ),
+            FFRoute(
+              name: 'PhoneVerify',
+              path: 'phoneVerify',
+              builder: (context, params) => PhoneVerifyWidget(),
+            ),
+            FFRoute(
               name: 'SignUpPage',
               path: 'signUpPage',
               builder: (context, params) => SignUpPageWidget(),

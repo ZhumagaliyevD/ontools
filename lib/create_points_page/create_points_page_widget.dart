@@ -116,13 +116,17 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                 ),
                 onPressed: () async {
                   if (uploadedFileUrl != null && uploadedFileUrl != '') {
-                    final notesUpdateData = createNotesRecordData(
-                      title: noteTitleController!.text,
-                      description: noteDescriptionController!.text,
-                      createdBy: currentUserReference,
-                      createdAt: getCurrentTimestamp,
-                      image: uploadedFileUrl,
-                    );
+                    final notesUpdateData = {
+                      ...createNotesRecordData(
+                        title: noteTitleController!.text,
+                        description: noteDescriptionController!.text,
+                        createdBy: currentUserReference,
+                        createdAt: getCurrentTimestamp,
+                        image: uploadedFileUrl,
+                        isCheckbox: false,
+                      ),
+                      'note_points': FFAppState().photoNotePoints,
+                    };
                     await createPointsPageNotesRecord!.reference
                         .update(notesUpdateData);
                   } else {

@@ -63,6 +63,7 @@ dependencies:
   just_the_tooltip: ^0.0.12
   mime_type: 1.0.0
   page_transition: 2.0.4
+  pin_code_fields: 7.4.0
   plugin_platform_interface: 2.1.2
   rxdart: 0.27.4
   shared_preferences: 2.0.15

@@ -25,12 +25,14 @@ class PhotoNoteWidget extends StatefulWidget {
     this.height,
     required this.image,
     required this.onCreatePhotoNote,
+    this.points,
   }) : super(key: key);
 
   final double? width;
   final double? height;
   final String image;
   final Future<dynamic> Function() onCreatePhotoNote;
+  final List<DocumentReference>? points;
 
   @override
   _PhotoNoteWidgetState createState() => _PhotoNoteWidgetState();
@@ -47,6 +49,20 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
   bool showNewPoint = false;
 
   void addPoint() async {}
+
+  Future getData() async {
+    if (widget.points != null) {
+      final snapshot = await widget.points![0].get();
+      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+      print(data['description']);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
