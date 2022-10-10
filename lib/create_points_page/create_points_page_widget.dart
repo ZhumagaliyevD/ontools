@@ -27,6 +27,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
   TextEditingController? optionController;
   TextEditingController? noteDescriptionController;
   TextEditingController? noteTitleController;
+  PhotoNotePointRecord? photoNotePointOutput;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -115,7 +116,24 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                   size: 30,
                 ),
                 onPressed: () async {
+                  var _shouldSetState = false;
                   if (uploadedFileUrl != null && uploadedFileUrl != '') {
+                    final photoNotePointCreateData =
+                        createPhotoNotePointRecordData(
+                      dx: 167.66665649414062,
+                      dy: 171.3333282470703,
+                      description: 'tataq',
+                    );
+                    var photoNotePointRecordReference =
+                        PhotoNotePointRecord.collection.doc();
+                    await photoNotePointRecordReference
+                        .set(photoNotePointCreateData);
+                    photoNotePointOutput =
+                        PhotoNotePointRecord.getDocumentFromData(
+                            photoNotePointCreateData,
+                            photoNotePointRecordReference);
+                    _shouldSetState = true;
+
                     final notesUpdateData = {
                       ...createNotesRecordData(
                         title: noteTitleController!.text,
@@ -125,7 +143,8 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                         image: uploadedFileUrl,
                         isCheckbox: false,
                       ),
-                      'note_points': FFAppState().photoNotePoints,
+                      'note_points': FieldValue.arrayUnion(
+                          [photoNotePointOutput!.reference]),
                     };
                     await createPointsPageNotesRecord!.reference
                         .update(notesUpdateData);
@@ -146,12 +165,16 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                         );
                       },
                     );
+                    if (_shouldSetState) setState(() {});
                     return;
                   }
 
                   setState(() => FFAppState().noteIMG = '');
+                  setState(() => FFAppState().photoNotePoints = []);
 
                   context.pushNamed('Notes');
+
+                  if (_shouldSetState) setState(() {});
                 },
               ),
             ],

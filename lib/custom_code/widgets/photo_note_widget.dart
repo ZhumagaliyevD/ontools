@@ -7,6 +7,8 @@ import '../actions/index.dart'; // Imports custom actions
 import 'package:flutter/material.dart';
 // Begin custom widget code
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+import '../../backend/backend.dart';
+import '../../flutter_flow/flutter_flow_util.dart';
 
 typedef VoidCallback = void Function();
 
@@ -255,7 +257,7 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
                                             setState(() {
                                               showNewPoint = false;
                                             });
-                                            widget.onCreatePhotoNote();
+                                            FFAppState();
                                           },
                                           child: Icon(
                                             Icons.arrow_circle_up_rounded,
