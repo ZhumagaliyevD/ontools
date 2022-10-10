@@ -133,6 +133,10 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                             photoNotePointCreateData,
                             photoNotePointRecordReference);
                     _shouldSetState = true;
+                    setState(() => FFAppState().photoNotePoints = []);
+                    setState(() => FFAppState()
+                        .photoNotePoints
+                        .add(photoNotePointOutput!.reference));
 
                     final notesUpdateData = {
                       ...createNotesRecordData(
@@ -143,8 +147,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                         image: uploadedFileUrl,
                         isCheckbox: false,
                       ),
-                      'note_points': FieldValue.arrayUnion(
-                          [photoNotePointOutput!.reference]),
+                      'note_points': FFAppState().photoNotePoints,
                     };
                     await createPointsPageNotesRecord!.reference
                         .update(notesUpdateData);
