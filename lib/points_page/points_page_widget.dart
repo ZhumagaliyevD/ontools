@@ -3,6 +3,7 @@ import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import '../custom_code/widgets/index.dart' as custom_widgets;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -135,16 +136,6 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                             Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
-                              child: Image.network(
-                                pointsPageNotesRecord.image!,
-                                width: double.infinity,
-                                height: 200,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
                               child: Text(
                                 pointsPageNotesRecord.description!
                                     .maybeHandleOverflow(
@@ -153,6 +144,18 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                 ),
                                 maxLines: 2,
                                 style: FlutterFlowTheme.of(context).bodyText1,
+                              ),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 1,
+                              child: custom_widgets.PhotoNoteWidget(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height * 1,
+                                image: pointsPageNotesRecord.image!,
+                                points:
+                                    pointsPageNotesRecord.notePoints!.toList(),
+                                onCreatePhotoNote: () async {},
                               ),
                             ),
                             Column(
