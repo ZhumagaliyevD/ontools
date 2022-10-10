@@ -23,6 +23,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
   bool isMediaUploading = false;
   String uploadedFileUrl = '';
 
+
   BulletsRecord? bullet;
   TextEditingController? optionController;
   TextEditingController? noteDescriptionController;
@@ -30,12 +31,34 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  final photoNotePoint = FirebaseFirestore.instance.collection("photo_note").doc();
+  List<DocumentReference> get photoNotePoints => [
+  ];
+
   @override
   void initState() {
     super.initState();
     noteDescriptionController = TextEditingController();
     noteTitleController = TextEditingController();
     optionController = TextEditingController();
+    photoNotePoint.set({
+      "dx": 20,
+      "dy": 50,
+      "description": "Ffrom Aidar"
+    });
+    photoNotePoints.add(photoNotePoint);
+    setState(() {
+
+    });
+    getData();
+    FFAppState();
+
+  }
+
+  Future getData() async {
+    final snapshot = await photoNotePoints[0].get();
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+    print(data['description']);
   }
 
   @override
