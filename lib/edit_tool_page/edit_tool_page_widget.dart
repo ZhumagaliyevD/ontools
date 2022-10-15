@@ -662,36 +662,68 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
-                    child: FFButtonWidget(
-                      onPressed: () async {
-                        final toolsUpdateData = createToolsRecordData(
-                          inSale: true,
-                        );
-                        await editToolPageToolsRecord.reference
-                            .update(toolsUpdateData);
-                        context.pop();
-                      },
-                      text: 'Выставить на продажу',
-                      options: FFButtonOptions(
-                        width: 130,
-                        height: 48,
-                        color: FlutterFlowTheme.of(context).primaryBackground,
-                        textStyle: FlutterFlowTheme.of(context)
-                            .subtitle2
-                            .override(
-                              fontFamily: 'Montserrat',
-                              color: FlutterFlowTheme.of(context).primaryText,
-                            ),
-                        borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).secondaryColor,
-                          width: 1,
+                  if (widget.tool!.inSale == false)
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          final toolsUpdateData = createToolsRecordData(
+                            inSale: true,
+                          );
+                          await editToolPageToolsRecord.reference
+                              .update(toolsUpdateData);
+                          context.pop();
+                        },
+                        text: 'Выставить на продажу',
+                        options: FFButtonOptions(
+                          width: 130,
+                          height: 48,
+                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          textStyle: FlutterFlowTheme.of(context)
+                              .subtitle2
+                              .override(
+                                fontFamily: 'Montserrat',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).secondaryColor,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                  ),
+                  if (widget.tool!.inSale == true)
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          final toolsUpdateData = createToolsRecordData(
+                            inSale: false,
+                          );
+                          await editToolPageToolsRecord.reference
+                              .update(toolsUpdateData);
+                          context.pop();
+                        },
+                        text: 'Снять с продаж',
+                        options: FFButtonOptions(
+                          width: 130,
+                          height: 48,
+                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          textStyle: FlutterFlowTheme.of(context)
+                              .subtitle2
+                              .override(
+                                fontFamily: 'Montserrat',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).secondaryColor,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),

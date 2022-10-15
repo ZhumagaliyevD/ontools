@@ -27,6 +27,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
   TextEditingController? optionController;
   TextEditingController? noteDescriptionController;
   TextEditingController? noteTitleController;
+  PhotoNotePointRecord? photoNotePointOutput;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -74,9 +75,9 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
           return Container();
         }
         final createPointsPageNotesRecord =
-            createPointsPageNotesRecordList.isNotEmpty
-                ? createPointsPageNotesRecordList.first
-                : null;
+        createPointsPageNotesRecordList.isNotEmpty
+            ? createPointsPageNotesRecordList.first
+            : null;
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -115,14 +116,22 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                   size: 30,
                 ),
                 onPressed: () async {
+                  var _shouldSetState = false;
                   if (uploadedFileUrl != null && uploadedFileUrl != '') {
-                    final notesUpdateData = createNotesRecordData(
-                      title: noteTitleController!.text,
-                      description: noteDescriptionController!.text,
-                      createdBy: currentUserReference,
-                      createdAt: getCurrentTimestamp,
-                      image: uploadedFileUrl,
-                    );
+                    _shouldSetState = true;
+
+                    final notesUpdateData = {
+                      ...createNotesRecordData(
+                        title: noteTitleController!.text,
+                        description: noteDescriptionController!.text,
+                        createdBy: currentUserReference,
+                        createdAt: getCurrentTimestamp,
+                        image: uploadedFileUrl,
+                        isCheckbox: false,
+                      ),
+                      'note_points': FieldValue.arrayUnion(
+                          FFAppState().photoNotePoints),
+                    };
                     await createPointsPageNotesRecord!.reference
                         .update(notesUpdateData);
                   } else {
@@ -142,12 +151,16 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                         );
                       },
                     );
+                    if (_shouldSetState) setState(() {});
                     return;
                   }
 
                   setState(() => FFAppState().noteIMG = '');
+                  setState(() => FFAppState().photoNotePoints = []);
 
                   context.pushNamed('Notes');
+
+                  if (_shouldSetState) setState(() {});
                 },
               ),
             ],
@@ -171,14 +184,14 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                         children: [
                           Padding(
                             padding:
-                                EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                            EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
                             child: TextFormField(
                               controller: noteTitleController,
                               obscureText: false,
                               decoration: InputDecoration(
                                 labelText: 'Название заметки',
                                 hintStyle:
-                                    FlutterFlowTheme.of(context).bodyText2,
+                                FlutterFlowTheme.of(context).bodyText2,
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
@@ -224,14 +237,14 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                           if (FFAppState().isCheckbox == false)
                             Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                              EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
                               child: TextFormField(
                                 controller: noteDescriptionController,
                                 obscureText: false,
                                 decoration: InputDecoration(
                                   labelText: 'Начните писать',
                                   hintStyle:
-                                      FlutterFlowTheme.of(context).bodyText2,
+                                  FlutterFlowTheme.of(context).bodyText2,
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
@@ -270,11 +283,11 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                           if (FFAppState().isCheckbox == true)
                             Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                              EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
                               child: StreamBuilder<List<BulletsRecord>>(
                                 stream: queryBulletsRecord(
                                   parent:
-                                      createPointsPageNotesRecord!.reference,
+                                  createPointsPageNotesRecord!.reference,
                                 ),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
@@ -291,113 +304,113 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                     );
                                   }
                                   List<BulletsRecord> columnBulletsRecordList =
-                                      snapshot.data!;
+                                  snapshot.data!;
                                   return Column(
                                     mainAxisSize: MainAxisSize.max,
                                     children: List.generate(
                                         columnBulletsRecordList.length,
-                                        (columnIndex) {
-                                      final columnBulletsRecord =
+                                            (columnIndex) {
+                                          final columnBulletsRecord =
                                           columnBulletsRecordList[columnIndex];
-                                      return Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 0, 12),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Stack(
+                                          return Padding(
+                                            padding: EdgeInsetsDirectional.fromSTEB(
+                                                0, 0, 0, 12),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
                                               children: [
-                                                if (columnBulletsRecord
+                                                Stack(
+                                                  children: [
+                                                    if (columnBulletsRecord
                                                         .isDone ==
-                                                    false)
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      final bulletsUpdateData =
+                                                        false)
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          final bulletsUpdateData =
                                                           createBulletsRecordData(
-                                                        isDone: true,
-                                                      );
-                                                      await columnBulletsRecord
-                                                          .reference
-                                                          .update(
+                                                            isDone: true,
+                                                          );
+                                                          await columnBulletsRecord
+                                                              .reference
+                                                              .update(
                                                               bulletsUpdateData);
-                                                    },
-                                                    child: Container(
-                                                      width: 40,
-                                                      height: 40,
-                                                      decoration: BoxDecoration(
-                                                        color: FlutterFlowTheme
+                                                        },
+                                                        child: Container(
+                                                          width: 40,
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                            color: FlutterFlowTheme
                                                                 .of(context)
-                                                            .secondaryBackground,
-                                                        borderRadius:
+                                                                .secondaryBackground,
+                                                            borderRadius:
                                                             BorderRadius
                                                                 .circular(8),
-                                                        border: Border.all(
-                                                          color: FlutterFlowTheme
+                                                            border: Border.all(
+                                                              color: FlutterFlowTheme
                                                                   .of(context)
-                                                              .lineColor,
+                                                                  .lineColor,
+                                                            ),
+                                                          ),
+                                                          child: Icon(
+                                                            Icons.check,
+                                                            color: Colors.black,
+                                                            size: 24,
+                                                          ),
                                                         ),
                                                       ),
-                                                      child: Icon(
-                                                        Icons.check,
-                                                        color: Colors.black,
-                                                        size: 24,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                if (columnBulletsRecord
+                                                    if (columnBulletsRecord
                                                         .isDone ==
-                                                    true)
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      final bulletsUpdateData =
+                                                        true)
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          final bulletsUpdateData =
                                                           createBulletsRecordData(
-                                                        isDone: false,
-                                                      );
-                                                      await columnBulletsRecord
-                                                          .reference
-                                                          .update(
+                                                            isDone: false,
+                                                          );
+                                                          await columnBulletsRecord
+                                                              .reference
+                                                              .update(
                                                               bulletsUpdateData);
-                                                    },
-                                                    child: Container(
-                                                      width: 40,
-                                                      height: 40,
-                                                      decoration: BoxDecoration(
-                                                        color: FlutterFlowTheme
+                                                        },
+                                                        child: Container(
+                                                          width: 40,
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                            color: FlutterFlowTheme
                                                                 .of(context)
-                                                            .secondaryBackground,
-                                                        borderRadius:
+                                                                .secondaryBackground,
+                                                            borderRadius:
                                                             BorderRadius
                                                                 .circular(8),
-                                                        border: Border.all(
-                                                          color: FlutterFlowTheme
+                                                            border: Border.all(
+                                                              color: FlutterFlowTheme
                                                                   .of(context)
-                                                              .lineColor,
-                                                          width: 1,
+                                                                  .lineColor,
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                          child: Icon(
+                                                            Icons.check,
+                                                            color: Colors.black,
+                                                            size: 24,
+                                                          ),
                                                         ),
                                                       ),
-                                                      child: Icon(
-                                                        Icons.check,
-                                                        color: Colors.black,
-                                                        size: 24,
-                                                      ),
-                                                    ),
-                                                  ),
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(12, 0, 0, 0),
-                                              child: Text(
-                                                columnBulletsRecord.text!,
-                                                style:
+                                                  ],
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(12, 0, 0, 0),
+                                                  child: Text(
+                                                    columnBulletsRecord.text!,
+                                                    style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyText1,
-                                              ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                      );
-                                    }),
+                                          );
+                                        }),
                                   );
                                 },
                               ),
@@ -405,7 +418,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                           if (FFAppState().isCheckbox == true)
                             Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                              EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -450,7 +463,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                           .secondaryBackground,
                                     ),
                                     style:
-                                        FlutterFlowTheme.of(context).bodyText1,
+                                    FlutterFlowTheme.of(context).bodyText1,
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
@@ -477,14 +490,14 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                           );
                                         } else {
                                           final bulletsCreateData =
-                                              createBulletsRecordData(
+                                          createBulletsRecordData(
                                             isDone: false,
                                             text: optionController!.text,
                                           );
                                           var bulletsRecordReference =
-                                              BulletsRecord.createDoc(
-                                                  createPointsPageNotesRecord!
-                                                      .reference);
+                                          BulletsRecord.createDoc(
+                                              createPointsPageNotesRecord!
+                                                  .reference);
                                           await bulletsRecordReference
                                               .set(bulletsCreateData);
                                           bullet =
@@ -512,14 +525,14 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                           if (createPointsPageNotesRecord != null)
                             Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 18, 0, 0),
+                              EdgeInsetsDirectional.fromSTEB(0, 18, 0, 0),
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height * 1,
+                                height: 270,
                                 child: custom_widgets.PhotoNoteWidget(
                                   width: MediaQuery.of(context).size.width,
                                   height:
-                                      MediaQuery.of(context).size.height * 1,
+                                  MediaQuery.of(context).size.height * 1,
                                   image: uploadedFileUrl,
                                   onCreatePhotoNote: () async {
                                     await Future.delayed(
@@ -555,7 +568,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                         ),
                         onPressed: () async {
                           final selectedMedia =
-                              await selectMediaWithSourceBottomSheet(
+                          await selectMediaWithSourceBottomSheet(
                             context: context,
                             allowPhoto: true,
                           );
@@ -572,8 +585,8 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                               );
                               downloadUrls = (await Future.wait(
                                 selectedMedia.map(
-                                  (m) async =>
-                                      await uploadData(m.storagePath, m.bytes),
+                                      (m) async =>
+                                  await uploadData(m.storagePath, m.bytes),
                                 ),
                               ))
                                   .where((u) => u != null)
@@ -586,7 +599,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                             }
                             if (downloadUrls.length == selectedMedia.length) {
                               setState(
-                                  () => uploadedFileUrl = downloadUrls.first);
+                                      () => uploadedFileUrl = downloadUrls.first);
                               showUploadMessage(context, 'Success!');
                             } else {
                               setState(() {});

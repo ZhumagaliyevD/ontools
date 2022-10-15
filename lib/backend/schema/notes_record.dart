@@ -25,8 +25,8 @@ abstract class NotesRecord implements Built<NotesRecord, NotesRecordBuilder> {
   @BuiltValueField(wireName: 'created_at')
   DateTime? get createdAt;
 
-  @BuiltValueField(wireName: 'photo_notes')
-  BuiltList<DocumentReference>? get photoNotes;
+  @BuiltValueField(wireName: 'note_points')
+  BuiltList<DocumentReference>? get notePoints;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
@@ -37,7 +37,7 @@ abstract class NotesRecord implements Built<NotesRecord, NotesRecordBuilder> {
     ..description = ''
     ..isCheckbox = false
     ..image = ''
-    ..photoNotes = ListBuilder();
+    ..notePoints = ListBuilder();
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('notes');
@@ -78,7 +78,7 @@ Map<String, dynamic> createNotesRecordData({
         ..image = image
         ..createdBy = createdBy
         ..createdAt = createdAt
-        ..photoNotes = null,
+        ..notePoints = null,
     ),
   );
 

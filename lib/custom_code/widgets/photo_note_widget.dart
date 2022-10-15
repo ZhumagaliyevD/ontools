@@ -6,7 +6,13 @@ import 'index.dart'; // Imports other custom widgets
 import '../actions/index.dart'; // Imports custom actions
 import 'package:flutter/material.dart';
 // Begin custom widget code
+// Automatic FlutterFlow imports
+import 'package:on_tools/backend/backend.dart';
+import '../../flutter_flow/flutter_flow_util.dart';
+import '../../backend/backend.dart';
+import 'package:flutter/material.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:pinch_zoom/pinch_zoom.dart';
 
 typedef VoidCallback = void Function();
 
@@ -25,12 +31,14 @@ class PhotoNoteWidget extends StatefulWidget {
     this.height,
     required this.image,
     required this.onCreatePhotoNote,
+    this.points,
   }) : super(key: key);
 
   final double? width;
   final double? height;
   final String image;
   final Future<dynamic> Function() onCreatePhotoNote;
+  final List<DocumentReference>? points;
 
   @override
   _PhotoNoteWidgetState createState() => _PhotoNoteWidgetState();
@@ -47,6 +55,23 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
   bool showNewPoint = false;
 
   void addPoint() async {}
+
+  Future getData() async {
+    if (widget.points != null) {
+      final snapshot = await widget.points![0].get();
+      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+      photoNotes.add(PhotoNote(data['dx'], data['dy'], data['description']));
+    }
+    setState(() {});
+    print(photoNotes.length);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+    FFAppState().photoNotePoints.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +115,9 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
             child: Container(
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.red, width: 5)),
-                child: Image.network(widget.image)),
+                child: PinchZoom(child: Image.network(widget.image),    resetDuration: const Duration(milliseconds: 100),
+                  maxScale: 2.5,)
+            ),
           ),
 
           Stack(
@@ -232,14 +259,36 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: GestureDetector(
-                                          onTap: () {
+                                          onTap: () async {
                                             photoNotes.add(PhotoNote(x, y,
                                                 _textFieldController.text));
-                                            _textFieldController.clear();
                                             setState(() {
                                               showNewPoint = false;
                                             });
-                                            widget.onCreatePhotoNote();
+                                            FFAppState();
+
+                                            final photoNotePointCreateData =
+                                                createPhotoNotePointRecordData(
+                                              dx: x,
+                                              dy: y,
+                                              description:
+                                                  _textFieldController.text,
+                                            );
+                                            var photoNotePointRecordReference =
+                                                PhotoNotePointRecord.collection
+                                                    .doc();
+
+                                            await photoNotePointRecordReference
+                                                .set(photoNotePointCreateData);
+
+                                            FFAppState().photoNotePoints.add(
+                                                PhotoNotePointRecord
+                                                        .getDocumentFromData(
+                                                            photoNotePointCreateData,
+                                                            photoNotePointRecordReference)
+                                                    .reference);
+
+                                            _textFieldController.clear();
                                           },
                                           child: Icon(
                                             Icons.arrow_circle_up_rounded,

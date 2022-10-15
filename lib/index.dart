@@ -1,5 +1,8 @@
 // Export pages
 export 'entry_page/entry_page_widget.dart' show EntryPageWidget;
+export 'phone_entry_page/phone_entry_page_widget.dart'
+    show PhoneEntryPageWidget;
+export 'phone_verify/phone_verify_widget.dart' show PhoneVerifyWidget;
 export 'sign_up_page/sign_up_page_widget.dart' show SignUpPageWidget;
 export 'continue_signup_page/continue_signup_page_widget.dart'
     show ContinueSignupPageWidget;

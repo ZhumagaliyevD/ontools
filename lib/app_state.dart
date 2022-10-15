@@ -28,7 +28,8 @@ class FFAppState {
 
   String toolimg = '';
 
-  String profileimg = '';
+  String profileimg =
+      'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png';
 
   String noteIMG = '';
 
@@ -54,7 +55,9 @@ class FFAppState {
 
   String MarketplaceSearch = '';
 
-  DocumentReference? photoNoteList;
+  List<DocumentReference> photoNotePoints = [
+    FirebaseFirestore.instance.doc('/photo_note_point/SvzqjFTYLedGq2VTTxx4')
+  ];
 }
 
 LatLng? _latLngFromString(String? val) {

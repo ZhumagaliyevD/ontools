@@ -11,6 +11,7 @@ import 'schema/notes_record.dart';
 import 'schema/bullets_record.dart';
 import 'schema/chats_record.dart';
 import 'schema/photo_notes_record.dart';
+import 'schema/photo_note_point_record.dart';
 import 'schema/serializers.dart';
 
 export 'dart:async' show StreamSubscription;
@@ -25,6 +26,7 @@ export 'schema/notes_record.dart';
 export 'schema/bullets_record.dart';
 export 'schema/chats_record.dart';
 export 'schema/photo_notes_record.dart';
+export 'schema/photo_note_point_record.dart';
 
 /// Functions to query UserRecords (as a Stream and as a Future).
 Stream<List<UserRecord>> queryUserRecord({
@@ -323,6 +325,48 @@ Future<FFFirestorePage<PhotoNotesRecord>> queryPhotoNotesRecordPage({
     queryCollectionPage(
       PhotoNotesRecord.collection(parent),
       PhotoNotesRecord.serializer,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
+
+/// Functions to query PhotoNotePointRecords (as a Stream and as a Future).
+Stream<List<PhotoNotePointRecord>> queryPhotoNotePointRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      PhotoNotePointRecord.collection,
+      PhotoNotePointRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<PhotoNotePointRecord>> queryPhotoNotePointRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      PhotoNotePointRecord.collection,
+      PhotoNotePointRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<PhotoNotePointRecord>> queryPhotoNotePointRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+    queryCollectionPage(
+      PhotoNotePointRecord.collection,
+      PhotoNotePointRecord.serializer,
       queryBuilder: queryBuilder,
       nextPageMarker: nextPageMarker,
       pageSize: pageSize,

@@ -1,5 +1,4 @@
 import '../auth/auth_util.dart';
-import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -7,39 +6,27 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SignUpPageWidget extends StatefulWidget {
-  const SignUpPageWidget({Key? key}) : super(key: key);
+class PhoneEntryPageWidget extends StatefulWidget {
+  const PhoneEntryPageWidget({Key? key}) : super(key: key);
 
   @override
-  _SignUpPageWidgetState createState() => _SignUpPageWidgetState();
+  _PhoneEntryPageWidgetState createState() => _PhoneEntryPageWidgetState();
 }
 
-class _SignUpPageWidgetState extends State<SignUpPageWidget> {
-  TextEditingController? confPasswordSignUpController;
-
-  late bool confPasswordSignUpVisibility;
-  TextEditingController? emailSignUpController;
-  TextEditingController? passwordSignUpController;
-
-  late bool passwordSignUpVisibility;
+class _PhoneEntryPageWidgetState extends State<PhoneEntryPageWidget> {
+  TextEditingController? phoneLoginController;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    confPasswordSignUpController = TextEditingController();
-    confPasswordSignUpVisibility = false;
-    emailSignUpController = TextEditingController();
-    passwordSignUpController = TextEditingController();
-    passwordSignUpVisibility = false;
+    phoneLoginController = TextEditingController();
   }
 
   @override
   void dispose() {
-    confPasswordSignUpController?.dispose();
-    emailSignUpController?.dispose();
-    passwordSignUpController?.dispose();
+    phoneLoginController?.dispose();
     super.dispose();
   }
 
@@ -89,7 +76,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                               child: Text(
-                                'Создайте аккаунт',
+                                'Войдите в аккаунт',
                                 textAlign: TextAlign.start,
                                 style: FlutterFlowTheme.of(context).title1,
                               ),
@@ -106,10 +93,11 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                       CrossAxisAlignment.stretch,
                                   children: [
                                     TextFormField(
-                                      controller: emailSignUpController,
+                                      controller: phoneLoginController,
                                       obscureText: false,
                                       decoration: InputDecoration(
-                                        labelText: 'Email',
+                                        labelText: 'Мобильный телефон',
+                                        hintText: '+7 000 00 00',
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .bodyText2,
                                         enabledBorder: OutlineInputBorder(
@@ -155,198 +143,72 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                             fontFamily: 'Montserrat',
                                             fontWeight: FontWeight.normal,
                                           ),
-                                      keyboardType: TextInputType.emailAddress,
+                                      keyboardType: TextInputType.phone,
                                     ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 12, 0, 0),
-                                      child: TextFormField(
-                                        controller: passwordSignUpController,
-                                        obscureText: !passwordSignUpVisibility,
-                                        decoration: InputDecoration(
-                                          labelText: 'Введите пароль',
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryColor,
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryColor,
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          errorBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          focusedErrorBorder:
-                                              OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                          suffixIcon: InkWell(
-                                            onTap: () => setState(
-                                              () => passwordSignUpVisibility =
-                                                  !passwordSignUpVisibility,
-                                            ),
-                                            focusNode:
-                                                FocusNode(skipTraversal: true),
-                                            child: Icon(
-                                              passwordSignUpVisibility
-                                                  ? Icons.visibility_outlined
-                                                  : Icons
-                                                      .visibility_off_outlined,
-                                              color: Color(0xFF757575),
-                                              size: 22,
-                                            ),
-                                          ),
-                                        ),
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText1
-                                            .override(
-                                              fontFamily: 'Montserrat',
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 12, 0, 0),
-                                      child: TextFormField(
-                                        controller:
-                                            confPasswordSignUpController,
-                                        obscureText:
-                                            !confPasswordSignUpVisibility,
-                                        decoration: InputDecoration(
-                                          labelText: 'Введите пароль',
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryColor,
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryColor,
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          errorBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          focusedErrorBorder:
-                                              OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                          suffixIcon: InkWell(
-                                            onTap: () => setState(
-                                              () => confPasswordSignUpVisibility =
-                                                  !confPasswordSignUpVisibility,
-                                            ),
-                                            focusNode:
-                                                FocusNode(skipTraversal: true),
-                                            child: Icon(
-                                              confPasswordSignUpVisibility
-                                                  ? Icons.visibility_outlined
-                                                  : Icons
-                                                      .visibility_off_outlined,
-                                              color: Color(0xFF757575),
-                                              size: 22,
-                                            ),
-                                          ),
-                                        ),
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText1
-                                            .override(
-                                              fontFamily: 'Montserrat',
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 12, 0, 0),
-                                      child: FFButtonWidget(
-                                        onPressed: () async {
-                                          GoRouter.of(context)
-                                              .prepareAuthEvent();
-                                          if (passwordSignUpController?.text !=
-                                              confPasswordSignUpController
-                                                  ?.text) {
+                                          0, 16, 0, 0),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          if (phoneLoginController!
+                                              .text.isEmpty) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               SnackBar(
                                                 content: Text(
-                                                  'Passwords don\'t match!',
+                                                  'Email required!',
                                                 ),
                                               ),
                                             );
                                             return;
                                           }
-
-                                          final user =
-                                              await createAccountWithEmail(
-                                            context,
-                                            emailSignUpController!.text,
-                                            passwordSignUpController!.text,
+                                          await resetPassword(
+                                            email: phoneLoginController!.text,
+                                            context: context,
                                           );
-                                          if (user == null) {
+                                        },
+                                        child: Text(
+                                          'Забыл пароль? ',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText1
+                                              .override(
+                                                fontFamily: 'Montserrat',
+                                                fontWeight: FontWeight.normal,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 16, 0, 0),
+                                      child: FFButtonWidget(
+                                        onPressed: () async {
+                                          final phoneNumberVal =
+                                              phoneLoginController!.text;
+                                          if (phoneNumberVal == null ||
+                                              phoneNumberVal.isEmpty ||
+                                              !phoneNumberVal.startsWith('+')) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'Phone Number is required and has to start with +.'),
+                                              ),
+                                            );
                                             return;
                                           }
-
-                                          final userCreateData =
-                                              createUserRecordData(
-                                            email: emailSignUpController!.text,
-                                            createdTime: getCurrentTimestamp,
+                                          await beginPhoneAuth(
+                                            context: context,
+                                            phoneNumber: phoneNumberVal,
+                                            onCodeSent: () async {
+                                              context.goNamedAuth(
+                                                  'PhoneVerify', mounted);
+                                            },
                                           );
-                                          await UserRecord.collection
-                                              .doc(user.uid)
-                                              .update(userCreateData);
-
-                                          context.pushNamedAuth(
-                                              'ContinueSignupPage', mounted);
                                         },
-                                        text: 'Создать аккаунт',
+                                        text: 'Войти',
                                         options: FFButtonOptions(
                                           width: 130,
                                           height: 48,
@@ -372,26 +234,13 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                     ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 12, 0, 0),
-                                      child: Text(
-                                        'Нажимая кнопку Создать аккаунт, Вы соглашаетесь с Политикой конфиденциальности',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText1
-                                            .override(
-                                              fontFamily: 'Montserrat',
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 12, 0, 0),
+                                          0, 16, 0, 0),
                                       child: InkWell(
                                         onTap: () async {
-                                          context.pushNamed('EntryPage');
+                                          context.pushNamed('SignUpPage');
                                         },
                                         child: Text(
-                                          'У Вас есть аккаунт? Войти',
+                                          'У Вас нет аккаунта? Зарегистрируйтесь',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1
                                               .override(
@@ -525,7 +374,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                   ),
                                   InkWell(
                                     onTap: () async {
-                                      context.pushNamed('PhoneEntryPage');
+                                      context.pushNamed('EntryPage');
                                     },
                                     child: Container(
                                       width: 56,
@@ -540,8 +389,8 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                         ),
                                       ),
                                       alignment: AlignmentDirectional(0, 0),
-                                      child: FaIcon(
-                                        FontAwesomeIcons.phone,
+                                      child: Icon(
+                                        Icons.alternate_email,
                                         color: FlutterFlowTheme.of(context)
                                             .primaryColor,
                                         size: 24,

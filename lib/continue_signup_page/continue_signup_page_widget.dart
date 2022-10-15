@@ -151,15 +151,18 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                               () => FFAppState().profileimg = uploadedFileUrl);
                         }
                       },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        width: 80,
+                        height: 80,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
                         child: CachedNetworkImage(
                           imageUrl: valueOrDefault<String>(
                             uploadedFileUrl,
                             'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/e7eohoj7hn57/uploadImg.png',
                           ),
-                          width: 80,
-                          height: 80,
                           fit: BoxFit.contain,
                         ),
                       ),

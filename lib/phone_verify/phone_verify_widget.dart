@@ -2,38 +2,27 @@ import '../auth/auth_util.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class EntryPageWidget extends StatefulWidget {
-  const EntryPageWidget({Key? key}) : super(key: key);
+class PhoneVerifyWidget extends StatefulWidget {
+  const PhoneVerifyWidget({Key? key}) : super(key: key);
 
   @override
-  _EntryPageWidgetState createState() => _EntryPageWidgetState();
+  _PhoneVerifyWidgetState createState() => _PhoneVerifyWidgetState();
 }
 
-class _EntryPageWidgetState extends State<EntryPageWidget> {
-  TextEditingController? emailLoginController;
-  TextEditingController? passwordLoginController;
-
-  late bool passwordLoginVisibility;
+class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
+  TextEditingController? pinCodeController;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    emailLoginController = TextEditingController();
-    passwordLoginController = TextEditingController();
-    passwordLoginVisibility = false;
-  }
-
-  @override
-  void dispose() {
-    emailLoginController?.dispose();
-    passwordLoginController?.dispose();
-    super.dispose();
+    pinCodeController = TextEditingController();
   }
 
   @override
@@ -76,15 +65,15 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                       child: SingleChildScrollView(
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
+                                  EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                               child: Text(
-                                'Войдите в аккаунт',
-                                textAlign: TextAlign.start,
-                                style: FlutterFlowTheme.of(context).title1,
+                                'Введите код из SMS',
+                                style: FlutterFlowTheme.of(context).subtitle1,
                               ),
                             ),
                             Form(
@@ -98,164 +87,57 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   children: [
-                                    TextFormField(
-                                      controller: emailLoginController,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Email',
-                                        hintText: 'name@example.com',
-                                        hintStyle: FlutterFlowTheme.of(context)
-                                            .bodyText2,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                        ),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                      ),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText1
-                                          .override(
-                                            fontFamily: 'Montserrat',
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                      keyboardType: TextInputType.emailAddress,
-                                    ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 12, 0, 0),
-                                      child: TextFormField(
-                                        controller: passwordLoginController,
-                                        obscureText: !passwordLoginVisibility,
-                                        decoration: InputDecoration(
-                                          labelText: 'Введите пароль',
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryColor,
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryColor,
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          errorBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          focusedErrorBorder:
-                                              OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                          suffixIcon: InkWell(
-                                            onTap: () => setState(
-                                              () => passwordLoginVisibility =
-                                                  !passwordLoginVisibility,
-                                            ),
-                                            focusNode:
-                                                FocusNode(skipTraversal: true),
-                                            child: Icon(
-                                              passwordLoginVisibility
-                                                  ? Icons.visibility_outlined
-                                                  : Icons
-                                                      .visibility_off_outlined,
-                                              color: Color(0xFF757575),
-                                              size: 22,
-                                            ),
-                                          ),
-                                        ),
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText1
+                                      child: PinCodeTextField(
+                                        appContext: context,
+                                        length: 6,
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .subtitle2
                                             .override(
                                               fontFamily: 'Montserrat',
-                                              fontWeight: FontWeight.normal,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryBackground,
                                             ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 16, 0, 0),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          if (emailLoginController!
-                                              .text.isEmpty) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  'Email required!',
-                                                ),
-                                              ),
-                                            );
-                                            return;
-                                          }
-                                          await resetPassword(
-                                            email: emailLoginController!.text,
-                                            context: context,
-                                          );
-                                        },
-                                        child: Text(
-                                          'Забыл пароль? ',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText1
-                                              .override(
-                                                fontFamily: 'Montserrat',
-                                                fontWeight: FontWeight.normal,
-                                                decoration:
-                                                    TextDecoration.underline,
-                                              ),
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        enableActiveFill: true,
+                                        autoFocus: true,
+                                        showCursor: false,
+                                        cursorColor:
+                                            FlutterFlowTheme.of(context)
+                                                .primaryColor,
+                                        obscureText: false,
+                                        pinTheme: PinTheme(
+                                          fieldHeight: 60,
+                                          fieldWidth: 50,
+                                          borderWidth: 2,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          shape: PinCodeFieldShape.box,
+                                          activeColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondaryText,
+                                          inactiveColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondaryText,
+                                          selectedColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondaryColor,
+                                          activeFillColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondaryText,
+                                          inactiveFillColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondaryText,
+                                          selectedFillColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondaryColor,
                                         ),
+                                        controller: pinCodeController,
+                                        onChanged: (_) => {},
                                       ),
                                     ),
                                     Padding(
@@ -265,13 +147,25 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                                         onPressed: () async {
                                           GoRouter.of(context)
                                               .prepareAuthEvent();
-
-                                          final user = await signInWithEmail(
-                                            context,
-                                            emailLoginController!.text,
-                                            passwordLoginController!.text,
+                                          final smsCodeVal =
+                                              pinCodeController!.text;
+                                          if (smsCodeVal == null ||
+                                              smsCodeVal.isEmpty) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'Enter SMS verification code.'),
+                                              ),
+                                            );
+                                            return;
+                                          }
+                                          final phoneVerifiedUser =
+                                              await verifySmsCode(
+                                            context: context,
+                                            smsCode: smsCodeVal,
                                           );
-                                          if (user == null) {
+                                          if (phoneVerifiedUser == null) {
                                             return;
                                           }
 
@@ -376,7 +270,7 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                             ),
                             Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -444,7 +338,7 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                                   ),
                                   InkWell(
                                     onTap: () async {
-                                      context.pushNamed('PhoneEntryPage');
+                                      context.pushNamed('EntryPage');
                                     },
                                     child: Container(
                                       width: 56,
@@ -459,8 +353,8 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                                         ),
                                       ),
                                       alignment: AlignmentDirectional(0, 0),
-                                      child: FaIcon(
-                                        FontAwesomeIcons.phone,
+                                      child: Icon(
+                                        Icons.alternate_email,
                                         color: FlutterFlowTheme.of(context)
                                             .primaryColor,
                                         size: 24,
