@@ -12,6 +12,7 @@ import '../../flutter_flow/flutter_flow_util.dart';
 import '../../backend/backend.dart';
 import 'package:flutter/material.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:pinch_zoom/pinch_zoom.dart';
 
 typedef VoidCallback = void Function();
 
@@ -114,7 +115,9 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
             child: Container(
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.red, width: 5)),
-                child: Image.network(widget.image)),
+                child: PinchZoom(child: Image.network(widget.image),    resetDuration: const Duration(milliseconds: 100),
+                  maxScale: 2.5,)
+            ),
           ),
 
           Stack(
