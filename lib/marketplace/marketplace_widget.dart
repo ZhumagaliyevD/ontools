@@ -4,6 +4,7 @@ import '../components/sort_widget.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -63,8 +64,11 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
             color: FlutterFlowTheme.of(context).primaryText,
             size: 20,
           ),
-          onPressed: () {
-            print('IconButton pressed ...');
+          onPressed: () async {
+            if (Navigator.of(context).canPop()) {
+              context.pop();
+            }
+            context.pushNamed('AllChats');
           },
         ),
         title: Text(
@@ -164,12 +168,8 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                       controller: marketSearchController,
                                       onChanged: (_) => EasyDebounce.debounce(
                                         'marketSearchController',
-                                        Duration(milliseconds: 100),
-                                        () async {
-                                          setState(() =>
-                                              FFAppState().MarketplaceSearch =
-                                                  marketSearchController!.text);
-                                        },
+                                        Duration(milliseconds: 500),
+                                        () => setState(() {}),
                                       ),
                                       obscureText: false,
                                       decoration: InputDecoration(
@@ -213,6 +213,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
+                                      maxLines: null,
                                     ),
                                   ),
                                   FlutterFlowIconButton(
@@ -230,8 +231,6 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                       setState(() {
                                         marketSearchController?.clear();
                                       });
-                                      setState(() =>
-                                          FFAppState().MarketplaceSearch = '');
                                     },
                                   ),
                                 ],
@@ -257,11 +256,11 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                 isEqualTo: FFAppState().isCheque != ''
                                     ? FFAppState().isCheque
                                     : null)
+                            .where('inSale', isEqualTo: true)
                             .where('ToolName',
                                 isEqualTo: FFAppState().MarketplaceSearch != ''
                                     ? FFAppState().MarketplaceSearch
-                                    : null)
-                            .where('inSale', isEqualTo: true),
+                                    : null),
                       ),
                       builder: (context, snapshot) {
                         // Customize what your widget looks like when it's loading.
@@ -288,144 +287,156 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                           itemBuilder: (context, fullListIndex) {
                             final fullListToolsRecord =
                                 fullListToolsRecordList[fullListIndex];
-                            return Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                InkWell(
-                                  onTap: () async {
-                                    setState(() => FFAppState().toolBuyDate =
-                                        fullListToolsRecord.buyDate);
-                                    setState(() => FFAppState().toolimg =
-                                        fullListToolsRecord.photo!);
+                            return Visibility(
+                              visible: functions.searchRealTimeCopy(
+                                  marketSearchController!.text,
+                                  fullListToolsRecord.toolName!),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  InkWell(
+                                    onTap: () async {
+                                      setState(() => FFAppState().toolBuyDate =
+                                          fullListToolsRecord.buyDate);
+                                      setState(() => FFAppState().toolimg =
+                                          fullListToolsRecord.photo!);
 
-                                    context.pushNamed(
-                                      'ToolDetailPage',
-                                      queryParams: {
-                                        'tool': serializeParam(
-                                          fullListToolsRecord,
-                                          ParamType.Document,
-                                        ),
-                                      }.withoutNulls,
-                                      extra: <String, dynamic>{
-                                        'tool': fullListToolsRecord,
-                                      },
-                                    );
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(16),
-                                        child: Image.network(
-                                          fullListToolsRecord.photo!,
-                                          width: 80,
-                                          height: 116,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  12, 0, 0, 0),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            children: [
-                                              Text(
-                                                fullListToolsRecord.toolName!,
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyText1
-                                                        .override(
-                                                          fontFamily:
-                                                              'Montserrat',
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 12, 0, 12),
-                                                child: Text(
-                                                  fullListToolsRecord
-                                                      .description!,
-                                                  maxLines: 2,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyText1,
-                                                ),
-                                              ),
-                                              Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    '${fullListToolsRecord.price?.toString()} \$',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyText1,
-                                                  ),
-                                                  Container(
-                                                    width: 1,
-                                                    height: 18,
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    dateTimeFormat(
-                                                        'd/M/y',
-                                                        fullListToolsRecord
-                                                            .buyDate!),
-                                                    textAlign: TextAlign.center,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyText1,
-                                                  ),
-                                                  Container(
-                                                    width: 1,
-                                                    height: 18,
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    fullListToolsRecord
-                                                        .shopName!,
-                                                    textAlign: TextAlign.end,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyText1,
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
+                                      context.pushNamed(
+                                        'ToolDetailPage',
+                                        queryParams: {
+                                          'tool': serializeParam(
+                                            fullListToolsRecord,
+                                            ParamType.Document,
+                                          ),
+                                        }.withoutNulls,
+                                        extra: <String, dynamic>{
+                                          'tool': fullListToolsRecord,
+                                        },
+                                      );
+                                    },
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          child: Image.network(
+                                            fullListToolsRecord.photo!,
+                                            width: 80,
+                                            height: 116,
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        Expanded(
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    12, 0, 0, 0),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                Text(
+                                                  fullListToolsRecord.toolName!,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyText1
+                                                      .override(
+                                                        fontFamily:
+                                                            'Montserrat',
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 12, 0, 12),
+                                                  child: Text(
+                                                    fullListToolsRecord
+                                                        .description!,
+                                                    maxLines: 2,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyText1,
+                                                  ),
+                                                ),
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      '${fullListToolsRecord.price?.toString()} \$',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1,
+                                                    ),
+                                                    Container(
+                                                      width: 1,
+                                                      height: 18,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      dateTimeFormat(
+                                                          'd/M/y',
+                                                          fullListToolsRecord
+                                                              .buyDate!),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1,
+                                                    ),
+                                                    Container(
+                                                      width: 1,
+                                                      height: 18,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      fullListToolsRecord
+                                                          .shopName!,
+                                                      textAlign: TextAlign.end,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Divider(
-                                  height: 25,
-                                  thickness: 1,
-                                  color: FlutterFlowTheme.of(context).lineColor,
-                                ),
-                              ],
+                                  Divider(
+                                    height: 25,
+                                    thickness: 1,
+                                    color:
+                                        FlutterFlowTheme.of(context).lineColor,
+                                  ),
+                                ],
+                              ),
                             );
                           },
                         );

@@ -26,12 +26,6 @@ class _$ToolsRecordSerializer implements StructuredSerializer<ToolsRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    value = object.price;
-    if (value != null) {
-      result
-        ..add('Price')
-        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
-    }
     value = object.description;
     if (value != null) {
       result
@@ -103,6 +97,13 @@ class _$ToolsRecordSerializer implements StructuredSerializer<ToolsRecord> {
         ..add(
             serializers.serialize(value, specifiedType: const FullType(bool)));
     }
+    value = object.price;
+    if (value != null) {
+      result
+        ..add('Price')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(double)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -128,10 +129,6 @@ class _$ToolsRecordSerializer implements StructuredSerializer<ToolsRecord> {
         case 'ToolName':
           result.toolName = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
-          break;
-        case 'Price':
-          result.price = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int?;
           break;
         case 'Description':
           result.description = serializers.deserialize(value,
@@ -175,6 +172,10 @@ class _$ToolsRecordSerializer implements StructuredSerializer<ToolsRecord> {
           result.inSale = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool?;
           break;
+        case 'Price':
+          result.price = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -191,8 +192,6 @@ class _$ToolsRecordSerializer implements StructuredSerializer<ToolsRecord> {
 class _$ToolsRecord extends ToolsRecord {
   @override
   final String? toolName;
-  @override
-  final int? price;
   @override
   final String? description;
   @override
@@ -214,6 +213,8 @@ class _$ToolsRecord extends ToolsRecord {
   @override
   final bool? inSale;
   @override
+  final double? price;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$ToolsRecord([void Function(ToolsRecordBuilder)? updates]) =>
@@ -221,7 +222,6 @@ class _$ToolsRecord extends ToolsRecord {
 
   _$ToolsRecord._(
       {this.toolName,
-      this.price,
       this.description,
       this.shopName,
       this.createdBy,
@@ -232,6 +232,7 @@ class _$ToolsRecord extends ToolsRecord {
       this.chequeName,
       this.isCheque,
       this.inSale,
+      this.price,
       this.ffRef})
       : super._();
 
@@ -247,7 +248,6 @@ class _$ToolsRecord extends ToolsRecord {
     if (identical(other, this)) return true;
     return other is ToolsRecord &&
         toolName == other.toolName &&
-        price == other.price &&
         description == other.description &&
         shopName == other.shopName &&
         createdBy == other.createdBy &&
@@ -258,6 +258,7 @@ class _$ToolsRecord extends ToolsRecord {
         chequeName == other.chequeName &&
         isCheque == other.isCheque &&
         inSale == other.inSale &&
+        price == other.price &&
         ffRef == other.ffRef;
   }
 
@@ -275,17 +276,17 @@ class _$ToolsRecord extends ToolsRecord {
                                         $jc(
                                             $jc(
                                                 $jc($jc(0, toolName.hashCode),
-                                                    price.hashCode),
-                                                description.hashCode),
-                                            shopName.hashCode),
-                                        createdBy.hashCode),
-                                    buyDate.hashCode),
-                                photo.hashCode),
-                            createdAt.hashCode),
-                        chequeIMG.hashCode),
-                    chequeName.hashCode),
-                isCheque.hashCode),
-            inSale.hashCode),
+                                                    description.hashCode),
+                                                shopName.hashCode),
+                                            createdBy.hashCode),
+                                        buyDate.hashCode),
+                                    photo.hashCode),
+                                createdAt.hashCode),
+                            chequeIMG.hashCode),
+                        chequeName.hashCode),
+                    isCheque.hashCode),
+                inSale.hashCode),
+            price.hashCode),
         ffRef.hashCode));
   }
 
@@ -293,7 +294,6 @@ class _$ToolsRecord extends ToolsRecord {
   String toString() {
     return (newBuiltValueToStringHelper(r'ToolsRecord')
           ..add('toolName', toolName)
-          ..add('price', price)
           ..add('description', description)
           ..add('shopName', shopName)
           ..add('createdBy', createdBy)
@@ -304,6 +304,7 @@ class _$ToolsRecord extends ToolsRecord {
           ..add('chequeName', chequeName)
           ..add('isCheque', isCheque)
           ..add('inSale', inSale)
+          ..add('price', price)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -315,10 +316,6 @@ class ToolsRecordBuilder implements Builder<ToolsRecord, ToolsRecordBuilder> {
   String? _toolName;
   String? get toolName => _$this._toolName;
   set toolName(String? toolName) => _$this._toolName = toolName;
-
-  int? _price;
-  int? get price => _$this._price;
-  set price(int? price) => _$this._price = price;
 
   String? _description;
   String? get description => _$this._description;
@@ -361,6 +358,10 @@ class ToolsRecordBuilder implements Builder<ToolsRecord, ToolsRecordBuilder> {
   bool? get inSale => _$this._inSale;
   set inSale(bool? inSale) => _$this._inSale = inSale;
 
+  double? _price;
+  double? get price => _$this._price;
+  set price(double? price) => _$this._price = price;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -373,7 +374,6 @@ class ToolsRecordBuilder implements Builder<ToolsRecord, ToolsRecordBuilder> {
     final $v = _$v;
     if ($v != null) {
       _toolName = $v.toolName;
-      _price = $v.price;
       _description = $v.description;
       _shopName = $v.shopName;
       _createdBy = $v.createdBy;
@@ -384,6 +384,7 @@ class ToolsRecordBuilder implements Builder<ToolsRecord, ToolsRecordBuilder> {
       _chequeName = $v.chequeName;
       _isCheque = $v.isCheque;
       _inSale = $v.inSale;
+      _price = $v.price;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -408,7 +409,6 @@ class ToolsRecordBuilder implements Builder<ToolsRecord, ToolsRecordBuilder> {
     final _$result = _$v ??
         new _$ToolsRecord._(
             toolName: toolName,
-            price: price,
             description: description,
             shopName: shopName,
             createdBy: createdBy,
@@ -419,6 +419,7 @@ class ToolsRecordBuilder implements Builder<ToolsRecord, ToolsRecordBuilder> {
             chequeName: chequeName,
             isCheque: isCheque,
             inSale: inSale,
+            price: price,
             ffRef: ffRef);
     replace(_$result);
     return _$result;

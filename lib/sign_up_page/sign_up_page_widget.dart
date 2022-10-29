@@ -155,6 +155,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                             fontFamily: 'Montserrat',
                                             fontWeight: FontWeight.normal,
                                           ),
+                                      maxLines: null,
                                       keyboardType: TextInputType.emailAddress,
                                     ),
                                     Padding(
@@ -227,6 +228,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                               fontFamily: 'Montserrat',
                                               fontWeight: FontWeight.normal,
                                             ),
+                                        maxLines: null,
                                       ),
                                     ),
                                     Padding(
@@ -301,6 +303,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                               fontFamily: 'Montserrat',
                                               fontWeight: FontWeight.normal,
                                             ),
+                                        maxLines: null,
                                       ),
                                     ),
                                     Padding(
@@ -380,6 +383,53 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                             .override(
                                               fontFamily: 'Montserrat',
                                               fontWeight: FontWeight.normal,
+                                            ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 12, 0, 0),
+                                      child: Text(
+                                        'Нажимая кнопку Создать аккаунт, Вы соглашаетесь с',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText1
+                                            .override(
+                                              fontFamily: 'Montserrat',
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        await launchURL(
+                                            'https://docs.google.com/document/d/1c_O6H8qCjNQmTIKaWTwYpCmhJ569835QFmgOIu8mkAs/edit');
+                                      },
+                                      child: Text(
+                                        'Политикой конфиденциальности и',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText1
+                                            .override(
+                                              fontFamily: 'Montserrat',
+                                              fontWeight: FontWeight.normal,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        await launchURL(
+                                            'https://docs.google.com/document/d/1Fbw-bhcVuUF23JB2cNrXYxgi5SAzbchRsBRYRD8REmg/edit');
+                                      },
+                                      child: Text(
+                                        'Пользовательским соглашением',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText1
+                                            .override(
+                                              fontFamily: 'Montserrat',
+                                              fontWeight: FontWeight.normal,
+                                              decoration:
+                                                  TextDecoration.underline,
                                             ),
                                       ),
                                     ),

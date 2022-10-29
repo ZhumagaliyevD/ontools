@@ -49,6 +49,7 @@ class _MyAppState extends State<MyApp> {
     _router = createRouter(_appStateNotifier);
     userStream = onToolsFirebaseUserStream()
       ..listen((user) => _appStateNotifier.update(user));
+    jwtTokenStream.listen((_) {});
     Future.delayed(
       Duration(seconds: 1),
       () => _appStateNotifier.stopShowingSplashImage(),
@@ -113,10 +114,10 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
+      'MyToolsPage': MyToolsPageWidget(),
       'Notes': NotesWidget(),
       'Marketplace': MarketplaceWidget(),
       'ReportsPage': ReportsPageWidget(),
-      'MyToolsPage': MyToolsPageWidget(),
       'ProfileHomePage': ProfileHomePageWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
@@ -137,6 +138,14 @@ class _NavBarPageState extends State<NavBarPage> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
+              FFIcons.kbox,
+              size: 24,
+            ),
+            label: 'Инструменты',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
               FFIcons.kdocumentSigned,
               size: 24,
             ),
@@ -152,7 +161,7 @@ class _NavBarPageState extends State<NavBarPage> {
               Icons.shopping_cart_rounded,
               size: 24,
             ),
-            label: 'Marketplace',
+            label: 'Маркетплейс',
             tooltip: '',
           ),
           BottomNavigationBarItem(
@@ -165,14 +174,6 @@ class _NavBarPageState extends State<NavBarPage> {
               size: 24,
             ),
             label: 'Отчеты',
-            tooltip: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              FFIcons.kbox,
-              size: 24,
-            ),
-            label: 'Инструменты',
             tooltip: '',
           ),
           BottomNavigationBarItem(

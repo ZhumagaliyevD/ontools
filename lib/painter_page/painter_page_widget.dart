@@ -1,5 +1,4 @@
 import '../backend/backend.dart';
-import '../components/img_paint_buttons_widget.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -91,12 +90,6 @@ class _PainterPageWidgetState extends State<PainterPageWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [],
               ),
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                ImgPaintButtonsWidget(),
-              ],
             ),
           ],
         ),

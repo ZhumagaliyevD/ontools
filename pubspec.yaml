@@ -33,6 +33,7 @@ dependencies:
   cloud_firestore_platform_interface: 5.5.10
   cloud_firestore_web: 2.6.19
   collection: 1.16.0
+  dash_chat: 1.1.16
   easy_debounce: 2.0.1
   file_picker: 4.5.1
   firebase_auth: 3.4.1
@@ -66,6 +67,7 @@ dependencies:
   pin_code_fields: 7.4.0
   plugin_platform_interface: 2.1.2
   rxdart: 0.27.4
+  share_plus: 2.1.4
   shared_preferences: 2.0.15
   sign_in_with_apple: 4.1.0
   sign_in_with_apple_platform_interface: 1.0.0

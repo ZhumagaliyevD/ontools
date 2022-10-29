@@ -20,11 +20,11 @@ class FFAppState {
 
   late SharedPreferences prefs;
 
-  DateTime? birthday;
+  DateTime? birthday = DateTime.fromMillisecondsSinceEpoch(1665846180000);
 
-  LatLng? address;
+  LatLng? address = LatLng(40.18597, 44.515109);
 
-  DateTime? toolBuyDate;
+  DateTime? toolBuyDate = DateTime.fromMillisecondsSinceEpoch(1665846120000);
 
   String toolimg = '';
 

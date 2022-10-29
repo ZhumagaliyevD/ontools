@@ -86,6 +86,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                       padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
                       child: FlutterFlowDropDown(
                         options: bottomSheetMaterialToolsRecordList
+                            .where((e) => e.inSale!)
+                            .toList()
                             .map((e) => e.toolName!)
                             .toList()
                             .toList(),
@@ -108,6 +110,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                       padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
                       child: FlutterFlowDropDown(
                         options: bottomSheetMaterialToolsRecordList
+                            .where((e) => e.inSale!)
+                            .toList()
                             .map((e) => e.shopName!)
                             .toList()
                             .toList(),

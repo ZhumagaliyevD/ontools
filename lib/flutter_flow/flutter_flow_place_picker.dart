@@ -16,7 +16,7 @@ class FlutterFlowPlacePicker extends StatefulWidget {
     required this.androidGoogleMapsApiKey,
     required this.webGoogleMapsApiKey,
     required this.defaultText,
-    required this.icon,
+    this.icon,
     required this.buttonOptions,
     required this.onSelect,
     this.proxyBaseUrl,
@@ -26,7 +26,7 @@ class FlutterFlowPlacePicker extends StatefulWidget {
   final String androidGoogleMapsApiKey;
   final String webGoogleMapsApiKey;
   final String? defaultText;
-  final Widget icon;
+  final Widget? icon;
   final FFButtonOptions buttonOptions;
   final Function(FFPlace place) onSelect;
   final String? proxyBaseUrl;

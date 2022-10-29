@@ -87,6 +87,19 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => PhoneEntryPageWidget(),
             ),
             FFRoute(
+              name: 'ChatPage',
+              path: 'chatPage',
+              requireAuth: true,
+              asyncParams: {
+                'chatUser': getDoc('user', UserRecord.serializer),
+              },
+              builder: (context, params) => ChatPageWidget(
+                chatUser: params.getParam('chatUser', ParamType.Document),
+                chatRef: params.getParam(
+                    'chatRef', ParamType.DocumentReference, false, 'chats'),
+              ),
+            ),
+            FFRoute(
               name: 'PhoneVerify',
               path: 'phoneVerify',
               builder: (context, params) => PhoneVerifyWidget(),
@@ -103,20 +116,20 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => ContinueSignupPageWidget(),
             ),
             FFRoute(
-              name: 'ProfileHomePage',
-              path: 'profileHomePage',
-              requireAuth: true,
-              builder: (context, params) => params.isEmpty
-                  ? NavBarPage(initialPage: 'ProfileHomePage')
-                  : ProfileHomePageWidget(),
-            ),
-            FFRoute(
               name: 'ReportsPage',
               path: 'reportsPage',
               requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? NavBarPage(initialPage: 'ReportsPage')
                   : ReportsPageWidget(),
+            ),
+            FFRoute(
+              name: 'ProfileHomePage',
+              path: 'profileHomePage',
+              requireAuth: true,
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'ProfileHomePage')
+                  : ProfileHomePageWidget(),
             ),
             FFRoute(
               name: 'MyToolsPage',
@@ -161,17 +174,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'PainterPage',
-              path: 'painterPage',
-              requireAuth: true,
-              asyncParams: {
-                'noteIMG': getDoc('notes', NotesRecord.serializer),
-              },
-              builder: (context, params) => PainterPageWidget(
-                noteIMG: params.getParam('noteIMG', ParamType.Document),
-              ),
-            ),
-            FFRoute(
               name: 'Notes',
               path: 'notes',
               requireAuth: true,
@@ -183,6 +185,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'AuthPage',
               path: 'authPage',
               builder: (context, params) => AuthPageWidget(),
+            ),
+            FFRoute(
+              name: 'AllChats',
+              path: 'allChats',
+              requireAuth: true,
+              builder: (context, params) => AllChatsWidget(),
             ),
             FFRoute(
               name: 'createPointsPage',
@@ -207,6 +215,17 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               },
               builder: (context, params) => ToolDetailPageWidget(
                 tool: params.getParam('tool', ParamType.Document),
+              ),
+            ),
+            FFRoute(
+              name: 'PainterPage',
+              path: 'painterPage',
+              requireAuth: true,
+              asyncParams: {
+                'noteIMG': getDoc('notes', NotesRecord.serializer),
+              },
+              builder: (context, params) => PainterPageWidget(
+                noteIMG: params.getParam('noteIMG', ParamType.Document),
               ),
             ),
             FFRoute(

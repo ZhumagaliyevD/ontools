@@ -25,7 +25,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
   bool isMediaUploading = false;
   String uploadedFileUrl = '';
 
-  TextEditingController? textController1;
+  TextEditingController? usernameController;
   TextEditingController? industryController;
   TextEditingController? specialityController;
   TextEditingController? textController4;
@@ -39,7 +39,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
     super.initState();
     industryController = TextEditingController(
         text: valueOrDefault(currentUserDocument?.industry, ''));
-    textController1 = TextEditingController(text: currentUserDisplayName);
+    usernameController = TextEditingController(text: currentUserDisplayName);
     specialityController = TextEditingController(
         text: valueOrDefault(currentUserDocument?.specialty, ''));
     textController4 = TextEditingController(text: currentPhoneNumber);
@@ -48,7 +48,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
   @override
   void dispose() {
     industryController?.dispose();
-    textController1?.dispose();
+    usernameController?.dispose();
     specialityController?.dispose();
     textController4?.dispose();
     super.dispose();
@@ -73,8 +73,9 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
             size: 30,
           ),
           onPressed: () async {
-            setState(() => FFAppState().birthday = null);
-            setState(() => FFAppState().address = null);
+            setState(() => FFAppState().birthday =
+                DateTime.fromMillisecondsSinceEpoch(1665846180000));
+            setState(() => FFAppState().address = LatLng(40.18597, 44.515109));
             setState(() => FFAppState().profileimg =
                 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png');
             context.pop();
@@ -152,16 +153,19 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                           setState(
                               () => FFAppState().profileimg = uploadedFileUrl);
                         },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          width: 80,
+                          height: 80,
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
                           child: Image.network(
                             valueOrDefault<String>(
                               FFAppState().profileimg,
                               'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/e7eohoj7hn57/uploadImg.png',
                             ),
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.contain,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
@@ -179,7 +183,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(16, 23, 16, 0),
                     child: AuthUserStreamWidget(
                       child: TextFormField(
-                        controller: textController1,
+                        controller: usernameController,
                         obscureText: false,
                         decoration: InputDecoration(
                           labelText: 'ФИО',
@@ -214,6 +218,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                           ),
                         ),
                         style: FlutterFlowTheme.of(context).bodyText1,
+                        maxLines: null,
                       ),
                     ),
                   ),
@@ -255,6 +260,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                           ),
                         ),
                         style: FlutterFlowTheme.of(context).bodyText1,
+                        maxLines: null,
                       ),
                     ),
                   ),
@@ -296,6 +302,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                           ),
                         ),
                         style: FlutterFlowTheme.of(context).bodyText1,
+                        maxLines: null,
                       ),
                     ),
                   ),
@@ -338,6 +345,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                           ),
                         ),
                         style: FlutterFlowTheme.of(context).bodyText1,
+                        maxLines: null,
                       ),
                     ),
                   ),
@@ -350,7 +358,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
                           child: Text(
-                            'Адрес',
+                            'Мой город',
                             style:
                                 FlutterFlowTheme.of(context).bodyText1.override(
                                       fontFamily: 'Montserrat',
@@ -484,7 +492,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                             uploadedFileUrl == '')) {
                           final userUpdateData = createUserRecordData(
                             photoUrl: FFAppState().profileimg,
-                            displayName: textController1!.text,
+                            displayName: usernameController!.text,
                             specialty: industryController!.text,
                           );
                           await currentUserReference!.update(userUpdateData);
@@ -501,7 +509,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                         }
 
                         final userUpdateData = createUserRecordData(
-                          displayName: textController1!.text,
+                          displayName: usernameController!.text,
                           phoneNumber: textController4!.text,
                           specialty: specialityController!.text,
                           industry: industryController!.text,
@@ -519,8 +527,10 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                             backgroundColor: Color(0x00000000),
                           ),
                         );
-                        setState(() => FFAppState().birthday = null);
-                        setState(() => FFAppState().address = null);
+                        setState(() => FFAppState().birthday =
+                            DateTime.fromMillisecondsSinceEpoch(1665846180000));
+                        setState(() =>
+                            FFAppState().address = LatLng(40.18597, 44.515109));
                         setState(() => FFAppState().profileimg =
                             'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png');
 
@@ -549,8 +559,10 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
                     child: FFButtonWidget(
                       onPressed: () async {
-                        setState(() => FFAppState().birthday = null);
-                        setState(() => FFAppState().address = null);
+                        setState(() => FFAppState().birthday =
+                            DateTime.fromMillisecondsSinceEpoch(1665846180000));
+                        setState(() =>
+                            FFAppState().address = LatLng(40.18597, 44.515109));
                         setState(() => FFAppState().profileimg =
                             'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png');
                         GoRouter.of(context).prepareAuthEvent();

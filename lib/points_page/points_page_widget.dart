@@ -4,6 +4,7 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../custom_code/widgets/index.dart' as custom_widgets;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -101,196 +102,207 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
           body: SafeArea(
             child: GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 16),
-                    child: Card(
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
-                              child: Text(
-                                pointsPageNotesRecord.title!,
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyText1
-                                    .override(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 20,
-                                    ),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
-                              child: Text(
-                                pointsPageNotesRecord.description!
-                                    .maybeHandleOverflow(
-                                  maxChars: 35,
-                                  replacement: '…',
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 16),
+                      child: Card(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+                                child: AutoSizeText(
+                                  pointsPageNotesRecord.title!,
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyText1
+                                      .override(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 20,
+                                      ),
                                 ),
-                                maxLines: 2,
-                                style: FlutterFlowTheme.of(context).bodyText1,
                               ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 1,
-                              child: custom_widgets.PhotoNoteWidget(
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+                                child: AutoSizeText(
+                                  pointsPageNotesRecord.description!,
+                                  style: FlutterFlowTheme.of(context).bodyText1,
+                                ),
+                              ),
+                              Container(
                                 width: MediaQuery.of(context).size.width,
                                 height: MediaQuery.of(context).size.height * 1,
-                                image: pointsPageNotesRecord.image!,
-                                points:
-                                    pointsPageNotesRecord.notePoints!.toList(),
-                                onCreatePhotoNote: () async {},
+                                child: custom_widgets.PhotoNoteWidget(
+                                  width: MediaQuery.of(context).size.width,
+                                  height:
+                                      MediaQuery.of(context).size.height * 1,
+                                  image: pointsPageNotesRecord.image!,
+                                  points: pointsPageNotesRecord.notePoints!
+                                      .toList(),
+                                  onCreatePhotoNote: () async {},
+                                ),
                               ),
-                            ),
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                StreamBuilder<List<BulletsRecord>>(
-                                  stream: queryBulletsRecord(
-                                    parent: pointsPageNotesRecord.reference,
-                                  ),
-                                  builder: (context, snapshot) {
-                                    // Customize what your widget looks like when it's loading.
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: SizedBox(
-                                          width: 50,
-                                          height: 50,
-                                          child: CircularProgressIndicator(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryColor,
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                    List<BulletsRecord>
-                                        columnBulletsRecordList =
-                                        snapshot.data!;
-                                    return Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: List.generate(
-                                          columnBulletsRecordList.length,
-                                          (columnIndex) {
-                                        final columnBulletsRecord =
-                                            columnBulletsRecordList[
-                                                columnIndex];
-                                        return Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 0, 12),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Stack(
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    StreamBuilder<List<BulletsRecord>>(
+                                      stream: queryBulletsRecord(
+                                        parent: pointsPageNotesRecord.reference,
+                                      ),
+                                      builder: (context, snapshot) {
+                                        // Customize what your widget looks like when it's loading.
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: SizedBox(
+                                              width: 50,
+                                              height: 50,
+                                              child: CircularProgressIndicator(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryColor,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        List<BulletsRecord>
+                                            columnBulletsRecordList =
+                                            snapshot.data!;
+                                        return Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: List.generate(
+                                              columnBulletsRecordList.length,
+                                              (columnIndex) {
+                                            final columnBulletsRecord =
+                                                columnBulletsRecordList[
+                                                    columnIndex];
+                                            return Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 0, 0, 12),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
                                                 children: [
-                                                  if (columnBulletsRecord
-                                                          .isDone ==
-                                                      false)
-                                                    InkWell(
-                                                      onTap: () async {
-                                                        final bulletsUpdateData =
-                                                            createBulletsRecordData(
-                                                          isDone: true,
-                                                        );
-                                                        await columnBulletsRecord
-                                                            .reference
-                                                            .update(
-                                                                bulletsUpdateData);
-                                                      },
-                                                      child: Container(
-                                                        width: 40,
-                                                        height: 40,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                          border: Border.all(
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .lineColor,
+                                                  Stack(
+                                                    children: [
+                                                      if (columnBulletsRecord
+                                                              .isDone ==
+                                                          false)
+                                                        InkWell(
+                                                          onTap: () async {
+                                                            final bulletsUpdateData =
+                                                                createBulletsRecordData(
+                                                              isDone: true,
+                                                            );
+                                                            await columnBulletsRecord
+                                                                .reference
+                                                                .update(
+                                                                    bulletsUpdateData);
+                                                          },
+                                                          child: Container(
+                                                            width: 40,
+                                                            height: 40,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12),
+                                                              border:
+                                                                  Border.all(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .lineColor,
+                                                              ),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                  if (columnBulletsRecord
-                                                          .isDone ==
-                                                      true)
-                                                    InkWell(
-                                                      onTap: () async {
-                                                        final bulletsUpdateData =
-                                                            createBulletsRecordData(
-                                                          isDone: false,
-                                                        );
-                                                        await columnBulletsRecord
-                                                            .reference
-                                                            .update(
-                                                                bulletsUpdateData);
-                                                      },
-                                                      child: Container(
-                                                        width: 40,
-                                                        height: 40,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                          border: Border.all(
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .lineColor,
+                                                      if (columnBulletsRecord
+                                                              .isDone ==
+                                                          true)
+                                                        InkWell(
+                                                          onTap: () async {
+                                                            final bulletsUpdateData =
+                                                                createBulletsRecordData(
+                                                              isDone: false,
+                                                            );
+                                                            await columnBulletsRecord
+                                                                .reference
+                                                                .update(
+                                                                    bulletsUpdateData);
+                                                          },
+                                                          child: Container(
+                                                            width: 40,
+                                                            height: 40,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12),
+                                                              border:
+                                                                  Border.all(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .lineColor,
+                                                              ),
+                                                            ),
+                                                            child: Icon(
+                                                              Icons.check,
+                                                              color:
+                                                                  Colors.black,
+                                                              size: 24,
+                                                            ),
                                                           ),
                                                         ),
-                                                        child: Icon(
-                                                          Icons.check,
-                                                          color: Colors.black,
-                                                          size: 24,
-                                                        ),
-                                                      ),
+                                                    ],
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                12, 0, 0, 0),
+                                                    child: Text(
+                                                      columnBulletsRecord.text!,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1,
                                                     ),
+                                                  ),
                                                 ],
                                               ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(12, 0, 0, 0),
-                                                child: Text(
-                                                  columnBulletsRecord.text!,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyText1,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            );
+                                          }),
                                         );
-                                      }),
-                                    );
-                                  },
+                                      },
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

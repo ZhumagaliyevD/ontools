@@ -12,9 +12,6 @@ abstract class ToolsRecord implements Built<ToolsRecord, ToolsRecordBuilder> {
   @BuiltValueField(wireName: 'ToolName')
   String? get toolName;
 
-  @BuiltValueField(wireName: 'Price')
-  int? get price;
-
   @BuiltValueField(wireName: 'Description')
   String? get description;
 
@@ -42,20 +39,23 @@ abstract class ToolsRecord implements Built<ToolsRecord, ToolsRecordBuilder> {
 
   bool? get inSale;
 
+  @BuiltValueField(wireName: 'Price')
+  double? get price;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
 
   static void _initializeBuilder(ToolsRecordBuilder builder) => builder
     ..toolName = ''
-    ..price = 0
     ..description = ''
     ..shopName = ''
     ..photo = ''
     ..chequeIMG = ''
     ..chequeName = ''
     ..isCheque = ''
-    ..inSale = false;
+    ..inSale = false
+    ..price = 0.0;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('Tools');
@@ -80,7 +80,6 @@ abstract class ToolsRecord implements Built<ToolsRecord, ToolsRecordBuilder> {
 
 Map<String, dynamic> createToolsRecordData({
   String? toolName,
-  int? price,
   String? description,
   String? shopName,
   DocumentReference? createdBy,
@@ -91,13 +90,13 @@ Map<String, dynamic> createToolsRecordData({
   String? chequeName,
   String? isCheque,
   bool? inSale,
+  double? price,
 }) {
   final firestoreData = serializers.toFirestore(
     ToolsRecord.serializer,
     ToolsRecord(
       (t) => t
         ..toolName = toolName
-        ..price = price
         ..description = description
         ..shopName = shopName
         ..createdBy = createdBy
@@ -107,7 +106,8 @@ Map<String, dynamic> createToolsRecordData({
         ..chequeIMG = chequeIMG
         ..chequeName = chequeName
         ..isCheque = isCheque
-        ..inSale = inSale,
+        ..inSale = inSale
+        ..price = price,
     ),
   );
 

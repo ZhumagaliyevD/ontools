@@ -163,7 +163,7 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                             uploadedFileUrl,
                             'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/e7eohoj7hn57/uploadImg.png',
                           ),
-                          fit: BoxFit.contain,
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
@@ -213,6 +213,7 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                         ),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
+                      maxLines: null,
                     ),
                   ),
                   Padding(
@@ -252,6 +253,7 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                         ),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
+                      maxLines: null,
                     ),
                   ),
                   Padding(
@@ -291,6 +293,7 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                         ),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
+                      maxLines: null,
                     ),
                   ),
                   Padding(
@@ -330,6 +333,7 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                         ),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
+                      maxLines: null,
                       keyboardType: TextInputType.phone,
                     ),
                   ),
@@ -339,7 +343,7 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                       controller: addressController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Адрес',
+                        labelText: 'Мой город',
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0xFFB3B3B3),
@@ -370,6 +374,7 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                         ),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
+                      maxLines: null,
                     ),
                   ),
                   Padding(

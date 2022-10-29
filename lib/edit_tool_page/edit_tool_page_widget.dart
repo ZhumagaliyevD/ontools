@@ -93,7 +93,8 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                setState(() => FFAppState().toolBuyDate = null);
+                setState(() => FFAppState().toolBuyDate =
+                    DateTime.fromMillisecondsSinceEpoch(1665846120000));
                 setState(() => FFAppState().toolimg = '');
                 setState(() => FFAppState().chequeName = '');
                 context.pop();
@@ -249,6 +250,7 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                             FlutterFlowTheme.of(context).secondaryBackground,
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
+                      maxLines: null,
                     ),
                   ),
                   Padding(
@@ -337,6 +339,7 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                             FlutterFlowTheme.of(context).secondaryBackground,
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
+                      maxLines: null,
                     ),
                   ),
                   Padding(
@@ -591,6 +594,7 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                         .secondaryBackground,
                                   ),
                                   style: FlutterFlowTheme.of(context).bodyText1,
+                                  maxLines: null,
                                   keyboardType: TextInputType.number,
                                 ),
                               ],
@@ -619,7 +623,7 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                         }
 
                         final toolsUpdateData = createToolsRecordData(
-                          price: int.parse(priceController!.text),
+                          price: double.parse(priceController!.text),
                           description: descriptionController!.text,
                           shopName: shopNameController!.text,
                           toolName: toolNameController!.text,
@@ -627,7 +631,8 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                           chequeIMG: uploadedFileUrl2,
                         );
                         await widget.tool!.reference.update(toolsUpdateData);
-                        setState(() => FFAppState().toolBuyDate = null);
+                        setState(() => FFAppState().toolBuyDate =
+                            DateTime.fromMillisecondsSinceEpoch(1665846120000));
                         setState(() => FFAppState().chequeName = '');
                         setState(() => FFAppState().toolimg = '');
                         ScaffoldMessenger.of(context).showSnackBar(

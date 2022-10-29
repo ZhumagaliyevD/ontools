@@ -4,12 +4,11 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom widgets
 import '../actions/index.dart'; // Imports custom actions
+import '../../flutter_flow/custom_functions.dart'; // Imports custom functions
 import 'package:flutter/material.dart';
 // Begin custom widget code
 // Automatic FlutterFlow imports
-import 'package:on_tools/backend/backend.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
-import '../../backend/backend.dart';
 import 'package:flutter/material.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 
@@ -263,27 +262,6 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
                                               showNewPoint = false;
                                             });
                                             FFAppState();
-
-                                            final photoNotePointCreateData =
-                                                createPhotoNotePointRecordData(
-                                              dx: x,
-                                              dy: y,
-                                              description:
-                                                  _textFieldController.text,
-                                            );
-                                            var photoNotePointRecordReference =
-                                                PhotoNotePointRecord.collection
-                                                    .doc();
-
-                                            await photoNotePointRecordReference
-                                                .set(photoNotePointCreateData);
-
-                                            FFAppState().photoNotePoints.add(
-                                                PhotoNotePointRecord
-                                                        .getDocumentFromData(
-                                                            photoNotePointCreateData,
-                                                            photoNotePointRecordReference)
-                                                    .reference);
 
                                             _textFieldController.clear();
                                           },

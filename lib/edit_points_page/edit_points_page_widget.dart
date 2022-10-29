@@ -215,6 +215,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                     .secondaryBackground,
                               ),
                               style: FlutterFlowTheme.of(context).bodyText2,
+                              maxLines: null,
                             ),
                           ),
                           if (FFAppState().isCheckbox == false)
@@ -261,6 +262,20 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                       .secondaryBackground,
                                 ),
                                 style: FlutterFlowTheme.of(context).bodyText2,
+                                maxLines: null,
+                              ),
+                            ),
+                          if (editPointsPageNotesRecord != null)
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 1,
+                              child: custom_widgets.PhotoNoteWidget(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height * 1,
+                                image: editPointsPageNotesRecord!.image!,
+                                points: editPointsPageNotesRecord!.notePoints!
+                                    .toList(),
+                                onCreatePhotoNote: () async {},
                               ),
                             ),
                           if (FFAppState().isCheckbox == true)
@@ -446,6 +461,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).bodyText1,
+                                    maxLines: null,
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
@@ -502,19 +518,6 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                          if (editPointsPageNotesRecord != null)
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 1,
-                              child: custom_widgets.PhotoNoteWidget(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height * 1,
-                                image: editPointsPageNotesRecord!.image!,
-                                points: editPointsPageNotesRecord!.notePoints!
-                                    .toList(),
-                                onCreatePhotoNote: () async {},
                               ),
                             ),
                         ],

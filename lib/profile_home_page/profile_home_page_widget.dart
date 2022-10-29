@@ -115,8 +115,9 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                       padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                       child: SwitchListTile(
                         value: switchListTileValue ??= true,
-                        onChanged: (newValue) =>
-                            setState(() => switchListTileValue = newValue),
+                        onChanged: (newValue) async {
+                          setState(() => switchListTileValue = newValue!);
+                        },
                         title: Text(
                           'Уведомления',
                           style: FlutterFlowTheme.of(context)
@@ -132,21 +133,29 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                         controlAffinity: ListTileControlAffinity.trailing,
                       ),
                     ),
-                    ListTile(
-                      title: Text(
-                        'Политика конфиденциальности данных',
-                        style: FlutterFlowTheme.of(context).subtitle2.override(
-                              fontFamily: 'Montserrat',
-                              color: FlutterFlowTheme.of(context).primaryText,
-                            ),
+                    InkWell(
+                      onTap: () async {
+                        await launchURL(
+                            'https://docs.google.com/document/d/1c_O6H8qCjNQmTIKaWTwYpCmhJ569835QFmgOIu8mkAs/edit');
+                      },
+                      child: ListTile(
+                        title: Text(
+                          'Политика конфиденциальности данных',
+                          style: FlutterFlowTheme.of(context)
+                              .subtitle2
+                              .override(
+                                fontFamily: 'Montserrat',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
+                        ),
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          color: FlutterFlowTheme.of(context).primaryColor,
+                          size: 20,
+                        ),
+                        tileColor: Color(0xFFF5F5F5),
+                        dense: false,
                       ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        color: FlutterFlowTheme.of(context).primaryColor,
-                        size: 20,
-                      ),
-                      tileColor: Color(0xFFF5F5F5),
-                      dense: false,
                     ),
                     ListTile(
                       title: Text(
@@ -231,16 +240,19 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             AuthUserStreamWidget(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
+                              child: Container(
+                                width: 80,
+                                height: 80,
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
                                 child: Image.network(
                                   valueOrDefault<String>(
                                     currentUserPhoto,
                                     'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/e7eohoj7hn57/uploadImg.png',
                                   ),
-                                  width: 80,
-                                  height: 100,
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),

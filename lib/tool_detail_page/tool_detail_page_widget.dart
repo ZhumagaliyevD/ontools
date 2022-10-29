@@ -88,7 +88,8 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                setState(() => FFAppState().toolBuyDate = null);
+                setState(() => FFAppState().toolBuyDate =
+                    DateTime.fromMillisecondsSinceEpoch(1665846120000));
                 setState(() => FFAppState().toolimg = '');
                 setState(() => FFAppState().chequeName = '');
                 context.pop();
@@ -202,6 +203,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                             FlutterFlowTheme.of(context).secondaryBackground,
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
+                      maxLines: null,
                     ),
                   ),
                   Padding(
@@ -292,6 +294,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                             FlutterFlowTheme.of(context).secondaryBackground,
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
+                      maxLines: null,
                     ),
                   ),
                   Padding(
@@ -524,6 +527,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                         .secondaryBackground,
                                   ),
                                   style: FlutterFlowTheme.of(context).bodyText1,
+                                  maxLines: null,
                                   keyboardType: TextInputType.number,
                                 ),
                               ],
@@ -624,8 +628,22 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                         }
                         final buttonUserRecord = snapshot.data!;
                         return FFButtonWidget(
-                          onPressed: () {
-                            print('Button pressed ...');
+                          onPressed: () async {
+                            if (Navigator.of(context).canPop()) {
+                              context.pop();
+                            }
+                            context.pushNamed(
+                              'ChatPage',
+                              queryParams: {
+                                'chatUser': serializeParam(
+                                  buttonUserRecord,
+                                  ParamType.Document,
+                                ),
+                              }.withoutNulls,
+                              extra: <String, dynamic>{
+                                'chatUser': buttonUserRecord,
+                              },
+                            );
                           },
                           text: 'Связаться',
                           options: FFButtonOptions(

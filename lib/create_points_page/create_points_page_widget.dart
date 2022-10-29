@@ -242,6 +242,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                     .secondaryBackground,
                               ),
                               style: FlutterFlowTheme.of(context).bodyText2,
+                              maxLines: null,
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
                                   return 'Обязательно к заполнению';
@@ -295,6 +296,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                       .secondaryBackground,
                                 ),
                                 style: FlutterFlowTheme.of(context).bodyText2,
+                                maxLines: null,
                               ),
                             ),
                           if (FFAppState().isCheckbox == true)
@@ -481,6 +483,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).bodyText1,
+                                    maxLines: null,
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(

@@ -149,6 +149,7 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                                             fontFamily: 'Montserrat',
                                             fontWeight: FontWeight.normal,
                                           ),
+                                      maxLines: null,
                                       keyboardType: TextInputType.emailAddress,
                                     ),
                                     Padding(
@@ -221,6 +222,7 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                                               fontFamily: 'Montserrat',
                                               fontWeight: FontWeight.normal,
                                             ),
+                                        maxLines: null,
                                       ),
                                     ),
                                     Padding(

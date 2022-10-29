@@ -12,6 +12,7 @@ import 'schema/bullets_record.dart';
 import 'schema/chats_record.dart';
 import 'schema/photo_notes_record.dart';
 import 'schema/photo_note_point_record.dart';
+import 'schema/chat_messages_record.dart';
 import 'schema/serializers.dart';
 
 export 'dart:async' show StreamSubscription;
@@ -27,6 +28,7 @@ export 'schema/bullets_record.dart';
 export 'schema/chats_record.dart';
 export 'schema/photo_notes_record.dart';
 export 'schema/photo_note_point_record.dart';
+export 'schema/chat_messages_record.dart';
 
 /// Functions to query UserRecords (as a Stream and as a Future).
 Stream<List<UserRecord>> queryUserRecord({
@@ -367,6 +369,48 @@ Future<FFFirestorePage<PhotoNotePointRecord>> queryPhotoNotePointRecordPage({
     queryCollectionPage(
       PhotoNotePointRecord.collection,
       PhotoNotePointRecord.serializer,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
+
+/// Functions to query ChatMessagesRecords (as a Stream and as a Future).
+Stream<List<ChatMessagesRecord>> queryChatMessagesRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      ChatMessagesRecord.collection,
+      ChatMessagesRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<ChatMessagesRecord>> queryChatMessagesRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      ChatMessagesRecord.collection,
+      ChatMessagesRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<ChatMessagesRecord>> queryChatMessagesRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+    queryCollectionPage(
+      ChatMessagesRecord.collection,
+      ChatMessagesRecord.serializer,
       queryBuilder: queryBuilder,
       nextPageMarker: nextPageMarker,
       pageSize: pageSize,
