@@ -10,6 +10,7 @@ import '../custom_code/widgets/index.dart' as custom_widgets;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '/custom_code/widgets/drawing.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CreatePointsPageWidget extends StatefulWidget {
@@ -137,6 +138,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                   color: FlutterFlowTheme.of(context).primaryText,
                   size: 30,
                 ),
+<<<<<<< Updated upstream
                 onPressed: () async {
                   if (uploadedFileUrl != null && uploadedFileUrl != '') {
                     final notesUpdateData = createNotesRecordData(
@@ -146,6 +148,27 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                       createdAt: getCurrentTimestamp,
                       image: uploadedFileUrl,
                     );
+=======
+                onPressed: () async { ////////////////////////////////////////////////////////////////////сохранение
+                  var _shouldSetState = false;
+                  if (uploadedFileUrl != null && uploadedFileUrl != '') {
+                    _shouldSetState = true;
+
+                    final notesUpdateData = {
+                      ...createNotesRecordData(
+                        title: noteTitleController!.text,
+                        description: noteDescriptionController!.text,
+                        createdBy: currentUserReference,
+                        createdAt: getCurrentTimestamp,
+                        image: uploadedFileUrl,
+                        isCheckbox: false,
+                      ),
+                      'note_points': FieldValue.arrayUnion(
+                          FFAppState().photoNotePoints),
+                      //'drawing': FieldValue.arrayUnion(
+                        //  FFAppState().),
+                    };
+>>>>>>> Stashed changes
                     await createPointsPageNotesRecord!.reference
                         .update(notesUpdateData);
                   } else {
@@ -540,17 +563,28 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                 width: MediaQuery.of(context).size.width,
                                 height: MediaQuery.of(context).size.height * 1,
                                 child: custom_widgets.PhotoNoteWidget(
+                                  isChangeable: true,
                                   width: MediaQuery.of(context).size.width,
                                   height:
                                       MediaQuery.of(context).size.height * 1,
                                   image: uploadedFileUrl,
-                                  onCreatePhotoNote: () async {
-                                    await Future.delayed(
-                                        const Duration(milliseconds: 1));
-                                  },
+                                  //onCreatePhotoNote: () async {
+                                  //  await Future.delayed(
+                                  //      const Duration(milliseconds: 1));
+                                  //},
                                 ),
                               ),
                             ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              DrawingButton(),
+                              Text('Painting \nMode'),
+                              //DrawingPage().clear(),
+
+                              //ClearButton(),
+                            ],
+                          )
                         ],
                       ),
                     ),

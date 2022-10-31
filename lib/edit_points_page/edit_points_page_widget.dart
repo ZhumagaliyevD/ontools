@@ -9,6 +9,7 @@ import '../custom_code/widgets/index.dart' as custom_widgets;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '/custom_code/widgets/drawing.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EditPointsPageWidget extends StatefulWidget {
@@ -106,7 +107,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
               style: FlutterFlowTheme.of(context).subtitle1,
             ),
             actions: [
-              FlutterFlowIconButton(
+              FlutterFlowIconButton( ///////////////////////////////////////сохранение
                 borderColor: Colors.transparent,
                 borderRadius: 30,
                 borderWidth: 1,
@@ -509,11 +510,19 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height * 1,
                               child: custom_widgets.PhotoNoteWidget(
+                                isChangeable: true,
                                 width: MediaQuery.of(context).size.width,
                                 height: MediaQuery.of(context).size.height * 1,
+<<<<<<< Updated upstream
                                 image:
                                     'https://images.pexels.com/photos/1459505/pexels-photo-1459505.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
                                 onCreatePhotoNote: () async {},
+=======
+                                image: editPointsPageNotesRecord!.image!,
+                                points: editPointsPageNotesRecord!.notePoints!
+                                    .toList(),
+                                //onCreatePhotoNote: () async {},
+>>>>>>> Stashed changes
                               ),
                             ),
                         ],
@@ -584,6 +593,16 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                     ],
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      DrawingButton(),
+                      Text('Painting \nMode'),
+              //DrawingPage().clear(),
+
+              //ClearButton(),
+                    ],
+                )
               ],
             ),
           ),

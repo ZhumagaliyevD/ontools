@@ -42,6 +42,12 @@
 @import google_sign_in_ios;
 #endif
 
+#if __has_include(<image_gallery_saver/ImageGallerySaverPlugin.h>)
+#import <image_gallery_saver/ImageGallerySaverPlugin.h>
+#else
+@import image_gallery_saver;
+#endif
+
 #if __has_include(<image_picker_ios/FLTImagePickerPlugin.h>)
 #import <image_picker_ios/FLTImagePickerPlugin.h>
 #else
@@ -93,6 +99,7 @@
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
   [FLTFirebaseStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseStoragePlugin"]];
   [FLTGoogleSignInPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleSignInPlugin"]];
+  [ImageGallerySaverPlugin registerWithRegistrar:[registry registrarForPlugin:@"ImageGallerySaverPlugin"]];
   [FLTImagePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImagePickerPlugin"]];
   [FLTPackageInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPackageInfoPlusPlugin"]];
   [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];

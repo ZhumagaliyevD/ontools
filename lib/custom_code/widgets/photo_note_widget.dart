@@ -7,6 +7,11 @@ import '../actions/index.dart'; // Imports custom actions
 import 'package:flutter/material.dart';
 // Begin custom widget code
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+<<<<<<< Updated upstream
+=======
+import 'package:pinch_zoom/pinch_zoom.dart';
+import '/custom_code/widgets/drawing.dart';
+>>>>>>> Stashed changes
 
 typedef VoidCallback = void Function();
 
@@ -19,18 +24,30 @@ class PhotoNote {
 }
 
 class PhotoNoteWidget extends StatefulWidget {
-  const PhotoNoteWidget({
+   PhotoNoteWidget({
     Key? key,
     this.width,
     this.height,
     required this.image,
+<<<<<<< Updated upstream
     required this.onCreatePhotoNote,
+=======
+    //required this.onCreatePhotoNote,
+    required this.isChangeable,
+    this.points,
+>>>>>>> Stashed changes
   }) : super(key: key);
 
+  bool isChangeable = true;
   final double? width;
   final double? height;
   final String image;
+<<<<<<< Updated upstream
   final Future<dynamic> Function() onCreatePhotoNote;
+=======
+  //Function() onCreatePhotoNote;
+  final List<DocumentReference>? points;
+>>>>>>> Stashed changes
 
   @override
   _PhotoNoteWidgetState createState() => _PhotoNoteWidgetState();
@@ -45,6 +62,7 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
   double y = 100;
 
   bool showNewPoint = false;
+  bool isChangeable = true;
 
   void addPoint() async {}
 
@@ -55,19 +73,21 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
 
     return Scaffold(
       body:
-
           /// Picked Image
           Stack(
-        children: <Widget>[
+          children: <Widget>[
           /// Picked Image
           GestureDetector(
             onTapDown: (details) {
               setState(() {
-                showNewPoint = !showNewPoint;
-                x = details.localPosition.dx;
-                y = details.localPosition.dy;
-              });
+                if (widget.isChangeable && !paintingMode) {
+                  showNewPoint =
+                  !showNewPoint; ///////показывает/убирает кружки при повторном нажатии
 
+                  x = details.localPosition.dx;
+                  y = details.localPosition.dy;
+                }
+              });
               // showDialog(context: context, builder: (context) {
               //   return AlertDialog(
               //     title: const Text('Type description'),
@@ -89,25 +109,35 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
             },
             child: Container(
                 decoration: BoxDecoration(
+<<<<<<< Updated upstream
                     border: Border.all(color: Colors.red, width: 5)),
                 child: Image.network(widget.image)),
+=======
+                    border: Border.all(color: Colors.black12, width: 3)),
+                child: Stack(
+                children: [PinchZoom(child: Image.network(widget.image),
+                  resetDuration: const Duration(milliseconds: 100),
+                  maxScale: 2.5,),
+                  DrawingPage(),
+                ]
+                )
+            ),
+>>>>>>> Stashed changes
           ),
-
           Stack(
-            children: photoNotes
-                .map((e) => Positioned(
+            children: photoNotes.map((e) => Positioned(
                       top: e.y,
                       left: e.x,
                       // right: width - x - 10,
                       // bottom: height - y - 10,
-                      child: JustTheTooltip(
+                      child: JustTheTooltip( ////////////////////////////////////
                         tailLength: 10.0,
                         backgroundColor: Colors.black,
                         triggerMode: TooltipTriggerMode.tap,
                         preferredDirection: AxisDirection.up,
                         margin: const EdgeInsets.all(20.0),
                         isModal: true,
-                        content: Padding(
+                        content: (widget.isChangeable) ? Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -121,10 +151,10 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  OutlinedButton(
-                                      onPressed: () {},
-                                      child: const Text("Edit")),
-                                  const SizedBox(width: 8),
+                                  //OutlinedButton(
+                                  //    onPressed: () {},
+                                  //    child: const Text("Edit")),
+                                  //const SizedBox(width: 8),
                                   ElevatedButton(
                                     onPressed: () {
                                       photoNotes.remove(e);
@@ -140,20 +170,29 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
                               )
                             ],
                           ),
+                        ) : Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                e.description,
+                                style: const TextStyle(color: Colors.white),
+                              )
+                            ],
+                          ),
                         ),
                         child: const CircleAvatar(
-                          radius: 6,
+                          radius: 9,
                           backgroundColor: Colors.white,
                           child: CircleAvatar(
-                            radius: 4,
+                            radius: 6,
                             backgroundColor: Colors.green,
                           ),
                         ),
                       ),
-                    ))
-                .toList(),
+                    )).toList(),
           ),
-
           showNewPoint
               ? Positioned(
                   left: x,
@@ -162,10 +201,10 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
                     children: [
                       const Center(
                         child: CircleAvatar(
-                          radius: 6,
+                          radius: 9,
                           backgroundColor: Colors.white,
                           child: CircleAvatar(
-                            radius: 4,
+                            radius: 6,
                             backgroundColor: Colors.green,
                           ),
                         ),
