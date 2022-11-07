@@ -133,7 +133,6 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                     fillColor: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
                   style: FlutterFlowTheme.of(context).bodyText1,
-                  maxLines: null,
                 ),
               ),
               Padding(
@@ -397,7 +396,6 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                     fillColor: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
                   style: FlutterFlowTheme.of(context).bodyText1,
-                  maxLines: null,
                 ),
               ),
               Padding(
@@ -533,7 +531,6 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                     .secondaryBackground,
                               ),
                               style: FlutterFlowTheme.of(context).bodyText1,
-                              maxLines: null,
                               keyboardType: TextInputType.number,
                             ),
                           ],

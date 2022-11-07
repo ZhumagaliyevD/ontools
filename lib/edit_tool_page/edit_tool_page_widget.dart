@@ -250,7 +250,6 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                             FlutterFlowTheme.of(context).secondaryBackground,
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
-                      maxLines: null,
                     ),
                   ),
                   Padding(
@@ -339,7 +338,6 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                             FlutterFlowTheme.of(context).secondaryBackground,
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
-                      maxLines: null,
                     ),
                   ),
                   Padding(
@@ -594,7 +592,6 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                         .secondaryBackground,
                                   ),
                                   style: FlutterFlowTheme.of(context).bodyText1,
-                                  maxLines: null,
                                   keyboardType: TextInputType.number,
                                 ),
                               ],

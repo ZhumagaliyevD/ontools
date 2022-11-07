@@ -213,7 +213,6 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
-                                      maxLines: null,
                                     ),
                                   ),
                                   FlutterFlowIconButton(

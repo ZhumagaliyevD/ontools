@@ -215,7 +215,6 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                     .secondaryBackground,
                               ),
                               style: FlutterFlowTheme.of(context).bodyText2,
-                              maxLines: null,
                             ),
                           ),
                           if (FFAppState().isCheckbox == false)
@@ -262,7 +261,6 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                       .secondaryBackground,
                                 ),
                                 style: FlutterFlowTheme.of(context).bodyText2,
-                                maxLines: null,
                               ),
                             ),
                           if (editPointsPageNotesRecord != null)
@@ -461,7 +459,6 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).bodyText1,
-                                    maxLines: null,
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(

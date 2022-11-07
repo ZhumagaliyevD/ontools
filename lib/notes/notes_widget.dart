@@ -146,7 +146,6 @@ class _NotesWidgetState extends State<NotesWidget> {
                                     FlutterFlowTheme.of(context).lineColor,
                               ),
                               style: FlutterFlowTheme.of(context).bodyText1,
-                              maxLines: null,
                             ),
                           ),
                           FlutterFlowIconButton(

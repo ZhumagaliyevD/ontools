@@ -213,7 +213,6 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                         ),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
-                      maxLines: null,
                     ),
                   ),
                   Padding(
@@ -253,7 +252,6 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                         ),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
-                      maxLines: null,
                     ),
                   ),
                   Padding(
@@ -293,7 +291,6 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                         ),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
-                      maxLines: null,
                     ),
                   ),
                   Padding(
@@ -333,7 +330,6 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                         ),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
-                      maxLines: null,
                       keyboardType: TextInputType.phone,
                     ),
                   ),
@@ -374,7 +370,6 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                         ),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
-                      maxLines: null,
                     ),
                   ),
                   Padding(

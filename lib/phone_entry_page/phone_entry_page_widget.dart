@@ -143,7 +143,6 @@ class _PhoneEntryPageWidgetState extends State<PhoneEntryPageWidget> {
                                             fontFamily: 'Montserrat',
                                             fontWeight: FontWeight.normal,
                                           ),
-                                      maxLines: null,
                                       keyboardType: TextInputType.phone,
                                     ),
                                     Padding(

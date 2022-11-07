@@ -155,7 +155,6 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                             fontFamily: 'Montserrat',
                                             fontWeight: FontWeight.normal,
                                           ),
-                                      maxLines: null,
                                       keyboardType: TextInputType.emailAddress,
                                     ),
                                     Padding(
@@ -228,7 +227,6 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                               fontFamily: 'Montserrat',
                                               fontWeight: FontWeight.normal,
                                             ),
-                                        maxLines: null,
                                       ),
                                     ),
                                     Padding(
@@ -303,7 +301,6 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                               fontFamily: 'Montserrat',
                                               fontWeight: FontWeight.normal,
                                             ),
-                                        maxLines: null,
                                       ),
                                     ),
                                     Padding(
