@@ -155,7 +155,6 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                 style: FlutterFlowTheme.of(context).bodyText1,
                               ),
                             ),
-<<<<<<< Updated upstream
                             Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
@@ -282,19 +281,18 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                   },
                                 ),
                               ],
-=======
-                            Container(
-                              height: 260,
-                              width: MediaQuery.of(context).size.width,
-                              child: custom_widgets.PhotoNoteWidget(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height * 1,
-                                image: pointsPageNotesRecord.image!,
-                                points: pointsPageNotesRecord.notePoints!.toList(),
-                                isChangeable: false,
-                                //onCreatePhotoNote: () async {},
-                              ),
->>>>>>> Stashed changes
+                              // Container(
+                              //   height: 260,
+                              //   width: MediaQuery.of(context).size.width,
+                              //   child: custom_widgets.PhotoNoteWidget(
+                              //     width: MediaQuery.of(context).size.width,
+                              //     height: MediaQuery.of(context).size.height * 1,
+                              //     image: pointsPageNotesRecord.image!,
+                              //     points: pointsPageNotesRecord.notePoints!.toList(),
+                              //     isChangeable: false,
+                              //     //onCreatePhotoNote: () async {},
+                              //   ),
+                              // ),
                             ),
                           ],
                         ),

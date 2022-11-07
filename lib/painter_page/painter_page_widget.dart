@@ -82,12 +82,10 @@ class _PainterPageWidgetState extends State<PainterPageWidget> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 1,
                 image: widget.noteIMG!.image!,
-<<<<<<< Updated upstream
+
                 onCreatePhotoNote: () async {},
-=======
                 points: widget.noteIMG!.notePoints!.toList(),
                 //onCreatePhotoNote: () async {},
->>>>>>> Stashed changes
               ),
             ),
             Expanded(

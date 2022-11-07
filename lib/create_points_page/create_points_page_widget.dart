@@ -24,7 +24,6 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
   bool isMediaUploading = false;
   String uploadedFileUrl = '';
 
-
   BulletsRecord? bullet;
   TextEditingController? optionController;
   TextEditingController? noteDescriptionController;
@@ -32,9 +31,9 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final photoNotePoint = FirebaseFirestore.instance.collection("photo_note").doc();
-  List<DocumentReference> get photoNotePoints => [
-  ];
+  final photoNotePoint =
+      FirebaseFirestore.instance.collection("photo_note").doc();
+  List<DocumentReference> get photoNotePoints => [];
 
   @override
   void initState() {
@@ -42,18 +41,11 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
     noteDescriptionController = TextEditingController();
     noteTitleController = TextEditingController();
     optionController = TextEditingController();
-    photoNotePoint.set({
-      "dx": 20,
-      "dy": 50,
-      "description": "Ffrom Aidar"
-    });
+    photoNotePoint.set({"dx": 20, "dy": 50, "description": "Ffrom Aidar"});
     photoNotePoints.add(photoNotePoint);
-    setState(() {
-
-    });
+    setState(() {});
     getData();
     FFAppState();
-
   }
 
   Future getData() async {
@@ -138,18 +130,17 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                   color: FlutterFlowTheme.of(context).primaryText,
                   size: 30,
                 ),
-<<<<<<< Updated upstream
+                // onPressed: () async {
+                //   if (uploadedFileUrl != null && uploadedFileUrl != '') {
+                //     final notesUpdateData = createNotesRecordData(
+                //       title: noteTitleController!.text,
+                //       description: noteDescriptionController!.text,
+                //       createdBy: currentUserReference,
+                //       createdAt: getCurrentTimestamp,
+                //       image: uploadedFileUrl,
+                //     );
                 onPressed: () async {
-                  if (uploadedFileUrl != null && uploadedFileUrl != '') {
-                    final notesUpdateData = createNotesRecordData(
-                      title: noteTitleController!.text,
-                      description: noteDescriptionController!.text,
-                      createdBy: currentUserReference,
-                      createdAt: getCurrentTimestamp,
-                      image: uploadedFileUrl,
-                    );
-=======
-                onPressed: () async { ////////////////////////////////////////////////////////////////////сохранение
+                  ////////////////////////////////////////////////////////////////////сохранение
                   var _shouldSetState = false;
                   if (uploadedFileUrl != null && uploadedFileUrl != '') {
                     _shouldSetState = true;
@@ -163,12 +154,11 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                         image: uploadedFileUrl,
                         isCheckbox: false,
                       ),
-                      'note_points': FieldValue.arrayUnion(
-                          FFAppState().photoNotePoints),
+                      'note_points':
+                          FieldValue.arrayUnion(FFAppState().photoNotePoints),
                       //'drawing': FieldValue.arrayUnion(
-                        //  FFAppState().),
+                      //  FFAppState().),
                     };
->>>>>>> Stashed changes
                     await createPointsPageNotesRecord!.reference
                         .update(notesUpdateData);
                   } else {
@@ -568,10 +558,10 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                   height:
                                       MediaQuery.of(context).size.height * 1,
                                   image: uploadedFileUrl,
-                                  //onCreatePhotoNote: () async {
-                                  //  await Future.delayed(
-                                  //      const Duration(milliseconds: 1));
-                                  //},
+                                  onCreatePhotoNote: () async {
+                                    await Future.delayed(
+                                        const Duration(milliseconds: 1));
+                                  },
                                 ),
                               ),
                             ),
