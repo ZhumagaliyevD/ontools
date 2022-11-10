@@ -632,6 +632,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                         borderRadius: 30,
                         borderWidth: 1,
                         buttonSize: 60,
+                        fillColor: Color(0x06232323),
                         icon: Icon(
                           FFIcons.kmenuDots,
                           color: FlutterFlowTheme.of(context).primaryText,

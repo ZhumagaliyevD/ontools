@@ -46,6 +46,7 @@ dependencies:
   firebase_storage_platform_interface: 4.1.10
   firebase_storage_web: 3.2.19
   flutter_animate: 1.0.0
+  flutter_cache_manager: 3.3.0
   flutter_datetime_picker: 1.5.1
   flutter_google_places: 0.3.0
   font_awesome_flutter: 10.1.0
@@ -72,6 +73,7 @@ dependencies:
   sign_in_with_apple: 4.1.0
   sign_in_with_apple_platform_interface: 1.0.0
   sign_in_with_apple_web: 1.0.1
+  sqflite: 2.2.0+2
   syncfusion_flutter_calendar:  20.3.47
   timeago: 3.2.2
   url_launcher: 6.1.5

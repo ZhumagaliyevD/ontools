@@ -75,6 +75,7 @@ class _AddNoteSettingsWidgetState extends State<AddNoteSettingsWidget> {
                             .toList(),
                       };
                       await NotesRecord.collection.doc().set(notesCreateData);
+                      Navigator.pop(context);
 
                       context.pushNamed('Notes');
                     },
@@ -94,6 +95,7 @@ class _AddNoteSettingsWidgetState extends State<AddNoteSettingsWidget> {
                   ),
                   InkWell(
                     onTap: () async {
+                      Navigator.pop(context);
                       await Share.share(
                           'ontools://ontools.com${GoRouter.of(context).location}');
                     },
@@ -114,6 +116,7 @@ class _AddNoteSettingsWidgetState extends State<AddNoteSettingsWidget> {
                   InkWell(
                     onTap: () async {
                       await bottomSheetMaterialNotesRecord!.reference.delete();
+                      Navigator.pop(context);
                     },
                     child: ListTile(
                       leading: FaIcon(
