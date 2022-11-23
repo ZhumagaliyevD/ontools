@@ -243,7 +243,7 @@ class _NotesWidgetState extends State<NotesWidget> {
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 0, 12),
+                                                  0, 1, 0, 12),
                                           child: Text(
                                             valueOrDefault<String>(
                                               searchNoteListNotesRecord.title,
