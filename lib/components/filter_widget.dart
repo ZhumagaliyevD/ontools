@@ -84,7 +84,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
-                      child: FlutterFlowDropDown(
+                      child: FlutterFlowDropDown<String>(
                         options: bottomSheetMaterialToolsRecordList
                             .where((e) => e.inSale!)
                             .toList()
@@ -108,7 +108,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
-                      child: FlutterFlowDropDown(
+                      child: FlutterFlowDropDown<String>(
                         options: bottomSheetMaterialToolsRecordList
                             .where((e) => e.inSale!)
                             .toList()
@@ -136,7 +136,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
-                      child: FlutterFlowDropDown(
+                      child: FlutterFlowDropDown<String>(
                         options: ['Есть', 'Нет'],
                         onChanged: (val) => setState(() => chequeValue = val),
                         width: double.infinity,

@@ -96,7 +96,6 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                await editPointsPageNotesRecord!.reference.delete();
                 setState(() => FFAppState().noteIMG = '');
                 context.pop();
               },
@@ -117,38 +116,15 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                   size: 30,
                 ),
                 onPressed: () async {
-                  if (FFAppState().noteIMG != null &&
-                      FFAppState().noteIMG != '') {
-                    final notesUpdateData = createNotesRecordData(
-                      title: noteTitleController!.text,
-                      description: noteDescriptionController!.text,
-                      createdBy: currentUserReference,
-                      createdAt: getCurrentTimestamp,
-                      image: FFAppState().noteIMG,
-                    );
-                    await editPointsPageNotesRecord!.reference
-                        .update(notesUpdateData);
-                  } else {
-                    await showDialog(
-                      context: context,
-                      builder: (alertDialogContext) {
-                        return AlertDialog(
-                          title: Text('Ошибка создания'),
-                          content: Text('Изображение отсутствует'),
-                          actions: [
-                            TextButton(
-                              onPressed: () =>
-                                  Navigator.pop(alertDialogContext),
-                              child: Text('Ok'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                    return;
-                  }
-
-                  setState(() => FFAppState().noteIMG = '');
+                  final notesUpdateData = createNotesRecordData(
+                    title: noteTitleController!.text,
+                    description: noteDescriptionController!.text,
+                    createdBy: currentUserReference,
+                    createdAt: getCurrentTimestamp,
+                    image: widget.note!.image,
+                  );
+                  await editPointsPageNotesRecord!.reference
+                      .update(notesUpdateData);
 
                   context.pushNamed('Notes');
                 },
@@ -270,7 +246,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                               child: custom_widgets.PhotoNoteWidget(
                                 width: MediaQuery.of(context).size.width,
                                 height: MediaQuery.of(context).size.height * 1,
-                                image: editPointsPageNotesRecord!.image!,
+                                image: widget.note!.image!,
                                 points: editPointsPageNotesRecord!.notePoints!
                                     .toList(),
                                 onCreatePhotoNote: () async {},
@@ -576,7 +552,9 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                             builder: (context) {
                               return Padding(
                                 padding: MediaQuery.of(context).viewInsets,
-                                child: AddNoteSettingsWidget(),
+                                child: AddNoteSettingsWidget(
+                                  object: widget.note!.reference,
+                                ),
                               );
                             },
                           ).then((value) => setState(() {}));

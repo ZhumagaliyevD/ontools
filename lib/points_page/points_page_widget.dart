@@ -80,16 +80,19 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                     size: 30,
                   ),
                   onPressed: () async {
+                    if (Navigator.of(context).canPop()) {
+                      context.pop();
+                    }
                     context.pushNamed(
                       'EditPointsPage',
                       queryParams: {
                         'note': serializeParam(
-                          pointsPageNotesRecord,
+                          widget.notepage,
                           ParamType.Document,
                         ),
                       }.withoutNulls,
                       extra: <String, dynamic>{
-                        'note': pointsPageNotesRecord,
+                        'note': widget.notepage,
                       },
                     );
                   },

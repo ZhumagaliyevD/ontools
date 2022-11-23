@@ -38,9 +38,9 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          context.pushNamed('AddNewToolPage');
-
           setState(() => FFAppState().SearchList = false);
+
+          context.pushNamed('AddNewToolPage');
         },
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         elevation: 8,
@@ -64,96 +64,95 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                  ),
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 12),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).lineColor,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: toolSearchController,
-                              onChanged: (_) => EasyDebounce.debounce(
-                                'toolSearchController',
-                                Duration(milliseconds: 500),
-                                () => setState(() {}),
-                              ),
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                isDense: true,
-                                hintText: 'Поиск',
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                filled: true,
-                                fillColor:
-                                    FlutterFlowTheme.of(context).lineColor,
-                              ),
-                              style: FlutterFlowTheme.of(context).bodyText1,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                width: 100,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                ),
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 12),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).lineColor,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: toolSearchController,
+                            onChanged: (_) => EasyDebounce.debounce(
+                              'toolSearchController',
+                              Duration(milliseconds: 500),
+                              () => setState(() {}),
                             ),
-                          ),
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30,
-                            borderWidth: 1,
-                            buttonSize: 50,
-                            icon: Icon(
-                              Icons.close,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 20,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              hintText: 'Поиск',
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              filled: true,
+                              fillColor: FlutterFlowTheme.of(context).lineColor,
                             ),
-                            onPressed: () async {
-                              setState(() {
-                                toolSearchController?.clear();
-                              });
-                            },
+                            style: FlutterFlowTheme.of(context).bodyText1,
                           ),
-                        ],
-                      ),
+                        ),
+                        FlutterFlowIconButton(
+                          borderColor: Colors.transparent,
+                          borderRadius: 30,
+                          borderWidth: 1,
+                          buttonSize: 50,
+                          icon: Icon(
+                            Icons.close,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            size: 20,
+                          ),
+                          onPressed: () async {
+                            setState(() {
+                              toolSearchController?.clear();
+                            });
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Padding(
+              ),
+              Expanded(
+                child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
                   child: StreamBuilder<List<ToolsRecord>>(
                     stream: queryToolsRecord(
@@ -338,8 +337,8 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                     },
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

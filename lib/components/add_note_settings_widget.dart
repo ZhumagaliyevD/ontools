@@ -9,7 +9,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 
 class AddNoteSettingsWidget extends StatefulWidget {
-  const AddNoteSettingsWidget({Key? key}) : super(key: key);
+  const AddNoteSettingsWidget({
+    Key? key,
+    this.object,
+  }) : super(key: key);
+
+  final DocumentReference? object;
 
   @override
   _AddNoteSettingsWidgetState createState() => _AddNoteSettingsWidgetState();
@@ -115,8 +120,10 @@ class _AddNoteSettingsWidgetState extends State<AddNoteSettingsWidget> {
                   ),
                   InkWell(
                     onTap: () async {
-                      await bottomSheetMaterialNotesRecord!.reference.delete();
+                      await widget.object!.delete();
                       Navigator.pop(context);
+
+                      context.pushNamed('Notes');
                     },
                     child: ListTile(
                       leading: FaIcon(
@@ -130,40 +137,6 @@ class _AddNoteSettingsWidgetState extends State<AddNoteSettingsWidget> {
                       ),
                       tileColor: Color(0xFFF5F5F5),
                       dense: false,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      await bottomSheetMaterialNotesRecord!.reference.delete();
-                    },
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
-                            child: FaIcon(
-                              FontAwesomeIcons.pen,
-                              color: Colors.black,
-                              size: 20,
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
-                            child: Text(
-                              'Удалить',
-                              style: FlutterFlowTheme.of(context).bodyText1,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ],

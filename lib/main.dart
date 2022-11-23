@@ -63,8 +63,10 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
-  void setLocale(String language) =>
-      setState(() => _locale = createLocale(language));
+  void setLocale(String language) {
+    setState(() => _locale = createLocale(language));
+  }
+
   void setThemeMode(ThemeMode mode) => setState(() {
         _themeMode = mode;
       });

@@ -218,17 +218,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'PainterPage',
-              path: 'painterPage',
-              requireAuth: true,
-              asyncParams: {
-                'noteIMG': getDoc('notes', NotesRecord.serializer),
-              },
-              builder: (context, params) => PainterPageWidget(
-                noteIMG: params.getParam('noteIMG', ParamType.Document),
-              ),
-            ),
-            FFRoute(
               name: 'EditPointsPage',
               path: 'editPointsPage',
               requireAuth: true,
@@ -237,6 +226,17 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               },
               builder: (context, params) => EditPointsPageWidget(
                 note: params.getParam('note', ParamType.Document),
+              ),
+            ),
+            FFRoute(
+              name: 'PainterPage',
+              path: 'painterPage',
+              requireAuth: true,
+              asyncParams: {
+                'noteIMG': getDoc('notes', NotesRecord.serializer),
+              },
+              builder: (context, params) => PainterPageWidget(
+                noteIMG: params.getParam('noteIMG', ParamType.Document),
               ),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),

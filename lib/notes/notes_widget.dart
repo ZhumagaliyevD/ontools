@@ -192,12 +192,11 @@ class _NotesWidgetState extends State<NotesWidget> {
                       }
                       List<NotesRecord> searchNoteListNotesRecordList =
                           snapshot.data!;
-                      return ListView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemCount: searchNoteListNotesRecordList.length,
-                        itemBuilder: (context, searchNoteListIndex) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children:
+                            List.generate(searchNoteListNotesRecordList.length,
+                                (searchNoteListIndex) {
                           final searchNoteListNotesRecord =
                               searchNoteListNotesRecordList[
                                   searchNoteListIndex];
@@ -246,7 +245,10 @@ class _NotesWidgetState extends State<NotesWidget> {
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 0, 12),
                                           child: Text(
-                                            searchNoteListNotesRecord.title!,
+                                            valueOrDefault<String>(
+                                              searchNoteListNotesRecord.title,
+                                              'Title',
+                                            ),
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyText1
                                                 .override(
@@ -260,15 +262,21 @@ class _NotesWidgetState extends State<NotesWidget> {
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 0, 12),
                                           child: Image.network(
-                                            searchNoteListNotesRecord.image!,
+                                            valueOrDefault<String>(
+                                              searchNoteListNotesRecord.image,
+                                              'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/dmoyfrptzjz3/onToolsLogo.png',
+                                            ),
                                             width: double.infinity,
                                             height: 200,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
                                         Text(
-                                          searchNoteListNotesRecord.description!
-                                              .maybeHandleOverflow(
+                                          valueOrDefault<String>(
+                                            searchNoteListNotesRecord
+                                                .description,
+                                            'description',
+                                          ).maybeHandleOverflow(
                                             maxChars: 35,
                                             replacement: '…',
                                           ),
@@ -417,8 +425,12 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                                             0,
                                                                             0),
                                                                 child: Text(
-                                                                  columnBulletsRecord
-                                                                      .text!,
+                                                                  valueOrDefault<
+                                                                      String>(
+                                                                    columnBulletsRecord
+                                                                        .text,
+                                                                    'text',
+                                                                  ),
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyText1,
@@ -458,7 +470,7 @@ class _NotesWidgetState extends State<NotesWidget> {
                               ),
                             ),
                           );
-                        },
+                        }),
                       );
                     },
                   ),

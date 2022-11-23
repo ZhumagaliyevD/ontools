@@ -25,6 +25,6 @@ export 'create_points_page/create_points_page_widget.dart'
 export 'marketplace/marketplace_widget.dart' show MarketplaceWidget;
 export 'tool_detail_page/tool_detail_page_widget.dart'
     show ToolDetailPageWidget;
-export 'painter_page/painter_page_widget.dart' show PainterPageWidget;
 export 'edit_points_page/edit_points_page_widget.dart'
     show EditPointsPageWidget;
+export 'painter_page/painter_page_widget.dart' show PainterPageWidget;
