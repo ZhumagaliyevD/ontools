@@ -96,7 +96,6 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                await editPointsPageNotesRecord!.reference.delete();
                 setState(() => FFAppState().noteIMG = '');
                 context.pop();
               },
@@ -117,14 +116,19 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                   size: 30,
                 ),
                 onPressed: () async {
-                  if (FFAppState().noteIMG != null &&
-                      FFAppState().noteIMG != '') {
+                  if (widget.note!.image != null) {
+                    showDialog(
+                        context: context,
+                        builder: (context) => Center(
+                              child:
+                                  CircularProgressIndicator(color: Colors.red),
+                            ));
                     final notesUpdateData = createNotesRecordData(
                       title: noteTitleController!.text,
                       description: noteDescriptionController!.text,
                       createdBy: currentUserReference,
                       createdAt: getCurrentTimestamp,
-                      image: FFAppState().noteIMG,
+                      image: widget.note!.image,
                     );
                     await editPointsPageNotesRecord!.reference
                         .update(notesUpdateData);
@@ -147,6 +151,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                     );
                     return;
                   }
+                  Navigator.of(context).pop();
 
                   setState(() => FFAppState().noteIMG = '');
 
@@ -261,6 +266,19 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                       .secondaryBackground,
                                 ),
                                 style: FlutterFlowTheme.of(context).bodyText2,
+                              ),
+                            ),
+                          if (editPointsPageNotesRecord != null)
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 1,
+                              child: custom_widgets.PhotoNoteWidget(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height * 1,
+                                image: widget.note!.image!,
+                                points: editPointsPageNotesRecord!.notePoints!
+                                    .toList(),
+                                onCreatePhotoNote: () async {},
                               ),
                             ),
                           if (FFAppState().isCheckbox == true)
@@ -504,19 +522,6 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                 ],
                               ),
                             ),
-                          if (editPointsPageNotesRecord != null)
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 1,
-                              child: custom_widgets.PhotoNoteWidget(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height * 1,
-                                image: editPointsPageNotesRecord!.image!,
-                                points: editPointsPageNotesRecord!.notePoints!
-                                    .toList(),
-                                onCreatePhotoNote: () async {},
-                              ),
-                            ),
                         ],
                       ),
                     ),
@@ -576,7 +581,9 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                             builder: (context) {
                               return Padding(
                                 padding: MediaQuery.of(context).viewInsets,
-                                child: AddNoteSettingsWidget(),
+                                child: AddNoteSettingsWidget(
+                                  object: widget.note!.reference,
+                                ),
                               );
                             },
                           ).then((value) => setState(() {}));

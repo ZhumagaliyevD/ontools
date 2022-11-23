@@ -231,16 +231,19 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             AuthUserStreamWidget(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
+                              child: Container(
+                                width: 80,
+                                height: 80,
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
                                 child: Image.network(
                                   valueOrDefault<String>(
                                     currentUserPhoto,
                                     'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/e7eohoj7hn57/uploadImg.png',
                                   ),
-                                  width: 80,
-                                  height: 100,
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),

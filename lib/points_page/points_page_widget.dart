@@ -81,21 +81,24 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                     size: 30,
                   ),
                   onPressed: () async {
+                    if (Navigator.of(context).canPop()) {
+                      context.pop();
+                    }
                     context.pushNamed(
                       'EditPointsPage',
                       queryParams: {
                         'note': serializeParam(
-                          pointsPageNotesRecord,
+                          widget.notepage,
                           ParamType.Document,
                         ),
                       }.withoutNulls,
                       extra: <String, dynamic>{
-                        'note': pointsPageNotesRecord,
+                        'note': widget.notepage,
                       },
                     );
                   },
                 ),
-              ),
+              )
             ],
             centerTitle: true,
             elevation: 0,
@@ -155,7 +158,8 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                 width: MediaQuery.of(context).size.width,
                                 height: MediaQuery.of(context).size.height * 1,
                                 image: pointsPageNotesRecord.image!,
-                                points: pointsPageNotesRecord.notePoints!.toList(),
+                                points:
+                                    pointsPageNotesRecord.notePoints!.toList(),
                                 onCreatePhotoNote: () async {},
                               ),
                             ),

@@ -64,7 +64,10 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
             size: 20,
           ),
           onPressed: () {
-            print('IconButton pressed ...');
+            if (Navigator.of(context).canPop()) {
+              context.pop();
+            }
+            context.pushNamed('AllChats');
           },
         ),
         title: Text(

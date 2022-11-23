@@ -36,7 +36,7 @@ class PhotoNoteWidget extends StatefulWidget {
 
   final double? width;
   final double? height;
-  final String image;
+  final String? image;
   final Future<dynamic> Function() onCreatePhotoNote;
   final List<DocumentReference>? points;
 
@@ -112,12 +112,26 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
               //   );
               // });
             },
-            child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.red, width: 5)),
-                child: PinchZoom(child: Image.network(widget.image),    resetDuration: const Duration(milliseconds: 100),
-                  maxScale: 2.5,)
-            ),
+            child: widget.image == null
+                ? Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.red, width: 1)),
+                    child: Text(
+                      "Please upload an image by clicking + below",
+                      style: TextStyle(
+                        fontSize: 25,
+                      ),
+                    ))
+                : Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white54, width: 2)),
+                    child: PinchZoom(
+                      child: Image.network(widget.image ??
+                          "https://en.wikipedia.org/wiki/Blinding_Lights#/media/File:The_Weeknd_-_Blinding_Lights.png"),
+                      resetDuration: const Duration(milliseconds: 100),
+                      maxScale: 2.5,
+                    )),
           ),
 
           Stack(

@@ -152,7 +152,7 @@ class _NavBarPageState extends State<NavBarPage> {
               Icons.shopping_cart_rounded,
               size: 24,
             ),
-            label: 'Marketplace',
+            label: 'Маркетплейс',
             tooltip: '',
           ),
           BottomNavigationBarItem(

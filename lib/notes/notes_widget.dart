@@ -3,6 +3,7 @@ import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
@@ -105,11 +106,8 @@ class _NotesWidgetState extends State<NotesWidget> {
                               controller: searchController,
                               onChanged: (_) => EasyDebounce.debounce(
                                 'searchController',
-                                Duration(milliseconds: 100),
-                                () async {
-                                  setState(() => FFAppState().noteNameSearch =
-                                      searchController!.text);
-                                },
+                                Duration(milliseconds: 500),
+                                () => setState(() {}),
                               ),
                               obscureText: false,
                               decoration: InputDecoration(
@@ -164,7 +162,6 @@ class _NotesWidgetState extends State<NotesWidget> {
                               setState(() {
                                 searchController?.clear();
                               });
-                              setState(() => FFAppState().noteNameSearch = '');
                             },
                           ),
                         ],
@@ -177,9 +174,7 @@ class _NotesWidgetState extends State<NotesWidget> {
                   child: StreamBuilder<List<NotesRecord>>(
                     stream: queryNotesRecord(
                       queryBuilder: (notesRecord) => notesRecord
-                          .where('created_by', isEqualTo: currentUserReference)
-                          .where('Title',
-                              isEqualTo: FFAppState().noteNameSearch),
+                          .where('created_by', isEqualTo: currentUserReference),
                     ),
                     builder: (context, snapshot) {
                       // Customize what your widget looks like when it's loading.
@@ -197,287 +192,19 @@ class _NotesWidgetState extends State<NotesWidget> {
                       }
                       List<NotesRecord> searchNoteListNotesRecordList =
                           snapshot.data!;
-                      return ListView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemCount: searchNoteListNotesRecordList.length,
-                        itemBuilder: (context, searchNoteListIndex) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children:
+                            List.generate(searchNoteListNotesRecordList.length,
+                                (searchNoteListIndex) {
                           final searchNoteListNotesRecord =
                               searchNoteListNotesRecordList[
                                   searchNoteListIndex];
-                          return Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
-                            child: InkWell(
-                              onTap: () async {
-                                context.pushNamed(
-                                  'PointsPage',
-                                  queryParams: {
-                                    'notepage': serializeParam(
-                                      searchNoteListNotesRecord,
-                                      ParamType.Document,
-                                    ),
-                                  }.withoutNulls,
-                                  extra: <String, dynamic>{
-                                    'notepage': searchNoteListNotesRecord,
-                                  },
-                                );
-                              },
-                              child: Card(
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      12, 12, 12, 12),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 0, 12),
-                                        child: Text(
-                                          searchNoteListNotesRecord.title!,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText1
-                                              .override(
-                                                fontFamily: 'Montserrat',
-                                                fontSize: 20,
-                                              ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 0, 12),
-                                        child: Image.network(
-                                          searchNoteListNotesRecord.image!,
-                                          width: double.infinity,
-                                          height: 200,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      Text(
-                                        searchNoteListNotesRecord.description!
-                                            .maybeHandleOverflow(
-                                          maxChars: 35,
-                                          replacement: '…',
-                                        ),
-                                        maxLines: 2,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText1,
-                                      ),
-                                      if (searchNoteListNotesRecord != null)
-                                        Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 12, 0, 0),
-                                              child: StreamBuilder<
-                                                  List<BulletsRecord>>(
-                                                stream: queryBulletsRecord(
-                                                  parent:
-                                                      searchNoteListNotesRecord
-                                                          .reference,
-                                                ),
-                                                builder: (context, snapshot) {
-                                                  // Customize what your widget looks like when it's loading.
-                                                  if (!snapshot.hasData) {
-                                                    return Center(
-                                                      child: SizedBox(
-                                                        width: 50,
-                                                        height: 50,
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryColor,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }
-                                                  List<BulletsRecord>
-                                                      columnBulletsRecordList =
-                                                      snapshot.data!;
-                                                  return Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: List.generate(
-                                                        columnBulletsRecordList
-                                                            .length,
-                                                        (columnIndex) {
-                                                      final columnBulletsRecord =
-                                                          columnBulletsRecordList[
-                                                              columnIndex];
-                                                      return Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(0, 0,
-                                                                    0, 12),
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          children: [
-                                                            Stack(
-                                                              children: [
-                                                                if (columnBulletsRecord
-                                                                        .isDone ==
-                                                                    false)
-                                                                  InkWell(
-                                                                    onTap:
-                                                                        () async {
-                                                                      final bulletsUpdateData =
-                                                                          createBulletsRecordData(
-                                                                        isDone:
-                                                                            true,
-                                                                      );
-                                                                      await columnBulletsRecord
-                                                                          .reference
-                                                                          .update(
-                                                                              bulletsUpdateData);
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      width: 40,
-                                                                      height:
-                                                                          40,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(12),
-                                                                        border:
-                                                                            Border.all(
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).lineColor,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                if (columnBulletsRecord
-                                                                        .isDone ==
-                                                                    true)
-                                                                  InkWell(
-                                                                    onTap:
-                                                                        () async {
-                                                                      final bulletsUpdateData =
-                                                                          createBulletsRecordData(
-                                                                        isDone:
-                                                                            false,
-                                                                      );
-                                                                      await columnBulletsRecord
-                                                                          .reference
-                                                                          .update(
-                                                                              bulletsUpdateData);
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      width: 40,
-                                                                      height:
-                                                                          40,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(12),
-                                                                        border:
-                                                                            Border.all(
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).lineColor,
-                                                                        ),
-                                                                      ),
-                                                                      child:
-                                                                          Icon(
-                                                                        Icons
-                                                                            .check,
-                                                                        color: Colors
-                                                                            .black,
-                                                                        size:
-                                                                            24,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                              ],
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          12,
-                                                                          0,
-                                                                          0,
-                                                                          0),
-                                                              child: Text(
-                                                                columnBulletsRecord
-                                                                    .text!,
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyText1,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      );
-                                                    }),
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-                if (FFAppState().noteNameSearch == null ||
-                    FFAppState().noteNameSearch == '')
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                    child: StreamBuilder<List<NotesRecord>>(
-                      stream: queryNotesRecord(
-                        queryBuilder: (notesRecord) => notesRecord.where(
-                            'created_by',
-                            isEqualTo: currentUserReference),
-                      ),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: CircularProgressIndicator(
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryColor,
-                              ),
-                            ),
-                          );
-                        }
-                        List<NotesRecord> fullNoteListNotesRecordList =
-                            snapshot.data!;
-                        return ListView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: fullNoteListNotesRecordList.length,
-                          itemBuilder: (context, fullNoteListIndex) {
-                            final fullNoteListNotesRecord =
-                                fullNoteListNotesRecordList[fullNoteListIndex];
-                            return Padding(
+                          return Visibility(
+                            visible: functions.searchRealTimeCopy(
+                                searchController!.text,
+                                searchNoteListNotesRecord.title!),
+                            child: Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
                               child: InkWell(
@@ -486,12 +213,12 @@ class _NotesWidgetState extends State<NotesWidget> {
                                     'PointsPage',
                                     queryParams: {
                                       'notepage': serializeParam(
-                                        fullNoteListNotesRecord,
+                                        searchNoteListNotesRecord,
                                         ParamType.Document,
                                       ),
                                     }.withoutNulls,
                                     extra: <String, dynamic>{
-                                      'notepage': fullNoteListNotesRecord,
+                                      'notepage': searchNoteListNotesRecord,
                                     },
                                   );
                                 },
@@ -518,7 +245,10 @@ class _NotesWidgetState extends State<NotesWidget> {
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 0, 12),
                                           child: Text(
-                                            fullNoteListNotesRecord.title!,
+                                            valueOrDefault<String>(
+                                              searchNoteListNotesRecord.title,
+                                              'Title',
+                                            ),
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyText1
                                                 .override(
@@ -532,15 +262,21 @@ class _NotesWidgetState extends State<NotesWidget> {
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 0, 12),
                                           child: Image.network(
-                                            fullNoteListNotesRecord.image!,
+                                            valueOrDefault<String>(
+                                              searchNoteListNotesRecord.image,
+                                              'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/dmoyfrptzjz3/onToolsLogo.png',
+                                            ),
                                             width: double.infinity,
                                             height: 200,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
                                         Text(
-                                          fullNoteListNotesRecord.description!
-                                              .maybeHandleOverflow(
+                                          valueOrDefault<String>(
+                                            searchNoteListNotesRecord
+                                                .description,
+                                            'description',
+                                          ).maybeHandleOverflow(
                                             maxChars: 35,
                                             replacement: '…',
                                           ),
@@ -548,7 +284,7 @@ class _NotesWidgetState extends State<NotesWidget> {
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1,
                                         ),
-                                        if (fullNoteListNotesRecord != null)
+                                        if (searchNoteListNotesRecord != null)
                                           Column(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
@@ -559,7 +295,7 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                     List<BulletsRecord>>(
                                                   stream: queryBulletsRecord(
                                                     parent:
-                                                        fullNoteListNotesRecord
+                                                        searchNoteListNotesRecord
                                                             .reference,
                                                   ),
                                                   builder: (context, snapshot) {
@@ -689,8 +425,12 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                                             0,
                                                                             0),
                                                                 child: Text(
-                                                                  columnBulletsRecord
-                                                                      .text!,
+                                                                  valueOrDefault<
+                                                                      String>(
+                                                                    columnBulletsRecord
+                                                                        .text,
+                                                                    'text',
+                                                                  ),
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyText1,
@@ -706,17 +446,35 @@ class _NotesWidgetState extends State<NotesWidget> {
                                               ),
                                             ],
                                           ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              dateTimeFormat(
+                                                  'd/M/y',
+                                                  searchNoteListNotesRecord
+                                                      .createdAt!),
+                                              textAlign: TextAlign.start,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText2,
+                                            ),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                   ),
                                 ),
                               ),
-                            );
-                          },
-                        );
-                      },
-                    ),
+                            ),
+                          );
+                        }),
+                      );
+                    },
                   ),
+                ),
               ],
             ),
           ),
