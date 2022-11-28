@@ -17,9 +17,8 @@ class NotesWidget extends StatefulWidget {
 }
 
 class _NotesWidgetState extends State<NotesWidget> {
-  NotesRecord? currentNote;
-  final scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController? searchController;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -55,27 +54,9 @@ class _NotesWidgetState extends State<NotesWidget> {
             size: 24,
           ),
           onPressed: () async {
-            final notesCreateData = createNotesRecordData(
-              createdAt: getCurrentTimestamp,
-              createdBy: currentUserReference,
-            );
-            var notesRecordReference = NotesRecord.collection.doc();
-            await notesRecordReference.set(notesCreateData);
-            currentNote = NotesRecord.getDocumentFromData(
-                notesCreateData, notesRecordReference);
             setState(() => FFAppState().isCheckbox = false);
 
-            context.pushNamed(
-              'createPointsPage',
-              queryParams: {
-                'currentNote': serializeParam(
-                  currentNote!.reference,
-                  ParamType.DocumentReference,
-                ),
-              }.withoutNulls,
-            );
-
-            setState(() {});
+            context.pushNamed('createPointsPage');
           },
         ),
       ),

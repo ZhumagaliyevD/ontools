@@ -14,12 +14,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CreatePointsPageWidget extends StatefulWidget {
-  const CreatePointsPageWidget({
-    Key? key,
-    this.currentNote,
-  }) : super(key: key);
-
-  final DocumentReference? currentNote;
+  const CreatePointsPageWidget({Key? key}) : super(key: key);
 
   @override
   _CreatePointsPageWidgetState createState() => _CreatePointsPageWidgetState();
@@ -56,8 +51,10 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<NotesRecord>(
-      stream: NotesRecord.getDocument(widget.currentNote!),
+    return StreamBuilder<List<NotesRecord>>(
+      stream: queryNotesRecord(
+        singleRecord: true,
+      ),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -71,7 +68,15 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
             ),
           );
         }
-        final createPointsPageNotesRecord = snapshot.data!;
+        List<NotesRecord> createPointsPageNotesRecordList = snapshot.data!;
+        // Return an empty Container when the document does not exist.
+        if (snapshot.data!.isEmpty) {
+          return Container();
+        }
+        final createPointsPageNotesRecord =
+            createPointsPageNotesRecordList.isNotEmpty
+                ? createPointsPageNotesRecordList.first
+                : null;
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -89,7 +94,6 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                await createPointsPageNotesRecord.reference.delete();
                 setState(() => FFAppState().noteIMG = '');
                 context.pop();
               },
@@ -111,19 +115,18 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                 ),
                 onPressed: () async {
                   if (uploadedFileUrl != null && uploadedFileUrl != '') {
-                    final notesUpdateData = {
+                    final notesCreateData = {
                       ...createNotesRecordData(
                         title: noteTitleController!.text,
                         description: noteDescriptionController!.text,
+                        isCheckbox: false,
+                        image: uploadedFileUrl,
                         createdBy: currentUserReference,
                         createdAt: getCurrentTimestamp,
-                        image: uploadedFileUrl,
-                        isCheckbox: false,
                       ),
                       'note_points': FFAppState().photoNotePoints,
                     };
-                    await createPointsPageNotesRecord.reference
-                        .update(notesUpdateData);
+                    await NotesRecord.collection.doc().set(notesCreateData);
                     setState(() => FFAppState().photoNotePoints = []);
                   } else {
                     await showDialog(
@@ -274,7 +277,8 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                   EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
                               child: StreamBuilder<List<BulletsRecord>>(
                                 stream: queryBulletsRecord(
-                                  parent: createPointsPageNotesRecord.reference,
+                                  parent:
+                                      createPointsPageNotesRecord!.reference,
                                 ),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
@@ -483,7 +487,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                           );
                                           var bulletsRecordReference =
                                               BulletsRecord.createDoc(
-                                                  createPointsPageNotesRecord
+                                                  createPointsPageNotesRecord!
                                                       .reference);
                                           await bulletsRecordReference
                                               .set(bulletsCreateData);
@@ -509,41 +513,44 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                 ],
                               ),
                             ),
-                          FlutterFlowChoiceChips(
-                            options: [
-                              ChipData('Draw', FontAwesomeIcons.pen),
-                              ChipData('Comment', Icons.add_comment)
-                            ],
-                            onChanged: (val) =>
-                                setState(() => choiceChipsValue = val?.first),
-                            selectedChipStyle: ChipStyle(
-                              backgroundColor: Color(0xFF323B45),
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .bodyText1
-                                  .override(
-                                    fontFamily: 'Montserrat',
-                                    color: Colors.white,
-                                  ),
-                              iconColor: Colors.white,
-                              iconSize: 18,
-                              elevation: 4,
+                          if (uploadedFileUrl != null && uploadedFileUrl != '')
+                            FlutterFlowChoiceChips(
+                              initiallySelected: ['Comment'],
+                              options: [
+                                ChipData('Draw', FontAwesomeIcons.pen),
+                                ChipData('Comment', Icons.add_comment)
+                              ],
+                              onChanged: (val) =>
+                                  setState(() => choiceChipsValue = val?.first),
+                              selectedChipStyle: ChipStyle(
+                                backgroundColor: Color(0xFF323B45),
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Montserrat',
+                                      color: Colors.white,
+                                    ),
+                                iconColor: Colors.white,
+                                iconSize: 18,
+                                elevation: 4,
+                              ),
+                              unselectedChipStyle: ChipStyle(
+                                backgroundColor: Colors.white,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .bodyText2
+                                    .override(
+                                      fontFamily: 'Montserrat',
+                                      color: Color(0xFF323B45),
+                                    ),
+                                iconColor: Color(0xFF323B45),
+                                iconSize: 18,
+                                elevation: 4,
+                              ),
+                              chipSpacing: 20,
+                              multiselect: false,
+                              initialized: choiceChipsValue != null,
+                              alignment: WrapAlignment.start,
                             ),
-                            unselectedChipStyle: ChipStyle(
-                              backgroundColor: Colors.white,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .bodyText2
-                                  .override(
-                                    fontFamily: 'Montserrat',
-                                    color: Color(0xFF323B45),
-                                  ),
-                              iconColor: Color(0xFF323B45),
-                              iconSize: 18,
-                              elevation: 4,
-                            ),
-                            chipSpacing: 20,
-                            multiselect: false,
-                            alignment: WrapAlignment.start,
-                          ),
                           if ((createPointsPageNotesRecord != null) &&
                               (uploadedFileUrl != null &&
                                   uploadedFileUrl != '') &&
@@ -559,7 +566,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                   height:
                                       MediaQuery.of(context).size.height * 1,
                                   image: uploadedFileUrl,
-                                  points: createPointsPageNotesRecord
+                                  points: createPointsPageNotesRecord!
                                       .notePoints!
                                       .toList(),
                                   onCreatePhotoNote: () async {

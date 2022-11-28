@@ -196,10 +196,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'createPointsPage',
               path: 'createPointsPage',
               requireAuth: true,
-              builder: (context, params) => CreatePointsPageWidget(
-                currentNote: params.getParam(
-                    'currentNote', ParamType.DocumentReference, false, 'notes'),
-              ),
+              builder: (context, params) => CreatePointsPageWidget(),
             ),
             FFRoute(
               name: 'Marketplace',
