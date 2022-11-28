@@ -13,7 +13,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CreatePointsPageWidget extends StatefulWidget {
-  const CreatePointsPageWidget({Key? key}) : super(key: key);
+  const CreatePointsPageWidget({
+    Key? key,
+    this.currentNote,
+  }) : super(key: key);
+
+  final DocumentReference? currentNote;
 
   @override
   _CreatePointsPageWidgetState createState() => _CreatePointsPageWidgetState();
@@ -27,7 +32,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
   TextEditingController? optionController;
   TextEditingController? noteDescriptionController;
   TextEditingController? noteTitleController;
-  PhotoNotePointRecord? photoNotePointOutput;
+  PhotoNotePointRecord? createdPoint;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -49,13 +54,8 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<NotesRecord>>(
-      stream: queryNotesRecord(
-        queryBuilder: (notesRecord) => notesRecord
-            .where('created_by', isEqualTo: currentUserReference)
-            .orderBy('created_at', descending: true),
-        singleRecord: true,
-      ),
+    return StreamBuilder<NotesRecord>(
+      stream: NotesRecord.getDocument(widget.currentNote!),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -69,15 +69,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
             ),
           );
         }
-        List<NotesRecord> createPointsPageNotesRecordList = snapshot.data!;
-        // Return an empty Container when the document does not exist.
-        if (snapshot.data!.isEmpty) {
-          return Container();
-        }
-        final createPointsPageNotesRecord =
-            createPointsPageNotesRecordList.isNotEmpty
-                ? createPointsPageNotesRecordList.first
-                : null;
+        final createPointsPageNotesRecord = snapshot.data!;
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -95,7 +87,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                await createPointsPageNotesRecord!.reference.delete();
+                await createPointsPageNotesRecord.reference.delete();
                 setState(() => FFAppState().noteIMG = '');
                 context.pop();
               },
@@ -116,28 +108,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                   size: 30,
                 ),
                 onPressed: () async {
-                  var _shouldSetState = false;
                   if (uploadedFileUrl != null && uploadedFileUrl != '') {
-                    final photoNotePointCreateData =
-                        createPhotoNotePointRecordData(
-                      dx: 170.1,
-                      dy: 120.21,
-                      description: 'from ff',
-                    );
-                    var photoNotePointRecordReference =
-                        PhotoNotePointRecord.collection.doc();
-                    await photoNotePointRecordReference
-                        .set(photoNotePointCreateData);
-                    photoNotePointOutput =
-                        PhotoNotePointRecord.getDocumentFromData(
-                            photoNotePointCreateData,
-                            photoNotePointRecordReference);
-                    _shouldSetState = true;
-                    setState(() => FFAppState().photoNotePoints = []);
-                    setState(() => FFAppState()
-                        .photoNotePoints
-                        .add(photoNotePointOutput!.reference));
-
                     final notesUpdateData = {
                       ...createNotesRecordData(
                         title: noteTitleController!.text,
@@ -149,8 +120,9 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                       ),
                       'note_points': FFAppState().photoNotePoints,
                     };
-                    await createPointsPageNotesRecord!.reference
+                    await createPointsPageNotesRecord.reference
                         .update(notesUpdateData);
+                    setState(() => FFAppState().photoNotePoints = []);
                   } else {
                     await showDialog(
                       context: context,
@@ -168,7 +140,6 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                         );
                       },
                     );
-                    if (_shouldSetState) setState(() {});
                     return;
                   }
 
@@ -176,8 +147,6 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                   setState(() => FFAppState().photoNotePoints = []);
 
                   context.pushNamed('Notes');
-
-                  if (_shouldSetState) setState(() {});
                 },
               ),
             ],
@@ -303,8 +272,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                   EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
                               child: StreamBuilder<List<BulletsRecord>>(
                                 stream: queryBulletsRecord(
-                                  parent:
-                                      createPointsPageNotesRecord!.reference,
+                                  parent: createPointsPageNotesRecord.reference,
                                 ),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
@@ -513,7 +481,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                           );
                                           var bulletsRecordReference =
                                               BulletsRecord.createDoc(
-                                                  createPointsPageNotesRecord!
+                                                  createPointsPageNotesRecord
                                                       .reference);
                                           await bulletsRecordReference
                                               .set(bulletsCreateData);
@@ -551,9 +519,33 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                   height:
                                       MediaQuery.of(context).size.height * 1,
                                   image: uploadedFileUrl,
+                                  points: createPointsPageNotesRecord
+                                      .notePoints!
+                                      .toList(),
                                   onCreatePhotoNote: () async {
                                     await Future.delayed(
                                         const Duration(milliseconds: 1));
+
+                                    final photoNotePointCreateData =
+                                        createPhotoNotePointRecordData(
+                                      dx: FFAppState().dx,
+                                      dy: FFAppState().dy,
+                                      description: FFAppState().comment,
+                                    );
+                                    var photoNotePointRecordReference =
+                                        PhotoNotePointRecord.collection.doc();
+                                    await photoNotePointRecordReference
+                                        .set(photoNotePointCreateData);
+                                    createdPoint = PhotoNotePointRecord
+                                        .getDocumentFromData(
+                                            photoNotePointCreateData,
+                                            photoNotePointRecordReference);
+                                    setState(() => FFAppState()
+                                        .photoNotePoints
+                                        .add(createdPoint!.reference));
+                                    setState(() => FFAppState().comment = '');
+                                    setState(() => FFAppState().dx = 0.0);
+                                    setState(() => FFAppState().dy = 0.0);
                                   },
                                 ),
                               ),

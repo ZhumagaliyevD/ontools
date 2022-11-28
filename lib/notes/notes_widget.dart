@@ -17,8 +17,9 @@ class NotesWidget extends StatefulWidget {
 }
 
 class _NotesWidgetState extends State<NotesWidget> {
-  TextEditingController? searchController;
+  NotesRecord? currentNote;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController? searchController;
 
   @override
   void initState() {
@@ -54,14 +55,27 @@ class _NotesWidgetState extends State<NotesWidget> {
             size: 24,
           ),
           onPressed: () async {
-            context.pushNamed('createPointsPage');
-
             final notesCreateData = createNotesRecordData(
               createdAt: getCurrentTimestamp,
               createdBy: currentUserReference,
             );
-            await NotesRecord.collection.doc().set(notesCreateData);
+            var notesRecordReference = NotesRecord.collection.doc();
+            await notesRecordReference.set(notesCreateData);
+            currentNote = NotesRecord.getDocumentFromData(
+                notesCreateData, notesRecordReference);
             setState(() => FFAppState().isCheckbox = false);
+
+            context.pushNamed(
+              'createPointsPage',
+              queryParams: {
+                'currentNote': serializeParam(
+                  currentNote!.reference,
+                  ParamType.DocumentReference,
+                ),
+              }.withoutNulls,
+            );
+
+            setState(() {});
           },
         ),
       ),
@@ -174,7 +188,8 @@ class _NotesWidgetState extends State<NotesWidget> {
                   child: StreamBuilder<List<NotesRecord>>(
                     stream: queryNotesRecord(
                       queryBuilder: (notesRecord) => notesRecord
-                          .where('created_by', isEqualTo: currentUserReference),
+                          .where('created_by', isEqualTo: currentUserReference)
+                          .orderBy('created_at', descending: true),
                     ),
                     builder: (context, snapshot) {
                       // Customize what your widget looks like when it's loading.
@@ -201,7 +216,7 @@ class _NotesWidgetState extends State<NotesWidget> {
                               searchNoteListNotesRecordList[
                                   searchNoteListIndex];
                           return Visibility(
-                            visible: functions.searchRealTimeCopy(
+                            visible: functions.searchRealTime(
                                 searchController!.text,
                                 searchNoteListNotesRecord.title!),
                             child: Padding(
@@ -277,10 +292,10 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                 .description,
                                             'description',
                                           ).maybeHandleOverflow(
-                                            maxChars: 35,
+                                            maxChars: 100,
                                             replacement: '…',
                                           ),
-                                          maxLines: 2,
+                                          maxLines: 10,
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1,
                                         ),

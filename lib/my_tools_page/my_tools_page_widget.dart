@@ -186,7 +186,7 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                               searchToolListToolsRecordList[
                                   searchToolListIndex];
                           return Visibility(
-                            visible: functions.searchRealTimeCopy(
+                            visible: functions.searchRealTime(
                                 toolSearchController!.text,
                                 searchToolListToolsRecord.toolName!),
                             child: Column(

@@ -212,7 +212,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                       readOnly: true,
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Описание',
+                        labelText: 'Описание инструмента',
                         hintText: 'Введите описание инструмента',
                         hintStyle: FlutterFlowTheme.of(context).bodyText2,
                         enabledBorder: OutlineInputBorder(
@@ -258,7 +258,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                       readOnly: true,
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Название магазина',
+                        labelText: 'Наименование магазина',
                         hintStyle: FlutterFlowTheme.of(context).bodyText2,
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -474,7 +474,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       8, 0, 0, 2),
                                   child: Text(
-                                    'Цена (USD)',
+                                    'Цена, тенге',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyText1
                                         .override(
@@ -605,65 +605,134 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                       },
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 24),
-                    child: StreamBuilder<UserRecord>(
-                      stream: UserRecord.getDocument(widget.tool!.createdBy!),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: CircularProgressIndicator(
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryColor,
+                  if (toolDetailPageToolsRecord.createdBy !=
+                      currentUserReference)
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 24),
+                      child: StreamBuilder<UserRecord>(
+                        stream: UserRecord.getDocument(widget.tool!.createdBy!),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryColor,
+                                ),
                               ),
+                            );
+                          }
+                          final buttonUserRecord = snapshot.data!;
+                          return FFButtonWidget(
+                            onPressed: () async {
+                              if (Navigator.of(context).canPop()) {
+                                context.pop();
+                              }
+                              context.pushNamed(
+                                'ChatPage',
+                                queryParams: {
+                                  'chatUser': serializeParam(
+                                    buttonUserRecord,
+                                    ParamType.Document,
+                                  ),
+                                }.withoutNulls,
+                                extra: <String, dynamic>{
+                                  'chatUser': buttonUserRecord,
+                                },
+                              );
+                            },
+                            text: 'Связаться',
+                            options: FFButtonOptions(
+                              width: 130,
+                              height: 48,
+                              color:
+                                  FlutterFlowTheme.of(context).secondaryColor,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .subtitle2
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                           );
-                        }
-                        final buttonUserRecord = snapshot.data!;
-                        return FFButtonWidget(
-                          onPressed: () async {
-                            if (Navigator.of(context).canPop()) {
-                              context.pop();
-                            }
-                            context.pushNamed(
-                              'ChatPage',
-                              queryParams: {
-                                'chatUser': serializeParam(
-                                  buttonUserRecord,
-                                  ParamType.Document,
-                                ),
-                              }.withoutNulls,
-                              extra: <String, dynamic>{
-                                'chatUser': buttonUserRecord,
-                              },
-                            );
-                          },
-                          text: 'Связаться',
-                          options: FFButtonOptions(
-                            width: 130,
-                            height: 48,
-                            color: FlutterFlowTheme.of(context).secondaryColor,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .subtitle2
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                ),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        );
-                      },
+                        },
+                      ),
                     ),
-                  ),
+                  if ((toolDetailPageToolsRecord.inSale == false) &&
+                      (toolDetailPageToolsRecord.createdBy ==
+                          currentUserReference))
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          final toolsUpdateData = createToolsRecordData(
+                            inSale: true,
+                          );
+                          await toolDetailPageToolsRecord.reference
+                              .update(toolsUpdateData);
+                          context.pop();
+                        },
+                        text: 'Выставить на продажу',
+                        options: FFButtonOptions(
+                          width: 130,
+                          height: 48,
+                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          textStyle: FlutterFlowTheme.of(context)
+                              .subtitle2
+                              .override(
+                                fontFamily: 'Montserrat',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).secondaryColor,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  if ((toolDetailPageToolsRecord.inSale == true) &&
+                      (toolDetailPageToolsRecord.createdBy ==
+                          currentUserReference))
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          final toolsUpdateData = createToolsRecordData(
+                            inSale: false,
+                          );
+                          await toolDetailPageToolsRecord.reference
+                              .update(toolsUpdateData);
+                          context.pop();
+                        },
+                        text: 'Снять с продаж',
+                        options: FFButtonOptions(
+                          width: 130,
+                          height: 48,
+                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          textStyle: FlutterFlowTheme.of(context)
+                              .subtitle2
+                              .override(
+                                fontFamily: 'Montserrat',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).secondaryColor,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),

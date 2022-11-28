@@ -1,7 +1,7 @@
 {
   "indexes": [
     {
-      "collectionGroup": "Tools",
+      "collectionGroup": "notes",
       "queryScope": "COLLECTION",
       "fields": [
         {
@@ -15,7 +15,7 @@
       ]
     },
     {
-      "collectionGroup": "notes",
+      "collectionGroup": "Tools",
       "queryScope": "COLLECTION",
       "fields": [
         {
@@ -39,6 +39,20 @@
         {
           "fieldPath": "Price",
           "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "Tools",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "inSale",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "Price",
+          "order": "ASCENDING"
         }
       ]
     },

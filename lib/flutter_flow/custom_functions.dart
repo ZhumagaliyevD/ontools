@@ -10,7 +10,7 @@ import '../backend/backend.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../auth/auth_util.dart';
 
-bool searchRealTimeCopy(
+bool searchRealTime(
   String textSearchFor,
   String textSearchIn,
 ) {

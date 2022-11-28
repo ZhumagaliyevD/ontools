@@ -230,6 +230,12 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                       setState(() {
                                         marketSearchController?.clear();
                                       });
+                                      setState(() =>
+                                          FFAppState().MarketplaceSearch = '');
+                                      setState(() =>
+                                          FFAppState().filterShopName = '');
+                                      setState(
+                                          () => FFAppState().isCheque = '');
                                     },
                                   ),
                                 ],
@@ -287,7 +293,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                             final fullListToolsRecord =
                                 fullListToolsRecordList[fullListIndex];
                             return Visibility(
-                              visible: functions.searchRealTimeCopy(
+                              visible: functions.searchRealTime(
                                   marketSearchController!.text,
                                   fullListToolsRecord.toolName!),
                               child: Column(
@@ -626,7 +632,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                       stream: queryToolsRecord(
                         queryBuilder: (toolsRecord) => toolsRecord
                             .where('inSale', isEqualTo: true)
-                            .orderBy('created_at', descending: true),
+                            .orderBy('Price'),
                       ),
                       builder: (context, snapshot) {
                         // Customize what your widget looks like when it's loading.

@@ -196,7 +196,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'createPointsPage',
               path: 'createPointsPage',
               requireAuth: true,
-              builder: (context, params) => CreatePointsPageWidget(),
+              builder: (context, params) => CreatePointsPageWidget(
+                currentNote: params.getParam(
+                    'currentNote', ParamType.DocumentReference, false, 'notes'),
+              ),
             ),
             FFRoute(
               name: 'Marketplace',
@@ -207,17 +210,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   : MarketplaceWidget(),
             ),
             FFRoute(
-              name: 'ToolDetailPage',
-              path: 'toolDetailPage',
-              requireAuth: true,
-              asyncParams: {
-                'tool': getDoc('Tools', ToolsRecord.serializer),
-              },
-              builder: (context, params) => ToolDetailPageWidget(
-                tool: params.getParam('tool', ParamType.Document),
-              ),
-            ),
-            FFRoute(
               name: 'EditPointsPage',
               path: 'editPointsPage',
               requireAuth: true,
@@ -226,6 +218,17 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               },
               builder: (context, params) => EditPointsPageWidget(
                 note: params.getParam('note', ParamType.Document),
+              ),
+            ),
+            FFRoute(
+              name: 'ToolDetailPage',
+              path: 'toolDetailPage',
+              requireAuth: true,
+              asyncParams: {
+                'tool': getDoc('Tools', ToolsRecord.serializer),
+              },
+              builder: (context, params) => ToolDetailPageWidget(
+                tool: params.getParam('tool', ParamType.Document),
               ),
             ),
             FFRoute(

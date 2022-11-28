@@ -10,7 +10,6 @@ import 'schema/reports_record.dart';
 import 'schema/notes_record.dart';
 import 'schema/bullets_record.dart';
 import 'schema/chats_record.dart';
-import 'schema/photo_notes_record.dart';
 import 'schema/photo_note_point_record.dart';
 import 'schema/chat_messages_record.dart';
 import 'schema/serializers.dart';
@@ -26,7 +25,6 @@ export 'schema/reports_record.dart';
 export 'schema/notes_record.dart';
 export 'schema/bullets_record.dart';
 export 'schema/chats_record.dart';
-export 'schema/photo_notes_record.dart';
 export 'schema/photo_note_point_record.dart';
 export 'schema/chat_messages_record.dart';
 
@@ -282,51 +280,6 @@ Future<FFFirestorePage<ChatsRecord>> queryChatsRecordPage({
     queryCollectionPage(
       ChatsRecord.collection,
       ChatsRecord.serializer,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
-/// Functions to query PhotoNotesRecords (as a Stream and as a Future).
-Stream<List<PhotoNotesRecord>> queryPhotoNotesRecord({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      PhotoNotesRecord.collection(parent),
-      PhotoNotesRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<PhotoNotesRecord>> queryPhotoNotesRecordOnce({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      PhotoNotesRecord.collection(parent),
-      PhotoNotesRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<PhotoNotesRecord>> queryPhotoNotesRecordPage({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      PhotoNotesRecord.collection(parent),
-      PhotoNotesRecord.serializer,
       queryBuilder: queryBuilder,
       nextPageMarker: nextPageMarker,
       pageSize: pageSize,

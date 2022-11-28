@@ -23,8 +23,8 @@ export 'all_chats/all_chats_widget.dart' show AllChatsWidget;
 export 'create_points_page/create_points_page_widget.dart'
     show CreatePointsPageWidget;
 export 'marketplace/marketplace_widget.dart' show MarketplaceWidget;
-export 'tool_detail_page/tool_detail_page_widget.dart'
-    show ToolDetailPageWidget;
 export 'edit_points_page/edit_points_page_widget.dart'
     show EditPointsPageWidget;
+export 'tool_detail_page/tool_detail_page_widget.dart'
+    show ToolDetailPageWidget;
 export 'painter_page/painter_page_widget.dart' show PainterPageWidget;

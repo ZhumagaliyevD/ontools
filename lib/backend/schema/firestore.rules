@@ -53,18 +53,6 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    match /notes/{parent}/photo_notes/{document} {
-      allow create: if true;
-      allow read: if true;
-      allow write: if false;
-      allow delete: if false;
-    }
-
-    match /{path=**}/photo_notes/{document} {
-      allow read: if true;
-    }
-
-
     match /photo_note_point/{document} {
       allow create: if true;
       allow read: if true;

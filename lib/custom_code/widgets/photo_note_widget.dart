@@ -88,9 +88,12 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
           GestureDetector(
             onTapDown: (details) {
               setState(() {
+                widget.onCreatePhotoNote();
                 showNewPoint = !showNewPoint;
                 x = details.localPosition.dx;
                 y = details.localPosition.dy;
+                FFAppState().dx = x;
+                FFAppState().dy = y;
               });
 
               // showDialog(context: context, builder: (context) {
@@ -263,8 +266,10 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
                                             setState(() {
                                               showNewPoint = false;
                                             });
-                                            FFAppState();
 
+                                            FFAppState().comment =
+                                                _textFieldController.text;
+                                            widget.onCreatePhotoNote();
                                             _textFieldController.clear();
                                           },
                                           child: Icon(

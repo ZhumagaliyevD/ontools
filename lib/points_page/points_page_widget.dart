@@ -155,8 +155,7 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                   height:
                                       MediaQuery.of(context).size.height * 1,
                                   image: pointsPageNotesRecord.image!,
-                                  points: pointsPageNotesRecord.notePoints!
-                                      .toList(),
+                                  points: widget.notepage!.notePoints!.toList(),
                                   onCreatePhotoNote: () async {},
                                 ),
                               ),

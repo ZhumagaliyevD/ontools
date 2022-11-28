@@ -31,6 +31,7 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
   TextEditingController? shopNameController;
   DateTime? datePicked;
   TextEditingController? priceController;
+  final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -78,7 +79,7 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
           },
         ),
         title: Text(
-          'Добавить продукт',
+          'Добавить инструмент',
           style: FlutterFlowTheme.of(context).subtitle1,
         ),
         actions: [],
@@ -87,530 +88,587 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                child: TextFormField(
-                  controller: toolNameController,
-                  autofocus: true,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    labelText: 'Наименование инстумента',
-                    hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).lineColor,
-                        width: 1,
+        child: Form(
+          key: formKey,
+          autovalidateMode: AutovalidateMode.always,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                  child: TextFormField(
+                    controller: toolNameController,
+                    autofocus: true,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      labelText: 'Наименование инстумента',
+                      hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).lineColor,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).lineColor,
-                        width: 1,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).lineColor,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0x00000000),
-                        width: 1,
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0x00000000),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0x00000000),
-                        width: 1,
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0x00000000),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      borderRadius: BorderRadius.circular(16),
+                      filled: true,
+                      fillColor:
+                          FlutterFlowTheme.of(context).secondaryBackground,
                     ),
-                    filled: true,
-                    fillColor: FlutterFlowTheme.of(context).secondaryBackground,
-                  ),
-                  style: FlutterFlowTheme.of(context).bodyText1,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 140,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: CachedNetworkImageProvider(
-                        FFAppState().toolimg,
-                      ),
-                    ),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: FlutterFlowTheme.of(context).lineColor,
-                      width: 1,
-                    ),
-                  ),
-                  child: InkWell(
-                    onTap: () async {
-                      final selectedMedia =
-                          await selectMediaWithSourceBottomSheet(
-                        context: context,
-                        imageQuality: 50,
-                        allowPhoto: true,
-                      );
-                      if (selectedMedia != null &&
-                          selectedMedia.every((m) =>
-                              validateFileFormat(m.storagePath, context))) {
-                        setState(() => isMediaUploading1 = true);
-                        var downloadUrls = <String>[];
-                        try {
-                          showUploadMessage(
-                            context,
-                            'Uploading file...',
-                            showLoading: true,
-                          );
-                          downloadUrls = (await Future.wait(
-                            selectedMedia.map(
-                              (m) async =>
-                                  await uploadData(m.storagePath, m.bytes),
-                            ),
-                          ))
-                              .where((u) => u != null)
-                              .map((u) => u!)
-                              .toList();
-                        } finally {
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                          isMediaUploading1 = false;
-                        }
-                        if (downloadUrls.length == selectedMedia.length) {
-                          setState(() => uploadedFileUrl1 = downloadUrls.first);
-                          showUploadMessage(context, 'Success!');
-                        } else {
-                          setState(() {});
-                          showUploadMessage(context, 'Failed to upload media');
-                          return;
-                        }
+                    style: FlutterFlowTheme.of(context).bodyText1,
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'Обязательное поле';
                       }
 
-                      if (!(uploadedFileUrl1 == null ||
-                          uploadedFileUrl1 == '')) {
-                        setState(() => FFAppState().toolimg = uploadedFileUrl1);
-                      }
+                      return null;
                     },
-                    child: Icon(
-                      FFIcons.kcamera,
-                      color: Colors.black,
-                      size: 24,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: CachedNetworkImageProvider(
+                          FFAppState().toolimg,
+                        ),
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: FlutterFlowTheme.of(context).lineColor,
+                        width: 1,
+                      ),
+                    ),
+                    child: Visibility(
+                      visible:
+                          uploadedFileUrl1 == null || uploadedFileUrl1 == '',
+                      child: InkWell(
+                        onTap: () async {
+                          final selectedMedia =
+                              await selectMediaWithSourceBottomSheet(
+                            context: context,
+                            imageQuality: 50,
+                            allowPhoto: true,
+                          );
+                          if (selectedMedia != null &&
+                              selectedMedia.every((m) =>
+                                  validateFileFormat(m.storagePath, context))) {
+                            setState(() => isMediaUploading1 = true);
+                            var downloadUrls = <String>[];
+                            try {
+                              showUploadMessage(
+                                context,
+                                'Uploading file...',
+                                showLoading: true,
+                              );
+                              downloadUrls = (await Future.wait(
+                                selectedMedia.map(
+                                  (m) async =>
+                                      await uploadData(m.storagePath, m.bytes),
+                                ),
+                              ))
+                                  .where((u) => u != null)
+                                  .map((u) => u!)
+                                  .toList();
+                            } finally {
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
+                              isMediaUploading1 = false;
+                            }
+                            if (downloadUrls.length == selectedMedia.length) {
+                              setState(
+                                  () => uploadedFileUrl1 = downloadUrls.first);
+                              showUploadMessage(context, 'Success!');
+                            } else {
+                              setState(() {});
+                              showUploadMessage(
+                                  context, 'Failed to upload media');
+                              return;
+                            }
+                          }
+
+                          if (!(uploadedFileUrl1 == null ||
+                              uploadedFileUrl1 == '')) {
+                            setState(
+                                () => FFAppState().toolimg = uploadedFileUrl1);
+                          }
+                        },
+                        child: Icon(
+                          FFIcons.kcamera,
+                          color: Colors.black,
+                          size: 24,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                    borderRadius: BorderRadius.circular(16),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
+                                child: Text(
+                                  valueOrDefault<String>(
+                                    FFAppState().chequeName,
+                                    'Добавить чек',
+                                  ),
+                                  style: FlutterFlowTheme.of(context).bodyText1,
+                                ),
+                              ),
+                            ),
+                            if (FFAppState().chequeName != null &&
+                                FFAppState().chequeName != '')
+                              FlutterFlowIconButton(
+                                borderColor: Colors.transparent,
+                                borderRadius: 30,
+                                borderWidth: 1,
+                                buttonSize: 50,
+                                icon: Icon(
+                                  FFIcons.kcrossCircle,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  size: 20,
+                                ),
+                                onPressed: () async {
+                                  setState(() => FFAppState().chequeName = '');
+                                },
+                              ),
+                            if (FFAppState().chequeName == null ||
+                                FFAppState().chequeName == '')
+                              FlutterFlowIconButton(
+                                borderColor: Colors.transparent,
+                                borderRadius: 30,
+                                borderWidth: 1,
+                                buttonSize: 50,
+                                icon: Icon(
+                                  FFIcons.kfreeIconFontDownload3917330,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  size: 20,
+                                ),
+                                onPressed: () async {
+                                  final selectedMedia =
+                                      await selectMediaWithSourceBottomSheet(
+                                    context: context,
+                                    allowPhoto: true,
+                                  );
+                                  if (selectedMedia != null &&
+                                      selectedMedia.every((m) =>
+                                          validateFileFormat(
+                                              m.storagePath, context))) {
+                                    setState(() => isMediaUploading2 = true);
+                                    var downloadUrls = <String>[];
+                                    try {
+                                      showUploadMessage(
+                                        context,
+                                        'Uploading file...',
+                                        showLoading: true,
+                                      );
+                                      downloadUrls = (await Future.wait(
+                                        selectedMedia.map(
+                                          (m) async => await uploadData(
+                                              m.storagePath, m.bytes),
+                                        ),
+                                      ))
+                                          .where((u) => u != null)
+                                          .map((u) => u!)
+                                          .toList();
+                                    } finally {
+                                      ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
+                                      isMediaUploading2 = false;
+                                    }
+                                    if (downloadUrls.length ==
+                                        selectedMedia.length) {
+                                      setState(() => uploadedFileUrl2 =
+                                          downloadUrls.first);
+                                      showUploadMessage(context, 'Success!');
+                                    } else {
+                                      setState(() {});
+                                      showUploadMessage(
+                                          context, 'Failed to upload media');
+                                      return;
+                                    }
+                                  }
+
+                                  setState(() => FFAppState().chequeName =
+                                      'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}');
+                                  setState(() => FFAppState().chequeImg =
+                                      uploadedFileUrl2);
+                                },
+                              ),
+                          ],
+                        ),
+                        if (uploadedFileUrl2 != null && uploadedFileUrl2 != '')
+                          Image.network(
+                            FFAppState().chequeImg,
+                            fit: BoxFit.cover,
+                          ),
+                      ],
+                    ),
                   ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                  child: TextFormField(
+                    controller: descriptionController,
+                    autofocus: true,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      labelText: 'Описание инструмента',
+                      hintText: 'Введите описание инструмента',
+                      hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).lineColor,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).lineColor,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0x00000000),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0x00000000),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      filled: true,
+                      fillColor:
+                          FlutterFlowTheme.of(context).secondaryBackground,
+                    ),
+                    style: FlutterFlowTheme.of(context).bodyText1,
+                    maxLines: 8,
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'Обязательное поле';
+                      }
+
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                  child: TextFormField(
+                    controller: shopNameController,
+                    autofocus: true,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      labelText: 'Наименование магазина',
+                      hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).lineColor,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).lineColor,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0x00000000),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0x00000000),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      filled: true,
+                      fillColor:
+                          FlutterFlowTheme.of(context).secondaryBackground,
+                    ),
+                    style: FlutterFlowTheme.of(context).bodyText1,
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'Обязательное поле';
+                      }
+
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 30),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
-                          child: Text(
-                            valueOrDefault<String>(
-                              FFAppState().chequeName,
-                              'Добавить чек',
-                            ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(8, 0, 0, 2),
+                                child: Text(
+                                  'Дата покупки',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyText1
+                                      .override(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 12,
+                                      ),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  await DatePicker.showDatePicker(
+                                    context,
+                                    showTitleActions: true,
+                                    onConfirm: (date) {
+                                      setState(() => datePicked = date);
+                                    },
+                                    currentTime: getCurrentTimestamp,
+                                    minTime: DateTime(0, 0, 0),
+                                  );
+
+                                  if (!(datePicked == null)) {
+                                    setState(() =>
+                                        FFAppState().toolBuyDate = datePicked);
+                                  }
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: FlutterFlowTheme.of(context)
+                                          .lineColor,
+                                    ),
+                                  ),
+                                  alignment: AlignmentDirectional(-1, 0),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        12, 0, 0, 0),
+                                    child: Text(
+                                      dateTimeFormat('d/M/y', datePicked),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      if (FFAppState().chequeName != null &&
-                          FFAppState().chequeName != '')
-                        FlutterFlowIconButton(
-                          borderColor: Colors.transparent,
-                          borderRadius: 30,
-                          borderWidth: 1,
-                          buttonSize: 50,
-                          icon: Icon(
-                            FFIcons.kcrossCircle,
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            size: 20,
-                          ),
-                          onPressed: () async {
-                            setState(() => FFAppState().chequeName = '');
-                          },
-                        ),
-                      if (FFAppState().chequeName == null ||
-                          FFAppState().chequeName == '')
-                        FlutterFlowIconButton(
-                          borderColor: Colors.transparent,
-                          borderRadius: 30,
-                          borderWidth: 1,
-                          buttonSize: 50,
-                          icon: Icon(
-                            FFIcons.kfreeIconFontDownload3917330,
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            size: 20,
-                          ),
-                          onPressed: () async {
-                            final selectedMedia =
-                                await selectMediaWithSourceBottomSheet(
-                              context: context,
-                              allowPhoto: true,
-                            );
-                            if (selectedMedia != null &&
-                                selectedMedia.every((m) => validateFileFormat(
-                                    m.storagePath, context))) {
-                              setState(() => isMediaUploading2 = true);
-                              var downloadUrls = <String>[];
-                              try {
-                                showUploadMessage(
-                                  context,
-                                  'Uploading file...',
-                                  showLoading: true,
-                                );
-                                downloadUrls = (await Future.wait(
-                                  selectedMedia.map(
-                                    (m) async => await uploadData(
-                                        m.storagePath, m.bytes),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(6, 0, 0, 0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(8, 0, 0, 2),
+                                child: Text(
+                                  'Цена, тенге',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyText1
+                                      .override(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 12,
+                                      ),
+                                ),
+                              ),
+                              TextFormField(
+                                controller: priceController,
+                                autofocus: true,
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                  hintStyle:
+                                      FlutterFlowTheme.of(context).bodyText2,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: FlutterFlowTheme.of(context)
+                                          .lineColor,
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(16),
                                   ),
-                                ))
-                                    .where((u) => u != null)
-                                    .map((u) => u!)
-                                    .toList();
-                              } finally {
-                                ScaffoldMessenger.of(context)
-                                    .hideCurrentSnackBar();
-                                isMediaUploading2 = false;
-                              }
-                              if (downloadUrls.length == selectedMedia.length) {
-                                setState(() =>
-                                    uploadedFileUrl2 = downloadUrls.first);
-                                showUploadMessage(context, 'Success!');
-                              } else {
-                                setState(() {});
-                                showUploadMessage(
-                                    context, 'Failed to upload media');
-                                return;
-                              }
-                            }
-
-                            setState(() => FFAppState().chequeName =
-                                'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}');
-                          },
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: FlutterFlowTheme.of(context)
+                                          .lineColor,
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  filled: true,
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                ),
+                                style: FlutterFlowTheme.of(context).bodyText1,
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                        signed: true, decimal: true),
+                              ),
+                            ],
+                          ),
                         ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                child: TextFormField(
-                  controller: descriptionController,
-                  autofocus: true,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    labelText: 'Описание',
-                    hintText: 'Введите описание инструмента',
-                    hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).lineColor,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).lineColor,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0x00000000),
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0x00000000),
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    filled: true,
-                    fillColor: FlutterFlowTheme.of(context).secondaryBackground,
-                  ),
-                  style: FlutterFlowTheme.of(context).bodyText1,
-                  maxLines: 8,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                child: TextFormField(
-                  controller: shopNameController,
-                  autofocus: true,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    labelText: 'Название магазина',
-                    hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).lineColor,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).lineColor,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0x00000000),
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0x00000000),
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    filled: true,
-                    fillColor: FlutterFlowTheme.of(context).secondaryBackground,
-                  ),
-                  style: FlutterFlowTheme.of(context).bodyText1,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 30),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(8, 0, 0, 2),
-                              child: Text(
-                                'Дата покупки',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyText1
-                                    .override(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                    ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                await DatePicker.showDatePicker(
-                                  context,
-                                  showTitleActions: true,
-                                  onConfirm: (date) {
-                                    setState(() => datePicked = date);
-                                  },
-                                  currentTime: getCurrentTimestamp,
-                                  minTime: DateTime(0, 0, 0),
-                                );
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
+                  child: FFButtonWidget(
+                    onPressed: () async {
+                      if (uploadedFileUrl2 != null && uploadedFileUrl2 != '') {
+                        final toolsCreateData = createToolsRecordData(
+                          toolName: toolNameController!.text,
+                          price: double.parse(priceController!.text),
+                          description: descriptionController!.text,
+                          shopName: shopNameController!.text,
+                          createdBy: currentUserReference,
+                          buyDate: datePicked,
+                          photo: FFAppState().toolimg,
+                          createdAt: getCurrentTimestamp,
+                          chequeIMG: uploadedFileUrl2,
+                          chequeName: FFAppState().chequeName,
+                          isCheque: 'Есть',
+                          inSale: false,
+                        );
+                        await ToolsRecord.collection.doc().set(toolsCreateData);
+                      } else {
+                        final toolsCreateData = createToolsRecordData(
+                          toolName: toolNameController!.text,
+                          price: double.parse(priceController!.text),
+                          description: descriptionController!.text,
+                          shopName: shopNameController!.text,
+                          createdBy: currentUserReference,
+                          buyDate: datePicked,
+                          photo: FFAppState().toolimg,
+                          createdAt: getCurrentTimestamp,
+                          chequeIMG: uploadedFileUrl2,
+                          chequeName: FFAppState().chequeName,
+                          isCheque: 'Нет',
+                          inSale: false,
+                        );
+                        await ToolsRecord.collection.doc().set(toolsCreateData);
+                      }
 
-                                if (!(datePicked == null)) {
-                                  setState(() =>
-                                      FFAppState().toolBuyDate = datePicked);
-                                }
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color:
-                                        FlutterFlowTheme.of(context).lineColor,
-                                  ),
-                                ),
-                                alignment: AlignmentDirectional(-1, 0),
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      12, 0, 0, 0),
-                                  child: Text(
-                                    dateTimeFormat('d/M/y', datePicked),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyText1,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                      setState(() => FFAppState().toolimg = '');
+                      setState(() => FFAppState().chequeName = '');
+                      setState(() => FFAppState().chequeImg = '');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Инструмент добавлен',
+                            style: FlutterFlowTheme.of(context).bodyText1,
+                          ),
+                          duration: Duration(milliseconds: 4000),
+                          backgroundColor: Color(0x00000000),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(6, 0, 0, 0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(8, 0, 0, 2),
-                              child: Text(
-                                'Цена (USD)',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyText1
-                                    .override(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                    ),
-                              ),
-                            ),
-                            TextFormField(
-                              controller: priceController,
-                              autofocus: true,
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                hintStyle:
-                                    FlutterFlowTheme.of(context).bodyText2,
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color:
-                                        FlutterFlowTheme.of(context).lineColor,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color:
-                                        FlutterFlowTheme.of(context).lineColor,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                filled: true,
-                                fillColor: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                              ),
-                              style: FlutterFlowTheme.of(context).bodyText1,
-                              keyboardType: TextInputType.number,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
-                child: FFButtonWidget(
-                  onPressed: () async {
-                    if (uploadedFileUrl2 != null && uploadedFileUrl2 != '') {
-                      final toolsCreateData = createToolsRecordData(
-                        toolName: toolNameController!.text,
-                        price: double.parse(priceController!.text),
-                        description: descriptionController!.text,
-                        shopName: shopNameController!.text,
-                        createdBy: currentUserReference,
-                        buyDate: datePicked,
-                        photo: FFAppState().toolimg,
-                        createdAt: getCurrentTimestamp,
-                        chequeIMG: uploadedFileUrl2,
-                        chequeName: FFAppState().chequeName,
-                        isCheque: 'Есть',
-                        inSale: false,
                       );
-                      await ToolsRecord.collection.doc().set(toolsCreateData);
-                    } else {
-                      final toolsCreateData = createToolsRecordData(
-                        toolName: toolNameController!.text,
-                        price: double.parse(priceController!.text),
-                        description: descriptionController!.text,
-                        shopName: shopNameController!.text,
-                        createdBy: currentUserReference,
-                        buyDate: datePicked,
-                        photo: FFAppState().toolimg,
-                        createdAt: getCurrentTimestamp,
-                        chequeIMG: uploadedFileUrl2,
-                        chequeName: FFAppState().chequeName,
-                        isCheque: 'Нет',
-                        inSale: false,
-                      );
-                      await ToolsRecord.collection.doc().set(toolsCreateData);
-                    }
 
-                    setState(() => FFAppState().toolimg = '');
-                    setState(() => FFAppState().chequeName = '');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Инструмент добавлен',
-                          style: FlutterFlowTheme.of(context).bodyText1,
-                        ),
-                        duration: Duration(milliseconds: 4000),
-                        backgroundColor: Color(0x00000000),
+                      context.pushNamed('MyToolsPage');
+                    },
+                    text: 'Опубликовать',
+                    options: FFButtonOptions(
+                      width: 130,
+                      height: 48,
+                      color: FlutterFlowTheme.of(context).secondaryColor,
+                      textStyle:
+                          FlutterFlowTheme.of(context).subtitle2.override(
+                                fontFamily: 'Montserrat',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                        width: 1,
                       ),
-                    );
-
-                    context.pushNamed('MyToolsPage');
-                  },
-                  text: 'Опубликовать',
-                  options: FFButtonOptions(
-                    width: 130,
-                    height: 48,
-                    color: FlutterFlowTheme.of(context).secondaryColor,
-                    textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                          fontFamily: 'Montserrat',
-                          color: FlutterFlowTheme.of(context).primaryText,
-                        ),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                      width: 1,
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -58,6 +58,14 @@ class FFAppState {
   List<DocumentReference> photoNotePoints = [
     FirebaseFirestore.instance.doc('/photo_note_point/SvzqjFTYLedGq2VTTxx4')
   ];
+
+  double dx = 0.0;
+
+  double dy = 0.0;
+
+  String comment = '';
+
+  String chequeImg = '';
 }
 
 LatLng? _latLngFromString(String? val) {
