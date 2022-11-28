@@ -2,6 +2,7 @@ import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../backend/firebase_storage/storage.dart';
 import '../components/add_note_settings_widget.dart';
+import '../flutter_flow/flutter_flow_choice_chips.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -32,6 +33,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
   TextEditingController? optionController;
   TextEditingController? noteDescriptionController;
   TextEditingController? noteTitleController;
+  String? choiceChipsValue;
   PhotoNotePointRecord? createdPoint;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -507,7 +509,45 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                 ],
                               ),
                             ),
-                          if (createPointsPageNotesRecord != null)
+                          FlutterFlowChoiceChips(
+                            options: [
+                              ChipData('Draw', FontAwesomeIcons.pen),
+                              ChipData('Comment', Icons.add_comment)
+                            ],
+                            onChanged: (val) =>
+                                setState(() => choiceChipsValue = val?.first),
+                            selectedChipStyle: ChipStyle(
+                              backgroundColor: Color(0xFF323B45),
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: Colors.white,
+                                  ),
+                              iconColor: Colors.white,
+                              iconSize: 18,
+                              elevation: 4,
+                            ),
+                            unselectedChipStyle: ChipStyle(
+                              backgroundColor: Colors.white,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodyText2
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: Color(0xFF323B45),
+                                  ),
+                              iconColor: Color(0xFF323B45),
+                              iconSize: 18,
+                              elevation: 4,
+                            ),
+                            chipSpacing: 20,
+                            multiselect: false,
+                            alignment: WrapAlignment.start,
+                          ),
+                          if ((createPointsPageNotesRecord != null) &&
+                              (uploadedFileUrl != null &&
+                                  uploadedFileUrl != '') &&
+                              (choiceChipsValue == 'Comment'))
                             Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 18, 0, 0),
@@ -549,6 +589,30 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                   },
                                 ),
                               ),
+                            ),
+                          if ((createPointsPageNotesRecord != null) &&
+                              (uploadedFileUrl != null &&
+                                  uploadedFileUrl != '') &&
+                              (choiceChipsValue != 'Comment'))
+                            Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                              ),
+                            ),
+                          if (uploadedFileUrl == null || uploadedFileUrl == '')
+                            Text(
+                              'Пожалуйста добавьте фото,\nНажмите на + внизу',
+                              textAlign: TextAlign.center,
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 27,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                         ],
                       ),

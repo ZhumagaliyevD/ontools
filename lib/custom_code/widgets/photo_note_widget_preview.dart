@@ -24,8 +24,8 @@ class PhotoNote {
   PhotoNote(this.x, this.y, this.description);
 }
 
-class PhotoNoteWidget extends StatefulWidget {
-  const PhotoNoteWidget({
+class PhotoNoteWidgetPreview extends StatefulWidget {
+  const PhotoNoteWidgetPreview({
     Key? key,
     this.width,
     this.height,
@@ -41,10 +41,10 @@ class PhotoNoteWidget extends StatefulWidget {
   final List<DocumentReference>? points;
 
   @override
-  _PhotoNoteWidgetState createState() => _PhotoNoteWidgetState();
+  _PhotoNoteWidgetPreviewState createState() => _PhotoNoteWidgetPreviewState();
 }
 
-class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
+class _PhotoNoteWidgetPreviewState extends State<PhotoNoteWidgetPreview> {
   List<PhotoNote> photoNotes = [];
 
   final TextEditingController _textFieldController = TextEditingController();
@@ -93,12 +93,6 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
           /// Picked Image
           GestureDetector(
             onTapDown: (details) {
-              setState(() {
-                showNewPoint = !showNewPoint;
-                x = details.localPosition.dx;
-                y = details.localPosition.dy;
-              });
-
               // showDialog(context: context, builder: (context) {
               //   return AlertDialog(
               //     title: const Text('Type description'),
@@ -148,27 +142,6 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
                                 style: const TextStyle(color: Colors.white),
                               ),
                               const SizedBox(height: 8),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  //OutlinedButton(
-                                  //  onPressed: () {},
-                                  // child: const Text("Edit")),
-                                  const SizedBox(width: 8),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      photoNotes.remove(e);
-                                      setState(() {});
-                                    },
-                                    child: const Text("Delete"),
-                                    style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.red)),
-                                  ),
-                                ],
-                              )
                             ],
                           ),
                         ),
@@ -260,31 +233,6 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
                                               height: 0.5,
                                               color: Colors.white,
                                             ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            photoNotes.add(PhotoNote(x, y,
-                                                _textFieldController.text));
-                                            setState(() {
-                                              showNewPoint = false;
-                                            });
-                                            FFAppState().dx = x;
-                                            FFAppState().dy = y;
-                                            FFAppState().comment =
-                                                _textFieldController.text;
-                                            widget.onCreatePhotoNote();
-                                            _textFieldController.clear();
-                                          },
-                                          child: Icon(
-                                            Icons.arrow_circle_up_rounded,
-                                            color:
-                                                _textFieldController.text == ""
-                                                    ? Colors.grey
-                                                    : Colors.white,
-                                          ),
-                                        ),
-                                      ),
                                     ],
                                   ),
                                 ],

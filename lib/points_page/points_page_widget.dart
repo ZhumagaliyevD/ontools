@@ -110,7 +110,7 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 16),
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 16),
                       child: Card(
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -119,16 +119,15 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    12, 0, 12, 12),
                                 child: AutoSizeText(
                                   pointsPageNotesRecord.title!,
                                   style: FlutterFlowTheme.of(context)
@@ -140,8 +139,8 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    12, 0, 12, 12),
                                 child: AutoSizeText(
                                   pointsPageNotesRecord.description!,
                                   style: FlutterFlowTheme.of(context).bodyText1,
@@ -150,7 +149,7 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                               Container(
                                 width: MediaQuery.of(context).size.width,
                                 height: MediaQuery.of(context).size.height * 1,
-                                child: custom_widgets.PhotoNoteWidget(
+                                child: custom_widgets.PhotoNoteWidgetPreview(
                                   width: MediaQuery.of(context).size.width,
                                   height:
                                       MediaQuery.of(context).size.height * 1,
