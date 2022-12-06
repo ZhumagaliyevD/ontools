@@ -1,3 +1,5 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../components/report_del_widget.dart';
@@ -9,6 +11,8 @@ import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:open_file/open_file.dart';
+import 'dart:io';
 
 class ProfileHomePageWidget extends StatefulWidget {
   const ProfileHomePageWidget({Key? key}) : super(key: key);
@@ -836,14 +840,23 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                         borderWidth: 1,
                                                         buttonSize: 50,
                                                         icon: Icon(
-                                                          FFIcons
-                                                              .kfreeIconFontDownload3917330,
+                                                          FontAwesomeIcons.eye,
                                                           color: FlutterFlowTheme
                                                                   .of(context)
                                                               .primaryText,
                                                           size: 24,
                                                         ),
-                                                        onPressed: () {
+                                                        onPressed: () async {
+                                                          if (Platform
+                                                                  .isAndroid ==
+                                                              true)
+                                                            await OpenFile.open(
+                                                                listViewReportsRecord
+                                                                    .pdfFile); //android
+                                                          else
+                                                            await OpenFile.open(
+                                                                listViewReportsRecord
+                                                                    .pdfFile);
                                                           print(
                                                               'IconButton pressed ...');
                                                         },

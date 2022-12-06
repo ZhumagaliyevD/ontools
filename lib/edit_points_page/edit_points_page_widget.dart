@@ -240,16 +240,21 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                               ),
                             ),
                           if (editPointsPageNotesRecord != null)
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 1,
-                              child: custom_widgets.PhotoNoteWidget(
+                            Padding(
+                              padding: const EdgeInsets.all(25.0)
+                                  .copyWith(top: 30, left: 30),
+                              child: Container(
                                 width: MediaQuery.of(context).size.width,
                                 height: MediaQuery.of(context).size.height * 1,
-                                image: widget.note!.image!,
-                                points: editPointsPageNotesRecord!.notePoints!
-                                    .toList(),
-                                onCreatePhotoNote: () async {},
+                                child: custom_widgets.PhotoNoteWidget(
+                                  width: MediaQuery.of(context).size.width,
+                                  height:
+                                      MediaQuery.of(context).size.height * 1,
+                                  image: widget.note!.image!,
+                                  points: editPointsPageNotesRecord!.notePoints!
+                                      .toList(),
+                                  onCreatePhotoNote: () async {},
+                                ),
                               ),
                             ),
                           if (FFAppState().isCheckbox == true)
