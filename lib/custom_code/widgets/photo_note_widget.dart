@@ -52,11 +52,15 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
   double x = 100;
   double y = 100;
 
+  double wid = 0;
+
   bool showNewPoint = false;
 
   void addPoint() async {}
 
   Future getData() async {
+    wid = widget.width!;
+    print(wid);
     if (widget.points != null) {
       final snapshot = await widget.points![0].get();
       int len = widget.points!.length;
@@ -75,6 +79,8 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
   @override
   void initState() {
     super.initState();
+
+    //wid = Image.network(widget.image).width!;
     getData();
     FFAppState().photoNotePoints.clear();
   }
@@ -98,25 +104,6 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
                 x = details.localPosition.dx;
                 y = details.localPosition.dy;
               });
-
-              // showDialog(context: context, builder: (context) {
-              //   return AlertDialog(
-              //     title: const Text('Type description'),
-              //     content: TextField(
-              //       onChanged: (value) { },
-              //       controller: _textFieldController,
-              //       decoration: const InputDecoration(hintText: "Text Field in Dialog"),
-              //     ),
-              //     actions: [
-              //       TextButton(onPressed: () {
-              //         photoNotes.add(PhotoNote(details.localPosition.dx, details.localPosition.dy, _textFieldController.text));
-              //         _textFieldController.clear();
-              //         setState(() {});
-              //         Navigator.pop(context);
-              //       }, child: const Text("Submit"))
-              //     ],
-              //   );
-              // });
             },
             child: Container(
                 decoration: BoxDecoration(
@@ -129,8 +116,6 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
                 .map((e) => Positioned(
                       top: e.y,
                       left: e.x,
-                      // right: width - x - 10,
-                      // bottom: height - y - 10,
                       child: JustTheTooltip(
                         tailLength: 10.0,
                         backgroundColor: Colors.black,
@@ -189,111 +174,106 @@ class _PhotoNoteWidgetState extends State<PhotoNoteWidget> {
               ? Positioned(
                   left: x,
                   top: y,
-                  child: Stack(
-                    children: [
-                      const Center(
-                        child: CircleAvatar(
-                          radius: 6,
-                          backgroundColor: Colors.white,
-                          child: CircleAvatar(
-                            radius: 4,
-                            backgroundColor: Colors.green,
+                  child: const Center(
+                    child: CircleAvatar(
+                      radius: 6,
+                      backgroundColor: Colors.white,
+                      child: CircleAvatar(
+                        radius: 4,
+                        backgroundColor: Colors.green,
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
+          showNewPoint
+              ? Positioned(
+                  left: (wid - x) < 225 ? x - 200 : x - 20,
+                  top: y + 15,
+                  child: AnimatedContainer(
+                    width: _textFieldController.text == "" ? 150 : 150,
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(5)),
+                    margin: const EdgeInsets.only(bottom: 150, left: 50),
+                    duration: const Duration(milliseconds: 100),
+                    child: Flex(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      direction: _textFieldController.text == ""
+                          ? Axis.horizontal
+                          : Axis.vertical,
+                      children: [
+                        SizedBox(
+                          width: _textFieldController.text == "" ? 110 : 150,
+                          child: TextFormField(
+                            controller: _textFieldController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            minLines: 1,
+                            maxLines: 5,
+                            keyboardType: TextInputType.multiline,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 12),
+                            decoration: const InputDecoration(
+                              hintText: 'Add a comment',
+                              hintStyle: TextStyle(color: Colors.grey),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 15),
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide: BorderSide(color: Colors.black)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide: BorderSide(color: Colors.black)),
+                            ),
                           ),
                         ),
-                      ),
-                      Align(
-                        // alignment: Alignment.topRight,
-                        child: AnimatedContainer(
-                          width: _textFieldController.text == "" ? 200 : 150,
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(5)),
-                          margin: const EdgeInsets.only(left: 30, bottom: 80),
-                          duration: const Duration(milliseconds: 100),
-                          child: Flex(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            direction: _textFieldController.text == ""
-                                ? Axis.horizontal
-                                : Axis.vertical,
-                            children: [
-                              SizedBox(
-                                width:
-                                    _textFieldController.text == "" ? 110 : 150,
-                                child: TextFormField(
-                                  controller: _textFieldController,
-                                  onChanged: (value) {
-                                    setState(() {});
-                                  },
-                                  minLines: 1,
-                                  maxLines: 5,
-                                  keyboardType: TextInputType.multiline,
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 12),
-                                  decoration: const InputDecoration(
-                                    hintText: 'Add a comment',
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 15),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20.0)),
-                                        borderSide:
-                                            BorderSide(color: Colors.black)),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20.0)),
-                                        borderSide:
-                                            BorderSide(color: Colors.black)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                _textFieldController.text == ""
+                                    ? Container()
+                                    : Container(
+                                        width: 150,
+                                        height: 0.5,
+                                        color: Colors.white,
+                                      ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      photoNotes.add(PhotoNote(
+                                          x, y, _textFieldController.text));
+                                      setState(() {
+                                        showNewPoint = false;
+                                      });
+                                      FFAppState().dx = x;
+                                      FFAppState().dy = y;
+                                      FFAppState().comment =
+                                          _textFieldController.text;
+                                      widget.onCreatePhotoNote();
+                                      _textFieldController.clear();
+                                    },
+                                    child: Icon(
+                                      Icons.arrow_circle_up_rounded,
+                                      color: _textFieldController.text == ""
+                                          ? Colors.grey
+                                          : Colors.white,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      _textFieldController.text == ""
-                                          ? Container()
-                                          : Container(
-                                              width: 150,
-                                              height: 0.5,
-                                              color: Colors.white,
-                                            ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            photoNotes.add(PhotoNote(x, y,
-                                                _textFieldController.text));
-                                            setState(() {
-                                              showNewPoint = false;
-                                            });
-                                            FFAppState().dx = x;
-                                            FFAppState().dy = y;
-                                            FFAppState().comment =
-                                                _textFieldController.text;
-                                            widget.onCreatePhotoNote();
-                                            _textFieldController.clear();
-                                          },
-                                          child: Icon(
-                                            Icons.arrow_circle_up_rounded,
-                                            color:
-                                                _textFieldController.text == ""
-                                                    ? Colors.grey
-                                                    : Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 )
               : Container(),

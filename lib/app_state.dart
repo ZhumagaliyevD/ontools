@@ -26,7 +26,13 @@ class FFAppState {
 
   DateTime? toolBuyDate = DateTime.fromMillisecondsSinceEpoch(1665846120000);
 
+  DateTime? reportStart = DateTime.fromMillisecondsSinceEpoch(1665846120000);
+
+  DateTime? reportEnd = DateTime.fromMillisecondsSinceEpoch(1665846120000);
+
   String toolimg = '';
+
+  bool viewPhoto = false;
 
   String profileimg =
       'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png';

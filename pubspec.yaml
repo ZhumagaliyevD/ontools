@@ -74,9 +74,13 @@ dependencies:
   sign_in_with_apple_platform_interface: 1.0.0
   sign_in_with_apple_web: 1.0.1
   sqflite: 2.2.0+2
+  open_file: ^3.2.1
+  printing: ^5.9.3
   syncfusion_flutter_calendar:  20.3.47
   timeago: 3.2.2
   url_launcher: 6.1.5
+  pdf: ^3.8.4
+  permission_handler: ^10.2.0
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -35,7 +35,7 @@ class _AllChatsWidgetState extends State<AllChatsWidget> {
             size: 30,
           ),
           onPressed: () async {
-            context.pop();
+            context.pushNamed("Marketplace");
           },
         ),
         title: Text(

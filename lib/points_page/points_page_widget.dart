@@ -110,7 +110,7 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 16),
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 16),
                       child: Card(
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -119,7 +119,7 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -146,16 +146,22 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                   style: FlutterFlowTheme.of(context).bodyText1,
                                 ),
                               ),
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height * 1,
-                                child: custom_widgets.PhotoNoteWidgetPreview(
+                              Padding(
+                                padding:
+                                    const EdgeInsets.all(23.0).copyWith(top: 0),
+                                child: Container(
                                   width: MediaQuery.of(context).size.width,
                                   height:
                                       MediaQuery.of(context).size.height * 1,
-                                  image: pointsPageNotesRecord.image!,
-                                  points: widget.notepage!.notePoints!.toList(),
-                                  onCreatePhotoNote: () async {},
+                                  child: custom_widgets.PhotoNoteWidgetPreview(
+                                    width: MediaQuery.of(context).size.width,
+                                    height:
+                                        MediaQuery.of(context).size.height * 1,
+                                    image: pointsPageNotesRecord.image!,
+                                    points:
+                                        widget.notepage!.notePoints!.toList(),
+                                    onCreatePhotoNote: () async {},
+                                  ),
                                 ),
                               ),
                               Padding(

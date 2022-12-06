@@ -114,7 +114,7 @@ class _PhotoNoteWidgetPreviewState extends State<PhotoNoteWidgetPreview> {
             },
             child: Container(
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.red, width: 5)),
+                    border: Border.all(color: Colors.white, width: 0)),
                 child: Image.network(widget.image)),
           ),
 

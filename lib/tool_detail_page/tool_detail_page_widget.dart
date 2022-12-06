@@ -9,6 +9,7 @@ import '../flutter_flow/upload_media.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ToolDetailPageWidget extends StatefulWidget {
@@ -36,6 +37,11 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
   @override
   void initState() {
     super.initState();
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      setState(() => FFAppState().viewPhoto = false);
+    });
+
     descriptionController =
         TextEditingController(text: widget.tool!.description);
     toolNameController = TextEditingController(text: widget.tool!.toolName);
@@ -135,521 +141,607 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
           ),
           body: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: CachedNetworkImageProvider(
-                            FFAppState().toolimg,
-                          ),
-                        ),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: FlutterFlowTheme.of(context).lineColor,
-                          width: 1,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                    child: TextFormField(
-                      controller: toolNameController,
-                      readOnly: true,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        labelText: 'Наименование инстумента',
-                        hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).lineColor,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).lineColor,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        filled: true,
-                        fillColor:
-                            FlutterFlowTheme.of(context).secondaryBackground,
-                      ),
-                      style: FlutterFlowTheme.of(context).bodyText1,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                    child: TextFormField(
-                      controller: descriptionController,
-                      readOnly: true,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        labelText: 'Описание инструмента',
-                        hintText: 'Введите описание инструмента',
-                        hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).lineColor,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).lineColor,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        filled: true,
-                        fillColor:
-                            FlutterFlowTheme.of(context).secondaryBackground,
-                      ),
-                      style: FlutterFlowTheme.of(context).bodyText1,
-                      maxLines: 8,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                    child: TextFormField(
-                      controller: shopNameController,
-                      readOnly: true,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        labelText: 'Наименование магазина',
-                        hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).lineColor,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).lineColor,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        filled: true,
-                        fillColor:
-                            FlutterFlowTheme.of(context).secondaryBackground,
-                      ),
-                      style: FlutterFlowTheme.of(context).bodyText1,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(8, 0, 0, 2),
-                          child: Text(
-                            'Добавить чек',
-                            style:
-                                FlutterFlowTheme.of(context).bodyText1.override(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                    ),
-                          ),
-                        ),
-                        Container(
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 200,
                           decoration: BoxDecoration(
                             color: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: CachedNetworkImageProvider(
+                                FFAppState().toolimg,
+                              ),
+                            ),
                             borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: FlutterFlowTheme.of(context).lineColor,
+                              width: 1,
+                            ),
                           ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      12, 0, 0, 0),
-                                  child: Text(
-                                    FFAppState().chequeName,
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyText1,
-                                  ),
-                                ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                        child: TextFormField(
+                          controller: toolNameController,
+                          readOnly: true,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'Наименование инстумента',
+                            hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).lineColor,
+                                width: 1,
                               ),
-                              if (widget.tool!.chequeName == null ||
-                                  widget.tool!.chequeName == '')
-                                FlutterFlowIconButton(
-                                  borderColor: Colors.transparent,
-                                  borderRadius: 30,
-                                  borderWidth: 1,
-                                  buttonSize: 50,
-                                  icon: Icon(
-                                    FFIcons.kfreeIconFontDownload3917330,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    size: 20,
-                                  ),
-                                  onPressed: () async {
-                                    final selectedMedia =
-                                        await selectMediaWithSourceBottomSheet(
-                                      context: context,
-                                      allowPhoto: true,
-                                    );
-                                    if (selectedMedia != null &&
-                                        selectedMedia.every((m) =>
-                                            validateFileFormat(
-                                                m.storagePath, context))) {
-                                      setState(() => isMediaUploading = true);
-                                      var downloadUrls = <String>[];
-                                      try {
-                                        showUploadMessage(
-                                          context,
-                                          'Uploading file...',
-                                          showLoading: true,
-                                        );
-                                        downloadUrls = (await Future.wait(
-                                          selectedMedia.map(
-                                            (m) async => await uploadData(
-                                                m.storagePath, m.bytes),
-                                          ),
-                                        ))
-                                            .where((u) => u != null)
-                                            .map((u) => u!)
-                                            .toList();
-                                      } finally {
-                                        ScaffoldMessenger.of(context)
-                                            .hideCurrentSnackBar();
-                                        isMediaUploading = false;
-                                      }
-                                      if (downloadUrls.length ==
-                                          selectedMedia.length) {
-                                        setState(() => uploadedFileUrl =
-                                            downloadUrls.first);
-                                        showUploadMessage(context, 'Success!');
-                                      } else {
-                                        setState(() {});
-                                        showUploadMessage(
-                                            context, 'Failed to upload media');
-                                        return;
-                                      }
-                                    }
-
-                                    setState(() => FFAppState().chequeName =
-                                        'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}');
-
-                                    final toolsUpdateData =
-                                        createToolsRecordData(
-                                      chequeIMG: uploadedFileUrl,
-                                      chequeName:
-                                          'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}',
-                                    );
-                                    await widget.tool!.reference
-                                        .update(toolsUpdateData);
-                                  },
-                                ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 30),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      8, 0, 0, 2),
-                                  child: Text(
-                                    'Дата покупки',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyText1
-                                        .override(
-                                          fontFamily: 'Montserrat',
-                                          fontSize: 12,
-                                        ),
-                                  ),
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: FlutterFlowTheme.of(context)
-                                          .lineColor,
-                                    ),
-                                  ),
-                                  alignment: AlignmentDirectional(-1, 0),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        12, 0, 0, 0),
-                                    child: Text(
-                                      dateTimeFormat(
-                                          'd/M/y', FFAppState().toolBuyDate),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText1,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(6, 0, 0, 0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      8, 0, 0, 2),
-                                  child: Text(
-                                    'Цена, тенге',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyText1
-                                        .override(
-                                          fontFamily: 'Montserrat',
-                                          fontSize: 12,
-                                        ),
-                                  ),
-                                ),
-                                TextFormField(
-                                  controller: priceController,
-                                  readOnly: true,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodyText2,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .lineColor,
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .lineColor,
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    filled: true,
-                                    fillColor: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                  ),
-                                  style: FlutterFlowTheme.of(context).bodyText1,
-                                  keyboardType: TextInputType.number,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
-                    child: StreamBuilder<UserRecord>(
-                      stream: UserRecord.getDocument(widget.tool!.createdBy!),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: CircularProgressIndicator(
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryColor,
-                              ),
-                            ),
-                          );
-                        }
-                        final rowUserRecord = snapshot.data!;
-                        return Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            ClipRRect(
                               borderRadius: BorderRadius.circular(16),
-                              child: Image.network(
-                                valueOrDefault<String>(
-                                  rowUserRecord.photoUrl,
-                                  'https://media.istockphoto.com/vectors/user-icon-flat-isolated-on-white-background-user-symbol-vector-vector-id1300845620?k=20&m=1300845620&s=612x612&w=0&h=f4XTZDAv7NPuZbG0habSpU0sNgECM0X7nbKzTUta3n8=',
-                                ),
-                                width: 60,
-                                height: 60,
-                                fit: BoxFit.cover,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).lineColor,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            filled: true,
+                            fillColor: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                          ),
+                          style: FlutterFlowTheme.of(context).bodyText1,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                        child: TextFormField(
+                          controller: descriptionController,
+                          readOnly: true,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'Описание инструмента',
+                            hintText: 'Введите описание инструмента',
+                            hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).lineColor,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).lineColor,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            filled: true,
+                            fillColor: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                          ),
+                          style: FlutterFlowTheme.of(context).bodyText1,
+                          maxLines: 8,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                        child: TextFormField(
+                          controller: shopNameController,
+                          readOnly: true,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'Наименование магазина',
+                            hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).lineColor,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).lineColor,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            filled: true,
+                            fillColor: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                          ),
+                          style: FlutterFlowTheme.of(context).bodyText1,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 0, 2),
+                              child: Text(
+                                'Добавить чек',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 12,
+                                    ),
                               ),
                             ),
-                            Expanded(
+                            Container(
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    16, 20, 0, 20),
+                                    0, 10, 0, 10),
+                                child: InkWell(
+                                  onTap: () async {
+                                    setState(
+                                        () => FFAppState().viewPhoto = true);
+                                  },
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  12, 0, 0, 0),
+                                          child: Text(
+                                            valueOrDefault<String>(
+                                              toolDetailPageToolsRecord
+                                                  .chequeName,
+                                              'cheque',
+                                            ),
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText1
+                                                .override(
+                                                  fontFamily: 'Montserrat',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryColor,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                      if (widget.tool!.chequeName == null ||
+                                          widget.tool!.chequeName == '')
+                                        FlutterFlowIconButton(
+                                          borderColor: Colors.transparent,
+                                          borderRadius: 30,
+                                          borderWidth: 1,
+                                          buttonSize: 50,
+                                          icon: Icon(
+                                            FFIcons
+                                                .kfreeIconFontDownload3917330,
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
+                                            size: 20,
+                                          ),
+                                          onPressed: () async {
+                                            final selectedMedia =
+                                                await selectMediaWithSourceBottomSheet(
+                                              context: context,
+                                              allowPhoto: true,
+                                            );
+                                            if (selectedMedia != null &&
+                                                selectedMedia.every((m) =>
+                                                    validateFileFormat(
+                                                        m.storagePath,
+                                                        context))) {
+                                              setState(() =>
+                                                  isMediaUploading = true);
+                                              var downloadUrls = <String>[];
+                                              try {
+                                                showUploadMessage(
+                                                  context,
+                                                  'Uploading file...',
+                                                  showLoading: true,
+                                                );
+                                                downloadUrls =
+                                                    (await Future.wait(
+                                                  selectedMedia.map(
+                                                    (m) async =>
+                                                        await uploadData(
+                                                            m.storagePath,
+                                                            m.bytes),
+                                                  ),
+                                                ))
+                                                        .where((u) => u != null)
+                                                        .map((u) => u!)
+                                                        .toList();
+                                              } finally {
+                                                ScaffoldMessenger.of(context)
+                                                    .hideCurrentSnackBar();
+                                                isMediaUploading = false;
+                                              }
+                                              if (downloadUrls.length ==
+                                                  selectedMedia.length) {
+                                                setState(() => uploadedFileUrl =
+                                                    downloadUrls.first);
+                                                showUploadMessage(
+                                                    context, 'Success!');
+                                              } else {
+                                                setState(() {});
+                                                showUploadMessage(context,
+                                                    'Failed to upload media');
+                                                return;
+                                              }
+                                            }
+
+                                            setState(() => FFAppState()
+                                                    .chequeName =
+                                                'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}');
+
+                                            final toolsUpdateData =
+                                                createToolsRecordData(
+                                              chequeIMG: uploadedFileUrl,
+                                              chequeName:
+                                                  'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}',
+                                            );
+                                            await widget.tool!.reference
+                                                .update(toolsUpdateData);
+                                          },
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 30),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      rowUserRecord.displayName!,
-                                      style: FlutterFlowTheme.of(context)
-                                          .subtitle1
-                                          .override(
-                                            fontFamily: 'Montserrat',
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                    ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 8, 0, 0),
+                                          8, 0, 0, 2),
                                       child: Text(
-                                        'Продавца',
+                                        'Дата покупки',
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText1,
+                                            .bodyText1
+                                            .override(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 12,
+                                            ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: FlutterFlowTheme.of(context)
+                                              .lineColor,
+                                        ),
+                                      ),
+                                      alignment: AlignmentDirectional(-1, 0),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            12, 0, 0, 0),
+                                        child: Text(
+                                          dateTimeFormat('d/M/y',
+                                              FFAppState().toolBuyDate),
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText1,
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                  if (toolDetailPageToolsRecord.createdBy !=
-                      currentUserReference)
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 24),
-                      child: StreamBuilder<UserRecord>(
-                        stream: UserRecord.getDocument(widget.tool!.createdBy!),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: CircularProgressIndicator(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryColor,
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(6, 0, 0, 0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          8, 0, 0, 2),
+                                      child: Text(
+                                        'Цена, тенге',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText1
+                                            .override(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 12,
+                                            ),
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      controller: priceController,
+                                      readOnly: true,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        hintStyle: FlutterFlowTheme.of(context)
+                                            .bodyText2,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .lineColor,
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .lineColor,
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                        filled: true,
+                                        fillColor: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1,
+                                      keyboardType: TextInputType.number,
+                                    ),
+                                  ],
                                 ),
                               ),
-                            );
-                          }
-                          final buttonUserRecord = snapshot.data!;
-                          return FFButtonWidget(
-                            onPressed: () async {
-                              if (Navigator.of(context).canPop()) {
-                                context.pop();
-                              }
-                              context.pushNamed(
-                                'ChatPage',
-                                queryParams: {
-                                  'chatUser': serializeParam(
-                                    buttonUserRecord,
-                                    ParamType.Document,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
+                        child: StreamBuilder<UserRecord>(
+                          stream:
+                              UserRecord.getDocument(widget.tool!.createdBy!),
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: CircularProgressIndicator(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryColor,
                                   ),
-                                }.withoutNulls,
-                                extra: <String, dynamic>{
-                                  'chatUser': buttonUserRecord,
+                                ),
+                              );
+                            }
+                            final rowUserRecord = snapshot.data!;
+                            return Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Image.network(
+                                    valueOrDefault<String>(
+                                      rowUserRecord.photoUrl,
+                                      'https://media.istockphoto.com/vectors/user-icon-flat-isolated-on-white-background-user-symbol-vector-vector-id1300845620?k=20&m=1300845620&s=612x612&w=0&h=f4XTZDAv7NPuZbG0habSpU0sNgECM0X7nbKzTUta3n8=',
+                                    ),
+                                    width: 60,
+                                    height: 60,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        16, 20, 0, 20),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        Text(
+                                          rowUserRecord.displayName!,
+                                          style: FlutterFlowTheme.of(context)
+                                              .subtitle1
+                                              .override(
+                                                fontFamily: 'Montserrat',
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 8, 0, 0),
+                                          child: Text(
+                                            'Продавца',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText1,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      if (toolDetailPageToolsRecord.createdBy !=
+                          currentUserReference)
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(12, 0, 12, 24),
+                          child: StreamBuilder<UserRecord>(
+                            stream:
+                                UserRecord.getDocument(widget.tool!.createdBy!),
+                            builder: (context, snapshot) {
+                              // Customize what your widget looks like when it's loading.
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: CircularProgressIndicator(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryColor,
+                                    ),
+                                  ),
+                                );
+                              }
+                              final buttonUserRecord = snapshot.data!;
+                              return FFButtonWidget(
+                                onPressed: () async {
+                                  if (Navigator.of(context).canPop()) {
+                                    context.pop();
+                                  }
+                                  context.pushNamed(
+                                    'ChatPage',
+                                    queryParams: {
+                                      'chatUser': serializeParam(
+                                        buttonUserRecord,
+                                        ParamType.Document,
+                                      ),
+                                    }.withoutNulls,
+                                    extra: <String, dynamic>{
+                                      'chatUser': buttonUserRecord,
+                                    },
+                                  );
                                 },
+                                text: 'Связаться',
+                                options: FFButtonOptions(
+                                  width: 130,
+                                  height: 48,
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryColor,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .subtitle2
+                                      .override(
+                                        fontFamily: 'Montserrat',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
                               );
                             },
-                            text: 'Связаться',
+                          ),
+                        ),
+                      if ((toolDetailPageToolsRecord.inSale == false) &&
+                          (toolDetailPageToolsRecord.createdBy ==
+                              currentUserReference))
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
+                          child: FFButtonWidget(
+                            onPressed: () async {
+                              final toolsUpdateData = createToolsRecordData(
+                                inSale: true,
+                              );
+                              await toolDetailPageToolsRecord.reference
+                                  .update(toolsUpdateData);
+                              context.pop();
+                            },
+                            text: 'Выставить на продажу',
                             options: FFButtonOptions(
                               width: 130,
                               height: 48,
-                              color:
-                                  FlutterFlowTheme.of(context).secondaryColor,
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
                               textStyle: FlutterFlowTheme.of(context)
                                   .subtitle2
                                   .override(
@@ -658,83 +750,81 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                         .primaryText,
                                   ),
                               borderSide: BorderSide(
-                                color: Colors.transparent,
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryColor,
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  if ((toolDetailPageToolsRecord.inSale == false) &&
-                      (toolDetailPageToolsRecord.createdBy ==
-                          currentUserReference))
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
-                      child: FFButtonWidget(
-                        onPressed: () async {
-                          final toolsUpdateData = createToolsRecordData(
-                            inSale: true,
-                          );
-                          await toolDetailPageToolsRecord.reference
-                              .update(toolsUpdateData);
-                          context.pop();
-                        },
-                        text: 'Выставить на продажу',
-                        options: FFButtonOptions(
-                          width: 130,
-                          height: 48,
-                          color: FlutterFlowTheme.of(context).primaryBackground,
-                          textStyle: FlutterFlowTheme.of(context)
-                              .subtitle2
-                              .override(
-                                fontFamily: 'Montserrat',
-                                color: FlutterFlowTheme.of(context).primaryText,
-                              ),
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).secondaryColor,
-                            width: 1,
                           ),
-                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      if ((toolDetailPageToolsRecord.inSale == true) &&
+                          (toolDetailPageToolsRecord.createdBy ==
+                              currentUserReference))
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
+                          child: FFButtonWidget(
+                            onPressed: () async {
+                              final toolsUpdateData = createToolsRecordData(
+                                inSale: false,
+                              );
+                              await toolDetailPageToolsRecord.reference
+                                  .update(toolsUpdateData);
+                              context.pop();
+                            },
+                            text: 'Снять с продаж',
+                            options: FFButtonOptions(
+                              width: 130,
+                              height: 48,
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .subtitle2
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                              borderSide: BorderSide(
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryColor,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                if (FFAppState().viewPhoto)
+                  InkWell(
+                    onTap: () async {
+                      setState(() => FFAppState().viewPhoto = false);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Color(0x84000000),
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      child: Align(
+                        alignment: AlignmentDirectional(0, 0),
+                        child: InkWell(
+                          onTap: () async {
+                            setState(() => FFAppState().viewPhoto = false);
+                          },
+                          child: Image.network(
+                            toolDetailPageToolsRecord.photo!,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
-                  if ((toolDetailPageToolsRecord.inSale == true) &&
-                      (toolDetailPageToolsRecord.createdBy ==
-                          currentUserReference))
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
-                      child: FFButtonWidget(
-                        onPressed: () async {
-                          final toolsUpdateData = createToolsRecordData(
-                            inSale: false,
-                          );
-                          await toolDetailPageToolsRecord.reference
-                              .update(toolsUpdateData);
-                          context.pop();
-                        },
-                        text: 'Снять с продаж',
-                        options: FFButtonOptions(
-                          width: 130,
-                          height: 48,
-                          color: FlutterFlowTheme.of(context).primaryBackground,
-                          textStyle: FlutterFlowTheme.of(context)
-                              .subtitle2
-                              .override(
-                                fontFamily: 'Montserrat',
-                                color: FlutterFlowTheme.of(context).primaryText,
-                              ),
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).secondaryColor,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+                  ),
+              ],
             ),
           ),
         );

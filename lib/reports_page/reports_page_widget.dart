@@ -5,6 +5,7 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import '../custom_code/actions/index.dart' as actions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -70,298 +71,297 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
                       ),
-                      child: Visibility(
-                        visible: reportsPageReportsRecordList.length == null,
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                                child: Text(
-                                  'Выберите период',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                              child: Text(
+                                'Выберите период',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            8, 0, 0, 2),
+                                        child: Text(
+                                          'Начало',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText1
+                                              .override(
+                                                fontFamily: 'Montserrat',
+                                                fontSize: 12,
+                                              ),
+                                        ),
                                       ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  8, 0, 0, 2),
-                                          child: Text(
-                                            'Начало',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText1
-                                                .override(
-                                                  fontFamily: 'Montserrat',
-                                                  fontSize: 12,
-                                                ),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () async {
-                                            await DatePicker.showDatePicker(
-                                              context,
-                                              showTitleActions: true,
-                                              onConfirm: (date) {
-                                                setState(
-                                                    () => datePicked1 = date);
-                                              },
-                                              currentTime: getCurrentTimestamp,
-                                              minTime: DateTime(0, 0, 0),
-                                            );
+                                      InkWell(
+                                        onTap: () async {
+                                          await DatePicker.showDatePicker(
+                                            context,
+                                            showTitleActions: true,
+                                            onConfirm: (date) {
+                                              setState(
+                                                  () => datePicked1 = date);
+                                            },
+                                            currentTime: getCurrentTimestamp,
+                                            minTime: DateTime(0, 0, 0),
+                                          );
 
-                                            if (!(datePicked1 == null)) {
-                                              setState(() => FFAppState()
-                                                  .toolBuyDate = datePicked1);
-                                            }
-                                          },
-                                          child: Container(
-                                            width: 150,
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              border: Border.all(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .lineColor,
-                                              ),
-                                            ),
-                                            alignment:
-                                                AlignmentDirectional(-1, 0),
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(12, 0, 0, 0),
-                                              child: Text(
-                                                dateTimeFormat(
-                                                    'd/M/y', datePicked1),
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyText1,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  8, 0, 0, 2),
-                                          child: Text(
-                                            'Конец',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText1
-                                                .override(
-                                                  fontFamily: 'Montserrat',
-                                                  fontSize: 12,
-                                                ),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () async {
-                                            await DatePicker.showDatePicker(
-                                              context,
-                                              showTitleActions: true,
-                                              onConfirm: (date) {
-                                                setState(
-                                                    () => datePicked2 = date);
-                                              },
-                                              currentTime: getCurrentTimestamp,
-                                              minTime: DateTime(0, 0, 0),
-                                            );
-
-                                            if (!(datePicked2 == null)) {
-                                              setState(() => FFAppState()
-                                                  .toolBuyDate = datePicked2);
-                                            }
-                                          },
-                                          child: Container(
-                                            width: 150,
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              border: Border.all(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .lineColor,
-                                              ),
-                                            ),
-                                            alignment:
-                                                AlignmentDirectional(-1, 0),
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(12, 0, 0, 0),
-                                              child: Text(
-                                                dateTimeFormat(
-                                                    'd/M/y', datePicked2),
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyText1,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0, 12, 0, 12),
-                                child: StreamBuilder<List<ToolsRecord>>(
-                                  stream: queryToolsRecord(
-                                    queryBuilder: (toolsRecord) => toolsRecord
-                                        .where('created_at',
-                                            isGreaterThan: datePicked1)
-                                        .where('created_at',
-                                            isLessThan: datePicked2),
-                                  ),
-                                  builder: (context, snapshot) {
-                                    // Customize what your widget looks like when it's loading.
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: SizedBox(
-                                          width: 50,
-                                          height: 50,
-                                          child: CircularProgressIndicator(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryColor,
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                    List<ToolsRecord> buttonToolsRecordList =
-                                        snapshot.data!;
-                                    return FFButtonWidget(
-                                      onPressed: () async {
-                                        if (dateTimeFormat(
-                                                    'd/M/y', datePicked1) !=
-                                                null &&
-                                            dateTimeFormat(
-                                                    'd/M/y', datePicked1) !=
-                                                '') {
-                                          if (dateTimeFormat(
-                                                      'd/M/y', datePicked2) !=
-                                                  null &&
-                                              dateTimeFormat(
-                                                      'd/M/y', datePicked2) !=
-                                                  '') {
-                                            final reportsCreateData = {
-                                              ...createReportsRecordData(
-                                                startDate: datePicked1,
-                                                endDate: datePicked2,
-                                                createdBy: currentUserReference,
-                                                createdAt: getCurrentTimestamp,
-                                              ),
-                                              'Tools': buttonToolsRecordList
-                                                  .map((e) => e.reference)
-                                                  .toList(),
-                                            };
-                                            await ReportsRecord.createDoc(
-                                                    currentUserReference!)
-                                                .set(reportsCreateData);
+                                          if (!(datePicked1 == null)) {
+                                            setState(() => FFAppState()
+                                                .reportStart = datePicked1);
                                           }
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'Отчет создан',
-                                                style: TextStyle(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                ),
-                                              ),
-                                              duration:
-                                                  Duration(milliseconds: 4000),
-                                              backgroundColor:
-                                                  Color(0x00000000),
-                                            ),
-                                          );
-                                        } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'Выберите даты',
-                                                style: TextStyle(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                ),
-                                              ),
-                                              duration:
-                                                  Duration(milliseconds: 4000),
-                                              backgroundColor:
-                                                  Color(0x00000000),
-                                            ),
-                                          );
-                                        }
-                                      },
-                                      text: 'Загрузить отчет',
-                                      options: FFButtonOptions(
-                                        width: 130,
-                                        height: 48,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryColor,
-                                        textStyle: FlutterFlowTheme.of(context)
-                                            .subtitle2
-                                            .override(
-                                              fontFamily: 'Montserrat',
+                                        },
+                                        child: Container(
+                                          width: 150,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            border: Border.all(
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
+                                                      .lineColor,
                                             ),
-                                        borderSide: BorderSide(
-                                          color: Colors.transparent,
-                                          width: 1,
+                                          ),
+                                          alignment:
+                                              AlignmentDirectional(-1, 0),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    12, 0, 0, 0),
+                                            child: Text(
+                                              dateTimeFormat(
+                                                  'd/M/y', datePicked1),
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText1,
+                                            ),
+                                          ),
                                         ),
-                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            8, 0, 0, 2),
+                                        child: Text(
+                                          'Конец',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText1
+                                              .override(
+                                                fontFamily: 'Montserrat',
+                                                fontSize: 12,
+                                              ),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () async {
+                                          await DatePicker.showDatePicker(
+                                            context,
+                                            showTitleActions: true,
+                                            onConfirm: (date) {
+                                              setState(
+                                                  () => datePicked2 = date);
+                                            },
+                                            currentTime: getCurrentTimestamp,
+                                            minTime: DateTime(0, 0, 0),
+                                          );
+
+                                          if (!(datePicked2 == null)) {
+                                            setState(() => FFAppState()
+                                                .reportEnd = datePicked2);
+                                          }
+                                        },
+                                        child: Container(
+                                          width: 150,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            border: Border.all(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .lineColor,
+                                            ),
+                                          ),
+                                          alignment:
+                                              AlignmentDirectional(-1, 0),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    12, 0, 0, 0),
+                                            child: Text(
+                                              dateTimeFormat(
+                                                  'd/M/y', datePicked2),
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText1,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
+                              child: StreamBuilder<List<ToolsRecord>>(
+                                stream: queryToolsRecord(
+                                  queryBuilder: (toolsRecord) => toolsRecord
+                                      .where('created_at',
+                                          isGreaterThan: datePicked1)
+                                      .where('created_at',
+                                          isLessThan: datePicked2)
+                                      .where('created_by',
+                                          isEqualTo: currentUserReference),
+                                ),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 50,
+                                        height: 50,
+                                        child: CircularProgressIndicator(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryColor,
+                                        ),
                                       ),
                                     );
-                                  },
-                                ),
+                                  }
+                                  List<ToolsRecord> buttonToolsRecordList =
+                                      snapshot.data!;
+                                  return FFButtonWidget(
+                                    onPressed: () async {
+                                      if (dateTimeFormat(
+                                                  'd/M/y', datePicked1) !=
+                                              null &&
+                                          dateTimeFormat(
+                                                  'd/M/y', datePicked1) !=
+                                              '') {
+                                        if (dateTimeFormat(
+                                                    'd/M/y', datePicked2) !=
+                                                null &&
+                                            dateTimeFormat(
+                                                    'd/M/y', datePicked2) !=
+                                                '') {
+                                          final reportsCreateData = {
+                                            ...createReportsRecordData(
+                                              startDate: datePicked1,
+                                              endDate: datePicked2,
+                                              createdBy: currentUserReference,
+                                              createdAt: getCurrentTimestamp,
+                                            ),
+                                            'Tools': buttonToolsRecordList
+                                                .map((e) => e.reference)
+                                                .toList(),
+                                          };
+                                          await ReportsRecord.createDoc(
+                                                  currentUserReference!)
+                                              .set(reportsCreateData);
+                                          await actions.convert(
+                                            buttonToolsRecordList.toList(),
+                                            FFAppState().reportStart,
+                                            FFAppState().reportEnd,
+                                          );
+                                        }
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Отчет создан',
+                                              style: TextStyle(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                              ),
+                                            ),
+                                            duration:
+                                                Duration(milliseconds: 4000),
+                                            backgroundColor: Color(0x00000000),
+                                          ),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Выберите даты',
+                                              style: TextStyle(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                              ),
+                                            ),
+                                            duration:
+                                                Duration(milliseconds: 4000),
+                                            backgroundColor: Color(0x00000000),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    text: 'Поиск',
+                                    options: FFButtonOptions(
+                                      width: 130,
+                                      height: 48,
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryColor,
+                                      textStyle: FlutterFlowTheme.of(context)
+                                          .subtitle2
+                                          .override(
+                                            fontFamily: 'Montserrat',
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  );
+                                },
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

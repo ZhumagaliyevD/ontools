@@ -48,6 +48,12 @@
 @import image_picker_ios;
 #endif
 
+#if __has_include(<open_file/OpenFilePlugin.h>)
+#import <open_file/OpenFilePlugin.h>
+#else
+@import open_file;
+#endif
+
 #if __has_include(<package_info_plus/FLTPackageInfoPlusPlugin.h>)
 #import <package_info_plus/FLTPackageInfoPlusPlugin.h>
 #else
@@ -58,6 +64,18 @@
 #import <path_provider_ios/FLTPathProviderPlugin.h>
 #else
 @import path_provider_ios;
+#endif
+
+#if __has_include(<permission_handler_apple/PermissionHandlerPlugin.h>)
+#import <permission_handler_apple/PermissionHandlerPlugin.h>
+#else
+@import permission_handler_apple;
+#endif
+
+#if __has_include(<printing/PrintingPlugin.h>)
+#import <printing/PrintingPlugin.h>
+#else
+@import printing;
 #endif
 
 #if __has_include(<share_plus/FLTSharePlusPlugin.h>)
@@ -100,8 +118,11 @@
   [FLTFirebaseStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseStoragePlugin"]];
   [FLTGoogleSignInPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleSignInPlugin"]];
   [FLTImagePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImagePickerPlugin"]];
+  [OpenFilePlugin registerWithRegistrar:[registry registrarForPlugin:@"OpenFilePlugin"]];
   [FLTPackageInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPackageInfoPlusPlugin"]];
   [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
+  [PermissionHandlerPlugin registerWithRegistrar:[registry registrarForPlugin:@"PermissionHandlerPlugin"]];
+  [PrintingPlugin registerWithRegistrar:[registry registrarForPlugin:@"PrintingPlugin"]];
   [FLTSharePlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharePlusPlugin"]];
   [FLTSharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharedPreferencesPlugin"]];
   [SignInWithApplePlugin registerWithRegistrar:[registry registrarForPlugin:@"SignInWithApplePlugin"]];

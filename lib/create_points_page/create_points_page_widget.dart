@@ -729,7 +729,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     30, 0, 30, 0),
                                 child: Container(
-                                  width: MediaQuery.of(context).size.width,
+                                  width: backgroundImage!.width.toDouble(),
                                   height:
                                       MediaQuery.of(context).size.height * 1,
                                   child: custom_widgets.PhotoNoteWidget(
