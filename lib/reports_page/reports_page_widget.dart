@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:open_file/open_file.dart';
+import 'dart:io';
 
 class ReportsPageWidget extends StatefulWidget {
   const ReportsPageWidget({Key? key}) : super(key: key);
@@ -281,25 +283,50 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                             dateTimeFormat(
                                                     'd/M/y', datePicked2) !=
                                                 '') {
-                                          final reportsCreateData = {
-                                            ...createReportsRecordData(
-                                              startDate: datePicked1,
-                                              endDate: datePicked2,
-                                              createdBy: currentUserReference,
-                                              createdAt: getCurrentTimestamp,
-                                            ),
-                                            'Tools': buttonToolsRecordList
-                                                .map((e) => e.reference)
-                                                .toList(),
-                                          };
-                                          await ReportsRecord.createDoc(
-                                                  currentUserReference!)
-                                              .set(reportsCreateData);
-                                          await actions.convert(
+                                          String pdfFilePath =
+                                              await actions.convert(
                                             buttonToolsRecordList.toList(),
                                             FFAppState().reportStart,
                                             FFAppState().reportEnd,
                                           );
+                                          if (pdfFilePath == "blablabla") {
+                                            await showDialog(
+                                              context: context,
+                                              builder: (alertDialogContext) {
+                                                return AlertDialog(
+                                                  title: Text(
+                                                      'Ошибка, pdf не сохранен'),
+                                                  content: Text(
+                                                      'Попробуйте еще раз'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              alertDialogContext),
+                                                      child: Text('Ok'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          } else {
+                                            final reportsCreateData = {
+                                              ...createReportsRecordData(
+                                                  startDate: datePicked1,
+                                                  endDate: datePicked2,
+                                                  createdBy:
+                                                      currentUserReference,
+                                                  createdAt:
+                                                      getCurrentTimestamp,
+                                                  pdfFile: pdfFilePath),
+                                              'Tools': buttonToolsRecordList
+                                                  .map((e) => e.reference)
+                                                  .toList(),
+                                            };
+                                            await ReportsRecord.createDoc(
+                                                    currentUserReference!)
+                                                .set(reportsCreateData);
+                                          }
                                         }
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
@@ -499,15 +526,23 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                                     borderWidth: 1,
                                                     buttonSize: 50,
                                                     icon: Icon(
-                                                      FFIcons
-                                                          .kfreeIconFontDownload3917330,
+                                                      FontAwesomeIcons.eye,
                                                       color:
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .primaryText,
                                                       size: 24,
                                                     ),
-                                                    onPressed: () {
+                                                    onPressed: () async {
+                                                      if (Platform.isAndroid ==
+                                                          true)
+                                                        await OpenFile.open(
+                                                            listViewReportsRecord
+                                                                .pdfFile); //android
+                                                      else
+                                                        await OpenFile.open(
+                                                            listViewReportsRecord
+                                                                .pdfFile);
                                                       print(
                                                           'IconButton pressed ...');
                                                     },

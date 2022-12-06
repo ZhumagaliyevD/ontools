@@ -1,4 +1,6 @@
 // Automatic FlutterFlow imports
+import 'package:flutter_painter/flutter_painter.dart';
+
 import '../../backend/backend.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
@@ -13,6 +15,7 @@ import 'package:flutter/material.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'dart:ui' as ui;
 
 typedef VoidCallback = void Function();
 
@@ -52,9 +55,18 @@ class _PhotoNoteWidgetPreviewState extends State<PhotoNoteWidgetPreview> {
   double x = 100;
   double y = 100;
 
+  ui.Image? backgroundImage;
+
   bool showNewPoint = false;
 
   void addPoint() async {}
+
+  void initBackground() async {
+    final image = await NetworkImage(widget.image).image;
+    setState(() {
+      backgroundImage = image;
+    });
+  }
 
   Future getData() async {
     if (widget.points != null) {
@@ -75,6 +87,7 @@ class _PhotoNoteWidgetPreviewState extends State<PhotoNoteWidgetPreview> {
   @override
   void initState() {
     super.initState();
+    initBackground();
     getData();
     FFAppState().photoNotePoints.clear();
   }
@@ -84,8 +97,10 @@ class _PhotoNoteWidgetPreviewState extends State<PhotoNoteWidgetPreview> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      body:
+    return Container(
+      width: backgroundImage?.width.toDouble() ?? 150,
+      height: backgroundImage?.height.toDouble() ?? 150,
+      child:
 
           /// Picked Image
           Stack(
@@ -114,7 +129,7 @@ class _PhotoNoteWidgetPreviewState extends State<PhotoNoteWidgetPreview> {
             },
             child: Container(
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.red, width: 5)),
+                    border: Border.all(color: Colors.white, width: 0)),
                 child: Image.network(widget.image)),
           ),
 
