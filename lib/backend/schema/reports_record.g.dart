@@ -59,6 +59,13 @@ class _$ReportsRecordSerializer implements StructuredSerializer<ReportsRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(DateTime)));
     }
+    value = object.pdfFile;
+    if (value != null) {
+      result
+        ..add('pdfFile')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -107,6 +114,10 @@ class _$ReportsRecordSerializer implements StructuredSerializer<ReportsRecord> {
           result.createdAt = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime?;
           break;
+        case 'pdfFile':
+          result.pdfFile = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -132,6 +143,8 @@ class _$ReportsRecord extends ReportsRecord {
   @override
   final DateTime? createdAt;
   @override
+  final String? pdfFile;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$ReportsRecord([void Function(ReportsRecordBuilder)? updates]) =>
@@ -143,6 +156,7 @@ class _$ReportsRecord extends ReportsRecord {
       this.createdBy,
       this.tools,
       this.createdAt,
+      this.pdfFile,
       this.ffRef})
       : super._();
 
@@ -162,6 +176,7 @@ class _$ReportsRecord extends ReportsRecord {
         createdBy == other.createdBy &&
         tools == other.tools &&
         createdAt == other.createdAt &&
+        pdfFile == other.pdfFile &&
         ffRef == other.ffRef;
   }
 
@@ -170,10 +185,12 @@ class _$ReportsRecord extends ReportsRecord {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, startDate.hashCode), endDate.hashCode),
-                    createdBy.hashCode),
-                tools.hashCode),
-            createdAt.hashCode),
+                $jc(
+                    $jc($jc($jc(0, startDate.hashCode), endDate.hashCode),
+                        createdBy.hashCode),
+                    tools.hashCode),
+                createdAt.hashCode),
+            pdfFile.hashCode),
         ffRef.hashCode));
   }
 
@@ -185,6 +202,7 @@ class _$ReportsRecord extends ReportsRecord {
           ..add('createdBy', createdBy)
           ..add('tools', tools)
           ..add('createdAt', createdAt)
+          ..add('pdfFile', pdfFile)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -217,6 +235,10 @@ class ReportsRecordBuilder
   DateTime? get createdAt => _$this._createdAt;
   set createdAt(DateTime? createdAt) => _$this._createdAt = createdAt;
 
+  String? _pdfFile;
+  String? get pdfFile => _$this._pdfFile;
+  set pdfFile(String? pdfFile) => _$this._pdfFile = pdfFile;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -233,6 +255,7 @@ class ReportsRecordBuilder
       _createdBy = $v.createdBy;
       _tools = $v.tools?.toBuilder();
       _createdAt = $v.createdAt;
+      _pdfFile = $v.pdfFile;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -263,6 +286,7 @@ class ReportsRecordBuilder
               createdBy: createdBy,
               tools: _tools?.build(),
               createdAt: createdAt,
+              pdfFile: pdfFile,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;

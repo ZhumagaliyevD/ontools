@@ -49,7 +49,7 @@ service cloud.firestore {
     match /chats/{document} {
       allow create: if true;
       allow read: if true;
-      allow write: if false;
+      allow write: if /databases/$(database)/documents/user/$(request.auth.uid) in resource.data.users;
       allow delete: if false;
     }
 

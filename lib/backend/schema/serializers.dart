@@ -29,6 +29,7 @@ const kDocumentReferenceField = 'Document__Reference__Field';
   ChatMessagesRecord,
   AddressStruct,
   PhotoNoteDataStruct,
+  PermissionsStruct,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(DocumentReferenceSerializer())

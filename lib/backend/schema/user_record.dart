@@ -33,6 +33,13 @@ abstract class UserRecord implements Built<UserRecord, UserRecordBuilder> {
 
   String? get industry;
 
+  @BuiltValueField(wireName: 'trial_start')
+  DateTime? get trialStart;
+
+  PermissionsStruct get permissions;
+
+  bool? get isCompleteTrial;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -45,7 +52,9 @@ abstract class UserRecord implements Built<UserRecord, UserRecordBuilder> {
     ..phoneNumber = ''
     ..address = AddressStructBuilder()
     ..specialty = ''
-    ..industry = '';
+    ..industry = ''
+    ..permissions = PermissionsStructBuilder()
+    ..isCompleteTrial = false;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('user');
@@ -78,6 +87,9 @@ Map<String, dynamic> createUserRecordData({
   String? specialty,
   DateTime? birthday,
   String? industry,
+  DateTime? trialStart,
+  PermissionsStruct? permissions,
+  bool? isCompleteTrial,
 }) {
   final firestoreData = serializers.toFirestore(
     UserRecord.serializer,
@@ -92,12 +104,18 @@ Map<String, dynamic> createUserRecordData({
         ..address = AddressStructBuilder()
         ..specialty = specialty
         ..birthday = birthday
-        ..industry = industry,
+        ..industry = industry
+        ..trialStart = trialStart
+        ..permissions = PermissionsStructBuilder()
+        ..isCompleteTrial = isCompleteTrial,
     ),
   );
 
   // Handle nested data for "address" field.
   addAddressStructData(firestoreData, address, 'address');
+
+  // Handle nested data for "permissions" field.
+  addPermissionsStructData(firestoreData, permissions, 'permissions');
 
   return firestoreData;
 }

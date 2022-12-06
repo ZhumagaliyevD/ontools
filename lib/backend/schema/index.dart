@@ -5,4 +5,5 @@ export 'package:flutter/material.dart' show Color, Colors;
 export '../../flutter_flow/lat_lng.dart';
 
 export 'structs/address_struct.dart';
+export 'structs/permissions_struct.dart';
 export 'structs/photo_note_data_struct.dart';

@@ -378,7 +378,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                           .spaceBetween,
                                                   children: [
                                                     Text(
-                                                      '${fullListToolsRecord.price?.toString()} \$',
+                                                      '${fullListToolsRecord.price?.toString()} тг',
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)

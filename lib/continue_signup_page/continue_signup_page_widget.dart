@@ -71,8 +71,8 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
             color: FlutterFlowTheme.of(context).primaryColor,
             size: 30,
           ),
-          onPressed: () {
-            print('IconButton pressed ...');
+          onPressed: () async {
+            context.pop();
           },
         ),
         title: Text(
@@ -421,6 +421,8 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                             specialty: specialityController!.text,
                             industry: industryController!.text,
                             photoUrl: uploadedFileUrl,
+                            isCompleteTrial: false,
+                            trialStart: datePicked,
                           );
                           await currentUserReference!.update(userUpdateData);
                         } else {
@@ -430,11 +432,13 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                             birthday: datePicked,
                             specialty: specialityController!.text,
                             industry: industryController!.text,
+                            isCompleteTrial: false,
+                            trialStart: datePicked,
                           );
                           await currentUserReference!.update(userUpdateData);
                         }
 
-                        context.pushNamed('ProfileHomePage');
+                        context.pushNamed('Paywall');
                       },
                       text: 'Продолжить',
                       options: FFButtonOptions(

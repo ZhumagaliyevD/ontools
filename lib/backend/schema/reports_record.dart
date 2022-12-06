@@ -25,14 +25,17 @@ abstract class ReportsRecord
   @BuiltValueField(wireName: 'created_at')
   DateTime? get createdAt;
 
+  String? get pdfFile;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
 
   DocumentReference get parentReference => reference.parent.parent!;
 
-  static void _initializeBuilder(ReportsRecordBuilder builder) =>
-      builder..tools = ListBuilder();
+  static void _initializeBuilder(ReportsRecordBuilder builder) => builder
+    ..tools = ListBuilder()
+    ..pdfFile = '';
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
       parent != null
@@ -65,6 +68,7 @@ Map<String, dynamic> createReportsRecordData({
   DateTime? endDate,
   DocumentReference? createdBy,
   DateTime? createdAt,
+  String? pdfFile,
 }) {
   final firestoreData = serializers.toFirestore(
     ReportsRecord.serializer,
@@ -74,7 +78,8 @@ Map<String, dynamic> createReportsRecordData({
         ..endDate = endDate
         ..createdBy = createdBy
         ..tools = null
-        ..createdAt = createdAt,
+        ..createdAt = createdAt
+        ..pdfFile = pdfFile,
     ),
   );
 

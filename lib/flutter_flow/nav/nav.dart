@@ -163,6 +163,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => ProfileEditPageWidget(),
             ),
             FFRoute(
+              name: 'Notes',
+              path: 'notes',
+              requireAuth: true,
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'Notes')
+                  : NotesWidget(),
+            ),
+            FFRoute(
               name: 'PointsPage',
               path: 'pointsPage',
               requireAuth: true,
@@ -172,14 +180,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => PointsPageWidget(
                 notepage: params.getParam('notepage', ParamType.Document),
               ),
-            ),
-            FFRoute(
-              name: 'Notes',
-              path: 'notes',
-              requireAuth: true,
-              builder: (context, params) => params.isEmpty
-                  ? NavBarPage(initialPage: 'Notes')
-                  : NotesWidget(),
             ),
             FFRoute(
               name: 'AuthPage',
@@ -218,15 +218,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'ToolDetailPage',
-              path: 'toolDetailPage',
+              name: 'Paywall',
+              path: 'paywall',
               requireAuth: true,
-              asyncParams: {
-                'tool': getDoc('Tools', ToolsRecord.serializer),
-              },
-              builder: (context, params) => ToolDetailPageWidget(
-                tool: params.getParam('tool', ParamType.Document),
-              ),
+              builder: (context, params) => PaywallWidget(),
             ),
             FFRoute(
               name: 'PainterPage',
@@ -237,6 +232,17 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               },
               builder: (context, params) => PainterPageWidget(
                 noteIMG: params.getParam('noteIMG', ParamType.Document),
+              ),
+            ),
+            FFRoute(
+              name: 'ToolDetailPage',
+              path: 'toolDetailPage',
+              requireAuth: true,
+              asyncParams: {
+                'tool': getDoc('Tools', ToolsRecord.serializer),
+              },
+              builder: (context, params) => ToolDetailPageWidget(
+                tool: params.getParam('tool', ParamType.Document),
               ),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),

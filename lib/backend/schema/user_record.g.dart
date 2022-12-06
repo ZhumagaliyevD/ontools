@@ -21,6 +21,9 @@ class _$UserRecordSerializer implements StructuredSerializer<UserRecord> {
       'address',
       serializers.serialize(object.address,
           specifiedType: const FullType(AddressStruct)),
+      'permissions',
+      serializers.serialize(object.permissions,
+          specifiedType: const FullType(PermissionsStruct)),
     ];
     Object? value;
     value = object.email;
@@ -86,6 +89,20 @@ class _$UserRecordSerializer implements StructuredSerializer<UserRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.trialStart;
+    if (value != null) {
+      result
+        ..add('trial_start')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(DateTime)));
+    }
+    value = object.isCompleteTrial;
+    if (value != null) {
+      result
+        ..add('isCompleteTrial')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -148,6 +165,19 @@ class _$UserRecordSerializer implements StructuredSerializer<UserRecord> {
           result.industry = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'trial_start':
+          result.trialStart = serializers.deserialize(value,
+              specifiedType: const FullType(DateTime)) as DateTime?;
+          break;
+        case 'permissions':
+          result.permissions.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(PermissionsStruct))!
+              as PermissionsStruct);
+          break;
+        case 'isCompleteTrial':
+          result.isCompleteTrial = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -183,6 +213,12 @@ class _$UserRecord extends UserRecord {
   @override
   final String? industry;
   @override
+  final DateTime? trialStart;
+  @override
+  final PermissionsStruct permissions;
+  @override
+  final bool? isCompleteTrial;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$UserRecord([void Function(UserRecordBuilder)? updates]) =>
@@ -199,9 +235,14 @@ class _$UserRecord extends UserRecord {
       this.specialty,
       this.birthday,
       this.industry,
+      this.trialStart,
+      required this.permissions,
+      this.isCompleteTrial,
       this.ffRef})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(address, r'UserRecord', 'address');
+    BuiltValueNullFieldError.checkNotNull(
+        permissions, r'UserRecord', 'permissions');
   }
 
   @override
@@ -225,6 +266,9 @@ class _$UserRecord extends UserRecord {
         specialty == other.specialty &&
         birthday == other.birthday &&
         industry == other.industry &&
+        trialStart == other.trialStart &&
+        permissions == other.permissions &&
+        isCompleteTrial == other.isCompleteTrial &&
         ffRef == other.ffRef;
   }
 
@@ -239,16 +283,22 @@ class _$UserRecord extends UserRecord {
                             $jc(
                                 $jc(
                                     $jc(
-                                        $jc($jc(0, email.hashCode),
-                                            displayName.hashCode),
-                                        photoUrl.hashCode),
-                                    uid.hashCode),
-                                createdTime.hashCode),
-                            phoneNumber.hashCode),
-                        address.hashCode),
-                    specialty.hashCode),
-                birthday.hashCode),
-            industry.hashCode),
+                                        $jc(
+                                            $jc(
+                                                $jc(
+                                                    $jc($jc(0, email.hashCode),
+                                                        displayName.hashCode),
+                                                    photoUrl.hashCode),
+                                                uid.hashCode),
+                                            createdTime.hashCode),
+                                        phoneNumber.hashCode),
+                                    address.hashCode),
+                                specialty.hashCode),
+                            birthday.hashCode),
+                        industry.hashCode),
+                    trialStart.hashCode),
+                permissions.hashCode),
+            isCompleteTrial.hashCode),
         ffRef.hashCode));
   }
 
@@ -265,6 +315,9 @@ class _$UserRecord extends UserRecord {
           ..add('specialty', specialty)
           ..add('birthday', birthday)
           ..add('industry', industry)
+          ..add('trialStart', trialStart)
+          ..add('permissions', permissions)
+          ..add('isCompleteTrial', isCompleteTrial)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -314,6 +367,21 @@ class UserRecordBuilder implements Builder<UserRecord, UserRecordBuilder> {
   String? get industry => _$this._industry;
   set industry(String? industry) => _$this._industry = industry;
 
+  DateTime? _trialStart;
+  DateTime? get trialStart => _$this._trialStart;
+  set trialStart(DateTime? trialStart) => _$this._trialStart = trialStart;
+
+  PermissionsStructBuilder? _permissions;
+  PermissionsStructBuilder get permissions =>
+      _$this._permissions ??= new PermissionsStructBuilder();
+  set permissions(PermissionsStructBuilder? permissions) =>
+      _$this._permissions = permissions;
+
+  bool? _isCompleteTrial;
+  bool? get isCompleteTrial => _$this._isCompleteTrial;
+  set isCompleteTrial(bool? isCompleteTrial) =>
+      _$this._isCompleteTrial = isCompleteTrial;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -335,6 +403,9 @@ class UserRecordBuilder implements Builder<UserRecord, UserRecordBuilder> {
       _specialty = $v.specialty;
       _birthday = $v.birthday;
       _industry = $v.industry;
+      _trialStart = $v.trialStart;
+      _permissions = $v.permissions.toBuilder();
+      _isCompleteTrial = $v.isCompleteTrial;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -370,12 +441,18 @@ class UserRecordBuilder implements Builder<UserRecord, UserRecordBuilder> {
               specialty: specialty,
               birthday: birthday,
               industry: industry,
+              trialStart: trialStart,
+              permissions: permissions.build(),
+              isCompleteTrial: isCompleteTrial,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'address';
         address.build();
+
+        _$failedField = 'permissions';
+        permissions.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'UserRecord', _$failedField, e.toString());

@@ -66,6 +66,12 @@ class FFAppState {
   String comment = '';
 
   String chequeImg = '';
+
+  bool viewPhoto = false;
+
+  DateTime? reportStart;
+
+  DateTime? reportEnd;
 }
 
 LatLng? _latLngFromString(String? val) {

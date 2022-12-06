@@ -5,7 +5,9 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProfileHomePageWidget extends StatefulWidget {
@@ -18,6 +20,21 @@ class ProfileHomePageWidget extends StatefulWidget {
 class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
   bool? switchListTileValue;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      if (functions.daysBetween(
+              currentUserDocument!.trialStart!, getCurrentTimestamp) >
+          30) {
+        context.pushNamed('Paywall');
+      } else {
+        context.pushNamed('ProfileHomePage');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -536,7 +553,7 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                                       .spaceBetween,
                                                               children: [
                                                                 Text(
-                                                                  '${listViewToolsRecord.price?.toString()} \$',
+                                                                  '${listViewToolsRecord.price?.toString()} тг',
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyText1,

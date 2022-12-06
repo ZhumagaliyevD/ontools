@@ -1,7 +1,6 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../backend/firebase_storage/storage.dart';
-import '../components/add_note_settings_widget.dart';
 import '../flutter_flow/flutter_flow_choice_chips.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -560,11 +559,12 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                   EdgeInsetsDirectional.fromSTEB(0, 18, 0, 0),
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height * 1,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.1,
                                 child: custom_widgets.PhotoNoteWidget(
                                   width: MediaQuery.of(context).size.width,
                                   height:
-                                      MediaQuery.of(context).size.height * 1,
+                                      MediaQuery.of(context).size.height * 0.1,
                                   image: uploadedFileUrl,
                                   points: createPointsPageNotesRecord!
                                       .notePoints!
@@ -644,7 +644,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                         icon: Icon(
                           Icons.add_circle_outline,
                           color: FlutterFlowTheme.of(context).primaryText,
-                          size: 30,
+                          size: 45,
                         ),
                         onPressed: () async {
                           final selectedMedia =
@@ -688,31 +688,6 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                               return;
                             }
                           }
-                        },
-                      ),
-                      FlutterFlowIconButton(
-                        borderColor: Colors.transparent,
-                        borderRadius: 30,
-                        borderWidth: 1,
-                        buttonSize: 60,
-                        fillColor: Color(0x06232323),
-                        icon: Icon(
-                          FFIcons.kmenuDots,
-                          color: FlutterFlowTheme.of(context).primaryText,
-                          size: 30,
-                        ),
-                        onPressed: () async {
-                          await showModalBottomSheet(
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            context: context,
-                            builder: (context) {
-                              return Padding(
-                                padding: MediaQuery.of(context).viewInsets,
-                                child: AddNoteSettingsWidget(),
-                              );
-                            },
-                          ).then((value) => setState(() {}));
                         },
                       ),
                     ],
