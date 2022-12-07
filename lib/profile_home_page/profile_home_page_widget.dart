@@ -6,6 +6,7 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/custom_functions.dart' as functions;
+import '../flutter_flow/revenue_cat_util.dart' as revenue_cat;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,12 +27,29 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      if (functions.daysBetween(
-              currentUserDocument!.trialStart!, getCurrentTimestamp) >
-          30) {
-        context.pushNamed('Paywall');
+      if (!((functions.daysBetween(
+                  currentUserDocument!.trialStart!, getCurrentTimestamp) >
+              30) &&
+          (valueOrDefault<bool>(currentUserDocument?.isCompleteTrial, false) ==
+              true))) {
+        final isEntitled = await revenue_cat.isEntitled('ot_access');
+        if (isEntitled == null) {
+          return;
+        } else if (!isEntitled) {
+          await revenue_cat.loadOfferings();
+        }
+
+        if (isEntitled) {
+          context.pushNamed('ProfileHomePage');
+
+          return;
+        } else {
+          context.pushNamed('Paywall');
+
+          return;
+        }
       } else {
-        context.pushNamed('ProfileHomePage');
+        return;
       }
     });
   }

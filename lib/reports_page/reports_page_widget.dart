@@ -287,6 +287,7 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                               endDate: datePicked2,
                                               createdBy: currentUserReference,
                                               createdAt: getCurrentTimestamp,
+                                              pdfFile: '',
                                             ),
                                             'Tools': buttonToolsRecordList
                                                 .map((e) => e.reference)

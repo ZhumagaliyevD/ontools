@@ -17,8 +17,9 @@ class NotesWidget extends StatefulWidget {
 }
 
 class _NotesWidgetState extends State<NotesWidget> {
-  TextEditingController? searchController;
+  NotesRecord? notes;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController? searchController;
 
   @override
   void initState() {
@@ -56,7 +57,13 @@ class _NotesWidgetState extends State<NotesWidget> {
           onPressed: () async {
             setState(() => FFAppState().isCheckbox = false);
 
-            context.pushNamed('createPointsPage');
+            final notesCreateData = createNotesRecordData();
+            var notesRecordReference = NotesRecord.collection.doc();
+            await notesRecordReference.set(notesCreateData);
+            notes = NotesRecord.getDocumentFromData(
+                notesCreateData, notesRecordReference);
+
+            setState(() {});
           },
         ),
       ),
