@@ -1,5 +1,9 @@
 import 'dart:async';
 
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
+
 import '../../backend/backend.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
@@ -22,7 +26,20 @@ Future<String> convert(
   DateTime? dateAfter,
 ) async {
   // Add your function code here!
+
   final pdf = pw.Document();
+
+  final img1 = await networkImage(listTools[0].chequeIMG!);
+  var img2;
+  var img3;
+
+  final netImage = await networkImage('https://www.nfet.net/nfet.jpg');
+
+  final iame = Image(image: AssetImage("assets/images/favicon.png"));
+
+  final image = await imageFromAssetBundle('assets/images/favicon.png');
+
+  List<Image> listImg = [];
 
   int lengthTools = listTools.length;
   DateTime bookingDate = DateTime.now();
@@ -53,19 +70,23 @@ Future<String> convert(
   double pageHeight = 595;
 
   double totalSum = 0;
+
   for (int a = 0; a < lengthTools; a++) {
     totalSum = totalSum + listTools[a].price!;
   }
 
-  for (int i = 0; i < lengthTools; i = i + 3) {
-    int j = 0, k = 0;
-    if ((i + 1) < lengthTools) {
-      j = i + 1;
-    }
-    if ((i + 2) < lengthTools) {
-      k = i + 2;
-    }
-    if (i != 0 && i % 3 == 0) {
+  for (int a = 0; a < lengthTools; a++) {
+    // img2 = networkImage(listTools[a].chequeIMG!);
+    // listImg.add(img2);
+  }
+
+  for (int i = 0; i < lengthTools; i++) {
+    var imageI;
+    int j = i + 1;
+    try {
+      imageI = await networkImage(listTools[i].chequeIMG!);
+    } catch (e) {}
+    if (i == 0) {
       pdf.addPage(
         pw.Page(
           pageTheme: pw.PageTheme(
@@ -76,15 +97,19 @@ Future<String> convert(
           ),
           build: (pw.Context context) => pw.Column(
             children: [
+              pw.SizedBox(height: 10),
               pw.Text("OnTools report from " + res,
                   style: pw.TextStyle(
                       fontWeight: pw.FontWeight.bold, fontSize: 20)),
+              pw.SizedBox(height: 7),
               pw.Text("Data range from " + b + " to " + c,
                   style: pw.TextStyle(
                       fontWeight: pw.FontWeight.bold, fontSize: 20)),
+              pw.SizedBox(height: 20),
               pw.Container(
                 margin: pw.EdgeInsets.symmetric(horizontal: 20),
                 child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     pw.Container(
                       decoration: pw.BoxDecoration(
@@ -116,75 +141,93 @@ Future<String> convert(
                             pw.Text(listTools[i].createdAt.toString()!)
                           ])),
                     ),
-                    pw.SizedBox(height: 15),
-                    if (j != 0)
-                      pw.Column(children: [
-                        pw.Container(
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border.all(color: PdfColors.black)),
-                            child: pw.Padding(
-                                padding: pw.EdgeInsets.all(8),
-                                child: pw.Row(children: [
-                                  pw.Text("Tool Name: "),
-                                  pw.Text(listTools[j].toolName!)
-                                ]))),
-                        pw.Container(
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border.all(color: PdfColors.black)),
-                            child: pw.Padding(
-                                padding: pw.EdgeInsets.all(8),
-                                child: pw.Row(children: [
-                                  pw.Text("Tool Price: "),
-                                  pw.Text(listTools[j].price.toString()!)
-                                ]))),
-                        pw.Container(
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border.all(color: PdfColors.black)),
-                            child: pw.Padding(
-                                padding: pw.EdgeInsets.all(8),
-                                child: pw.Row(children: [
-                                  pw.Text("Date: "),
-                                  pw.Text(listTools[j].createdAt.toString()!)
-                                ]))),
-                      ]),
-                    if (k != 0)
-                      pw.Column(children: [
-                        pw.Container(
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border.all(color: PdfColors.black)),
-                            child: pw.Padding(
-                                padding: pw.EdgeInsets.all(8),
-                                child: pw.Row(children: [
-                                  pw.Text("Tool Name: "),
-                                  pw.Text(listTools[k].toolName!)
-                                ]))),
-                        pw.Container(
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border.all(color: PdfColors.black)),
-                            child: pw.Padding(
-                                padding: pw.EdgeInsets.all(8),
-                                child: pw.Row(children: [
-                                  pw.Text("Tool Price: "),
-                                  pw.Text(listTools[k].price.toString()!)
-                                ]))),
-                        pw.Container(
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border.all(color: PdfColors.black)),
-                            child: pw.Padding(
-                                padding: pw.EdgeInsets.all(8),
-                                child: pw.Row(children: [
-                                  pw.Text("Date: "),
-                                  pw.Text(listTools[k].createdAt.toString()!)
-                                ]))),
-                        pw.SizedBox(height: 15),
-                      ]),
-                    if (i + 1 == lengthTools ||
-                        j + 1 == lengthTools ||
-                        k + 1 == lengthTools)
+                    pw.Container(
+                      decoration: pw.BoxDecoration(
+                          border: pw.Border.all(color: PdfColors.black)),
+                      child: pw.Padding(
+                          padding: pw.EdgeInsets.all(8),
+                          child: pw.Row(children: [
+                            pw.Text("Cheque: "),
+                            pw.Image(
+                              imageI,
+                              height: 280,
+                              width: 280,
+                            ),
+                          ])),
+                    ),
+                    pw.SizedBox(height: 25),
+                    // if (j != 0)
+                    //   pw.Column(children: [
+                    //     pw.Container(
+                    //         decoration: pw.BoxDecoration(
+                    //             border: pw.Border.all(color: PdfColors.black)),
+                    //         child: pw.Padding(
+                    //             padding: pw.EdgeInsets.all(8),
+                    //             child: pw.Row(children: [
+                    //               pw.Text("Tool Name: "),
+                    //               pw.Text(listTools[j].toolName!)
+                    //             ]))),
+                    //     pw.Container(
+                    //         decoration: pw.BoxDecoration(
+                    //             border: pw.Border.all(color: PdfColors.black)),
+                    //         child: pw.Padding(
+                    //             padding: pw.EdgeInsets.all(8),
+                    //             child: pw.Row(children: [
+                    //               pw.Text("Tool Price: "),
+                    //               pw.Text(listTools[j].price.toString()!)
+                    //             ]))),
+                    //     pw.Container(
+                    //         decoration: pw.BoxDecoration(
+                    //             border: pw.Border.all(color: PdfColors.black)),
+                    //         child: pw.Padding(
+                    //             padding: pw.EdgeInsets.all(8),
+                    //             child: pw.Row(children: [
+                    //               pw.Text("Date: "),
+                    //               pw.Text(listTools[j].createdAt.toString()!)
+                    //             ]))),
+                    //     pw.Image(
+                    //       imageJ,
+                    //       height: 100,
+                    //       width: 100,
+                    //     ),
+                    //     pw.SizedBox(height: 25),
+                    //   ]),
+                    // if (k != 0)
+                    //   pw.Column(children: [
+                    //     pw.Container(
+                    //         decoration: pw.BoxDecoration(
+                    //             border: pw.Border.all(color: PdfColors.black)),
+                    //         child: pw.Padding(
+                    //             padding: pw.EdgeInsets.all(8),
+                    //             child: pw.Row(children: [
+                    //               pw.Text("Tool Name: "),
+                    //               pw.Text(listTools[k].toolName!)
+                    //             ]))),
+                    //     pw.Container(
+                    //         decoration: pw.BoxDecoration(
+                    //             border: pw.Border.all(color: PdfColors.black)),
+                    //         child: pw.Padding(
+                    //             padding: pw.EdgeInsets.all(8),
+                    //             child: pw.Row(children: [
+                    //               pw.Text("Tool Price: "),
+                    //               pw.Text(listTools[k].price.toString()!)
+                    //             ]))),
+                    //     pw.Container(
+                    //         decoration: pw.BoxDecoration(
+                    //             border: pw.Border.all(color: PdfColors.black)),
+                    //         child: pw.Padding(
+                    //             padding: pw.EdgeInsets.all(8),
+                    //             child: pw.Row(children: [
+                    //               pw.Text("Date: "),
+                    //               pw.Text(listTools[k].createdAt.toString()!)
+                    //             ]))),
+                    //     pw.SizedBox(height: 25),
+                    //   ]),
+                    if (i + 1 == lengthTools)
                       pw.Column(
                         children: [
                           pw.SizedBox(
-                            height: 10,
+                            height: 5,
                           ),
                           pw.Row(children: [
                             pw.Text(
@@ -220,15 +263,19 @@ Future<String> convert(
           ),
           build: (pw.Context context) => pw.Column(
             children: [
-              pw.Text("OnTools report from " + res,
+              pw.SizedBox(height: 30),
+              pw.Text("OnTools report page #" + j.toString(),
                   style: pw.TextStyle(
                       fontWeight: pw.FontWeight.bold, fontSize: 20)),
+              pw.SizedBox(height: 7),
               pw.Text("Data range from " + b + " to " + c,
                   style: pw.TextStyle(
                       fontWeight: pw.FontWeight.bold, fontSize: 20)),
+              pw.SizedBox(height: 10),
               pw.Container(
                 margin: pw.EdgeInsets.symmetric(horizontal: 20),
                 child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     pw.Container(
                       decoration: pw.BoxDecoration(
@@ -260,72 +307,89 @@ Future<String> convert(
                             pw.Text(listTools[i].createdAt.toString()!)
                           ])),
                     ),
+                    pw.Container(
+                      decoration: pw.BoxDecoration(
+                          border: pw.Border.all(color: PdfColors.black)),
+                      child: pw.Padding(
+                          padding: pw.EdgeInsets.all(8),
+                          child: pw.Row(children: [
+                            pw.Text("Cheque: "),
+                            pw.Image(
+                              imageI,
+                              height: 280,
+                              width: 280,
+                            ),
+                          ])),
+                    ),
                     pw.SizedBox(height: 25),
-                    if (j != 0)
-                      pw.Column(children: [
-                        pw.Container(
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border.all(color: PdfColors.black)),
-                            child: pw.Padding(
-                                padding: pw.EdgeInsets.all(8),
-                                child: pw.Row(children: [
-                                  pw.Text("Tool Name: "),
-                                  pw.Text(listTools[j].toolName!)
-                                ]))),
-                        pw.Container(
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border.all(color: PdfColors.black)),
-                            child: pw.Padding(
-                                padding: pw.EdgeInsets.all(8),
-                                child: pw.Row(children: [
-                                  pw.Text("Tool Price: "),
-                                  pw.Text(listTools[j].price.toString()!)
-                                ]))),
-                        pw.Container(
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border.all(color: PdfColors.black)),
-                            child: pw.Padding(
-                                padding: pw.EdgeInsets.all(8),
-                                child: pw.Row(children: [
-                                  pw.Text("Date: "),
-                                  pw.Text(listTools[j].createdAt.toString()!)
-                                ]))),
-                        pw.SizedBox(height: 25),
-                      ]),
-                    if (k != 0)
-                      pw.Column(children: [
-                        pw.Container(
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border.all(color: PdfColors.black)),
-                            child: pw.Padding(
-                                padding: pw.EdgeInsets.all(8),
-                                child: pw.Row(children: [
-                                  pw.Text("Tool Name: "),
-                                  pw.Text(listTools[k].toolName!)
-                                ]))),
-                        pw.Container(
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border.all(color: PdfColors.black)),
-                            child: pw.Padding(
-                                padding: pw.EdgeInsets.all(8),
-                                child: pw.Row(children: [
-                                  pw.Text("Tool Price: "),
-                                  pw.Text(listTools[k].price.toString()!)
-                                ]))),
-                        pw.Container(
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border.all(color: PdfColors.black)),
-                            child: pw.Padding(
-                                padding: pw.EdgeInsets.all(8),
-                                child: pw.Row(children: [
-                                  pw.Text("Date: "),
-                                  pw.Text(listTools[k].createdAt.toString()!)
-                                ]))),
-                        pw.SizedBox(height: 25),
-                      ]),
-                    if (i + 1 == lengthTools ||
-                        j + 1 == lengthTools ||
-                        k + 1 == lengthTools)
+                    // if (j != 0)
+                    //   pw.Column(children: [
+                    //     pw.Container(
+                    //         decoration: pw.BoxDecoration(
+                    //             border: pw.Border.all(color: PdfColors.black)),
+                    //         child: pw.Padding(
+                    //             padding: pw.EdgeInsets.all(8),
+                    //             child: pw.Row(children: [
+                    //               pw.Text("Tool Name: "),
+                    //               pw.Text(listTools[j].toolName!)
+                    //             ]))),
+                    //     pw.Container(
+                    //         decoration: pw.BoxDecoration(
+                    //             border: pw.Border.all(color: PdfColors.black)),
+                    //         child: pw.Padding(
+                    //             padding: pw.EdgeInsets.all(8),
+                    //             child: pw.Row(children: [
+                    //               pw.Text("Tool Price: "),
+                    //               pw.Text(listTools[j].price.toString()!)
+                    //             ]))),
+                    //     pw.Container(
+                    //         decoration: pw.BoxDecoration(
+                    //             border: pw.Border.all(color: PdfColors.black)),
+                    //         child: pw.Padding(
+                    //             padding: pw.EdgeInsets.all(8),
+                    //             child: pw.Row(children: [
+                    //               pw.Text("Date: "),
+                    //               pw.Text(listTools[j].createdAt.toString()!)
+                    //             ]))),
+                    //     pw.Image(
+                    //       imageJ,
+                    //       height: 100,
+                    //       width: 100,
+                    //     ),
+                    //     pw.SizedBox(height: 25),
+                    //   ]),
+                    // if (k != 0)
+                    //   pw.Column(children: [
+                    //     pw.Container(
+                    //         decoration: pw.BoxDecoration(
+                    //             border: pw.Border.all(color: PdfColors.black)),
+                    //         child: pw.Padding(
+                    //             padding: pw.EdgeInsets.all(8),
+                    //             child: pw.Row(children: [
+                    //               pw.Text("Tool Name: "),
+                    //               pw.Text(listTools[k].toolName!)
+                    //             ]))),
+                    //     pw.Container(
+                    //         decoration: pw.BoxDecoration(
+                    //             border: pw.Border.all(color: PdfColors.black)),
+                    //         child: pw.Padding(
+                    //             padding: pw.EdgeInsets.all(8),
+                    //             child: pw.Row(children: [
+                    //               pw.Text("Tool Price: "),
+                    //               pw.Text(listTools[k].price.toString()!)
+                    //             ]))),
+                    //     pw.Container(
+                    //         decoration: pw.BoxDecoration(
+                    //             border: pw.Border.all(color: PdfColors.black)),
+                    //         child: pw.Padding(
+                    //             padding: pw.EdgeInsets.all(8),
+                    //             child: pw.Row(children: [
+                    //               pw.Text("Date: "),
+                    //               pw.Text(listTools[k].createdAt.toString()!)
+                    //             ]))),
+                    //     pw.SizedBox(height: 25),
+                    //   ]),
+                    if (i + 1 == lengthTools)
                       pw.Column(
                         children: [
                           pw.SizedBox(
@@ -396,6 +460,7 @@ Future<String> convert(
       file = File("${output.path}/$pdfName.pdf"); //ios
     //print(output.toString());
     await file.writeAsBytes(await pdf.save());
+    //await file.readAsBytes();
     print('документ сохранен успешно');
     //открытие файла
     if (Platform.isAndroid == true)
@@ -403,6 +468,17 @@ Future<String> convert(
           "/storage/emulated/0/Download/$pdfName.pdf"); //android
     else
       await OpenFile.open("${output.path}/$pdfName.pdf");
+    Random random = new Random();
+    int fileHash = random.nextInt(54) * random.nextInt(23);
+    final path = "files/paintedImages/$fileHash";
+    final ref = FirebaseStorage.instance.ref().child(path);
+    //final Uint8List? byteData = await ;
+    UploadTask? updTask;
+
+    updTask = ref.putData(file.readAsBytesSync()!);
+
+    final snapshot = await updTask!.whenComplete(() {});
+    final pdfLink = await snapshot.ref.getDownloadURL();
 
     return "${output.path}/$pdfName.pdf";
   } else {

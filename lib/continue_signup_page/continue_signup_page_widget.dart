@@ -1,3 +1,5 @@
+import 'package:on_tools/index.dart';
+
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../backend/firebase_storage/storage.dart';
@@ -438,7 +440,10 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                           await currentUserReference!.update(userUpdateData);
                         }
 
-                        context.pushNamed('Paywall');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PaywallWidget()));
                       },
                       text: 'Продолжить',
                       options: FFButtonOptions(

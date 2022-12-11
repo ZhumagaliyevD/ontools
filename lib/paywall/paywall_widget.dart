@@ -18,7 +18,7 @@ class PaywallWidget extends StatefulWidget {
 
 class _PaywallWidgetState extends State<PaywallWidget> {
   bool? isPurchaseMontly;
-  bool? isPurchaseSixMonths;
+  bool? isPurchaseOneYear;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -101,12 +101,10 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                                 child: InkWell(
                                   onTap: () async {
-                                    var _shouldSetState = false;
-                                    isPurchaseSixMonths = await revenue_cat
+                                    isPurchaseOneYear = await revenue_cat
                                         .purchasePackage(revenue_cat.offerings!
-                                            .current!.sixMonth!.identifier);
-                                    _shouldSetState = true;
-                                    if (isPurchaseSixMonths!) {
+                                            .current!.annual!.identifier);
+                                    if (isPurchaseOneYear!) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
@@ -127,9 +125,6 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                         context.pop();
                                       }
                                       context.pushNamed('ProfileHomePage');
-
-                                      if (_shouldSetState) setState(() {});
-                                      return;
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
@@ -146,11 +141,9 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                                   .primaryBackground,
                                         ),
                                       );
-                                      if (_shouldSetState) setState(() {});
-                                      return;
                                     }
 
-                                    if (_shouldSetState) setState(() {});
+                                    setState(() {});
                                   },
                                   child: Container(
                                     height: 100,
@@ -186,9 +179,7 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                                 borderRadius: 30,
                                                 borderWidth: 1,
                                                 buttonSize: 60,
-                                                fillColor:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryColor,
+                                                fillColor: Color(0xFFE9CE12),
                                                 icon: FaIcon(
                                                   FontAwesomeIcons.crown,
                                                   color: FlutterFlowTheme.of(
@@ -215,12 +206,7 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    revenue_cat
-                                                        .offerings!
-                                                        .current!
-                                                        .annual!
-                                                        .product
-                                                        .title,
+                                                    '1 год',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .title3
@@ -256,128 +242,108 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                               ),
                             ],
                           ),
-                          if (valueOrDefault<bool>(
-                              currentUserDocument?.isCompleteTrial, false))
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                              child: AuthUserStreamWidget(
-                                child: InkWell(
-                                  onTap: () async {
-                                    var _shouldSetState = false;
-                                    isPurchaseMontly = await revenue_cat
-                                        .purchasePackage(revenue_cat.offerings!
-                                            .current!.monthly!.identifier);
-                                    _shouldSetState = true;
-                                    if (isPurchaseSixMonths!) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'Подписка оформлена!',
-                                            style: TextStyle(
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                            child: InkWell(
+                              onTap: () async {
+                                isPurchaseMontly = await revenue_cat
+                                    .purchasePackage(revenue_cat.offerings!
+                                        .current!.monthly!.identifier);
+                                if (isPurchaseOneYear!) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Подписка оформлена!',
+                                        style: TextStyle(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                        ),
+                                      ),
+                                      duration: Duration(milliseconds: 4000),
+                                      backgroundColor: Color(0x00000000),
+                                    ),
+                                  );
+                                  if (Navigator.of(context).canPop()) {
+                                    context.pop();
+                                  }
+                                  context.pushNamed('ProfileHomePage');
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Не удалось купить подписку!',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText1,
+                                      ),
+                                      duration: Duration(milliseconds: 2000),
+                                      backgroundColor:
+                                          FlutterFlowTheme.of(context)
+                                              .primaryBackground,
+                                    ),
+                                  );
+                                }
+
+                                setState(() {});
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: Color(0xFF242424),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          FlutterFlowIconButton(
+                                            borderColor: Colors.transparent,
+                                            borderRadius: 30,
+                                            borderWidth: 1,
+                                            buttonSize: 60,
+                                            fillColor: Color(0xFFF3E36A),
+                                            icon: FaIcon(
+                                              FontAwesomeIcons.crown,
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .primaryText,
+                                                      .secondaryBackground,
+                                              size: 25,
                                             ),
+                                            onPressed: () {
+                                              print('IconButton pressed ...');
+                                            },
                                           ),
-                                          duration:
-                                              Duration(milliseconds: 4000),
-                                          backgroundColor: Color(0x00000000),
-                                        ),
-                                      );
-                                      if (Navigator.of(context).canPop()) {
-                                        context.pop();
-                                      }
-                                      context.pushNamed('ProfileHomePage');
-
-                                      if (_shouldSetState) setState(() {});
-                                      return;
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'Не удалось купить подписку!',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText1,
-                                          ),
-                                          duration:
-                                              Duration(milliseconds: 2000),
-                                          backgroundColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .primaryBackground,
-                                        ),
-                                      );
-                                      if (_shouldSetState) setState(() {});
-                                      return;
-                                    }
-
-                                    if (_shouldSetState) setState(() {});
-                                  },
-                                  child: Container(
-                                    width: 100,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: Color(0xFF242424),
-                                        width: 1,
+                                        ],
                                       ),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          24, 0, 24, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Column(
+                                      Expanded(
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  24, 0, 0, 0),
+                                          child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              FlutterFlowIconButton(
-                                                borderColor: Colors.transparent,
-                                                borderRadius: 30,
-                                                borderWidth: 1,
-                                                buttonSize: 60,
-                                                fillColor: Color(0xFFF3E36A),
-                                                icon: FaIcon(
-                                                  FontAwesomeIcons.crown,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryBackground,
-                                                  size: 25,
-                                                ),
-                                                onPressed: () {
-                                                  print(
-                                                      'IconButton pressed ...');
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(24, 0, 0, 0),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    revenue_cat
-                                                        .offerings!
-                                                        .current!
-                                                        .monthly!
-                                                        .product
-                                                        .title,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
+                                              Text(
+                                                '1 месяц',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
                                                         .title3
                                                         .override(
                                                           fontFamily:
@@ -385,31 +351,27 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                                           fontWeight:
                                                               FontWeight.w600,
                                                         ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 4, 0, 0),
-                                                    child: Text(
-                                                      '\$ 5.99',
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .subtitle1,
-                                                    ),
-                                                  ),
-                                                ],
                                               ),
-                                            ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 4, 0, 0),
+                                                child: Text(
+                                                  '\$ 5.99',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .subtitle1,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
+                                    ],
                                   ),
                                 ),
                               ),
                             ),
+                          ),
                           Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 12, 0, 50),

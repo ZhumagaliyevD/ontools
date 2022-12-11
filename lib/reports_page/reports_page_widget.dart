@@ -25,6 +25,27 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
   DateTime? datePicked1;
   DateTime? datePicked2;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController? textController;
+  String textC = '';
+
+  Stream<List<ToolsRecord>> filterCheck() {
+    if (textC == '') {
+      return queryToolsRecord(
+        queryBuilder: (toolsRecord) => toolsRecord
+            .where('created_at', isGreaterThan: datePicked1)
+            .where('created_at', isLessThan: datePicked2)
+            .where('created_by', isEqualTo: currentUserReference),
+      );
+    } else {
+      return queryToolsRecord(
+        queryBuilder: (toolsRecord) => toolsRecord
+            .where('created_at', isGreaterThan: datePicked1)
+            .where('created_at', isLessThan: datePicked2)
+            .where('created_by', isEqualTo: currentUserReference)
+            .where('ToolName', isEqualTo: textC),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -244,15 +265,7 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
                               child: StreamBuilder<List<ToolsRecord>>(
-                                stream: queryToolsRecord(
-                                  queryBuilder: (toolsRecord) => toolsRecord
-                                      .where('created_at',
-                                          isGreaterThan: datePicked1)
-                                      .where('created_at',
-                                          isLessThan: datePicked2)
-                                      .where('created_by',
-                                          isEqualTo: currentUserReference),
-                                ),
+                                stream: filterCheck(),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
                                   if (!snapshot.hasData) {

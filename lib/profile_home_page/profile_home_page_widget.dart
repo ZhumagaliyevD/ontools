@@ -29,15 +29,15 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
   void initState() {
     super.initState();
     // On page load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      if (functions.daysBetween(
-              currentUserDocument!.trialStart!, getCurrentTimestamp) >
-          30) {
-        context.pushNamed('Paywall');
-      } else {
-        context.pushNamed('ProfileHomePage');
-      }
-    });
+    // SchedulerBinding.instance.addPostFrameCallback((_) async {
+    //   if (functions.daysBetween(
+    //           currentUserDocument!.trialStart!, getCurrentTimestamp) >
+    //       30) {
+    //     context.pushNamed('Paywall');
+    //   } else {
+    //     context.pushNamed('ProfileHomePage');
+    //   }
+    // });
   }
 
   @override
