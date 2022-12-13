@@ -36,22 +36,19 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      floatingActionButton: Visibility(
-        visible: currentUserDocument!.permissions.createDoc == true,
-        child: AuthUserStreamWidget(
-          child: FloatingActionButton(
-            onPressed: () async {
-              setState(() => FFAppState().SearchList = false);
+      floatingActionButton: AuthUserStreamWidget(
+        child: FloatingActionButton(
+          onPressed: () async {
+            setState(() => FFAppState().SearchList = false);
 
-              context.pushNamed('AddNewToolPage');
-            },
-            backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-            elevation: 8,
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 36,
-            ),
+            context.pushNamed('AddNewToolPage');
+          },
+          backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+          elevation: 8,
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 36,
           ),
         ),
       ),
