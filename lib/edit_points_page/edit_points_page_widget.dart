@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class EditPointsPageWidget extends StatefulWidget {
   const EditPointsPageWidget({
@@ -50,6 +51,8 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<List<NotesRecord>>(
       stream: queryNotesRecord(
         queryBuilder: (notesRecord) => notesRecord
@@ -96,7 +99,9 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                setState(() => FFAppState().noteIMG = '');
+                setState(() {
+                  FFAppState().noteIMG = '';
+                });
                 context.pop();
               },
             ),

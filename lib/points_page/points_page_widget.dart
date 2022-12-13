@@ -8,6 +8,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class PointsPageWidget extends StatefulWidget {
   const PointsPageWidget({
@@ -26,6 +27,8 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<NotesRecord>(
       stream: NotesRecord.getDocument(widget.notepage!.reference),
       builder: (context, snapshot) {

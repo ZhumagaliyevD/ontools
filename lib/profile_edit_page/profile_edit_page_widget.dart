@@ -10,9 +10,10 @@ import '../flutter_flow/place.dart';
 import '../flutter_flow/upload_media.dart';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ProfileEditPageWidget extends StatefulWidget {
   const ProfileEditPageWidget({Key? key}) : super(key: key);
@@ -56,6 +57,8 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -73,11 +76,15 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
             size: 30,
           ),
           onPressed: () async {
-            setState(() => FFAppState().birthday =
-                DateTime.fromMillisecondsSinceEpoch(1665846180000));
-            setState(() => FFAppState().address = LatLng(40.18597, 44.515109));
-            setState(() => FFAppState().profileimg =
-                'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png');
+            setState(() {
+              FFAppState().birthday =
+                  DateTime.fromMillisecondsSinceEpoch(1665846180000);
+              FFAppState().address = LatLng(40.18597, 44.515109);
+            });
+            setState(() {
+              FFAppState().profileimg =
+                  'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png';
+            });
             context.pop();
           },
         ),
@@ -150,8 +157,9 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                             }
                           }
 
-                          setState(
-                              () => FFAppState().profileimg = uploadedFileUrl);
+                          setState(() {
+                            FFAppState().profileimg = uploadedFileUrl;
+                          });
                         },
                         child: Container(
                           width: 80,
@@ -445,18 +453,26 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(16, 2, 16, 0),
                     child: InkWell(
                       onTap: () async {
-                        await DatePicker.showDatePicker(
-                          context,
-                          showTitleActions: true,
-                          onConfirm: (date) {
-                            setState(() => datePicked = date);
-                          },
-                          currentTime: getCurrentTimestamp,
-                          minTime: DateTime(0, 0, 0),
+                        final _datePickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: getCurrentTimestamp,
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2050),
                         );
 
+                        if (_datePickedDate != null) {
+                          setState(
+                            () => datePicked = DateTime(
+                              _datePickedDate.year,
+                              _datePickedDate.month,
+                              _datePickedDate.day,
+                            ),
+                          );
+                        }
                         if (!(datePicked == null)) {
-                          setState(() => FFAppState().birthday = datePicked);
+                          setState(() {
+                            FFAppState().birthday = datePicked;
+                          });
                         }
                       },
                       child: Container(
@@ -523,12 +539,16 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                             backgroundColor: Color(0x00000000),
                           ),
                         );
-                        setState(() => FFAppState().birthday =
-                            DateTime.fromMillisecondsSinceEpoch(1665846180000));
-                        setState(() =>
-                            FFAppState().address = LatLng(40.18597, 44.515109));
-                        setState(() => FFAppState().profileimg =
-                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png');
+                        setState(() {
+                          FFAppState().birthday =
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  1665846180000);
+                          FFAppState().address = LatLng(40.18597, 44.515109);
+                        });
+                        setState(() {
+                          FFAppState().profileimg =
+                              'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png';
+                        });
 
                         context.pushNamed('ProfileHomePage');
                       },
@@ -555,12 +575,16 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
                     child: FFButtonWidget(
                       onPressed: () async {
-                        setState(() => FFAppState().birthday =
-                            DateTime.fromMillisecondsSinceEpoch(1665846180000));
-                        setState(() =>
-                            FFAppState().address = LatLng(40.18597, 44.515109));
-                        setState(() => FFAppState().profileimg =
-                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png');
+                        setState(() {
+                          FFAppState().birthday =
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  1665846180000);
+                          FFAppState().address = LatLng(40.18597, 44.515109);
+                        });
+                        setState(() {
+                          FFAppState().profileimg =
+                              'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png';
+                        });
                         GoRouter.of(context).prepareAuthEvent();
                         await signOut();
 

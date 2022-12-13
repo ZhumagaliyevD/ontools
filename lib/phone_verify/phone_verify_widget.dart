@@ -6,6 +6,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class PhoneVerifyWidget extends StatefulWidget {
   const PhoneVerifyWidget({Key? key}) : super(key: key);
@@ -26,7 +27,15 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
   }
 
   @override
+  void dispose() {
+    pinCodeController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,

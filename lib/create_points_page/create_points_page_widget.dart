@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class CreatePointsPageWidget extends StatefulWidget {
   const CreatePointsPageWidget({Key? key}) : super(key: key);
@@ -50,6 +51,8 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<List<NotesRecord>>(
       stream: queryNotesRecord(
         singleRecord: true,
@@ -93,7 +96,9 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                setState(() => FFAppState().noteIMG = '');
+                setState(() {
+                  FFAppState().noteIMG = '';
+                });
                 context.pop();
               },
             ),
@@ -126,7 +131,9 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                       'note_points': FFAppState().photoNotePoints,
                     };
                     await NotesRecord.collection.doc().set(notesCreateData);
-                    setState(() => FFAppState().photoNotePoints = []);
+                    setState(() {
+                      FFAppState().photoNotePoints = [];
+                    });
                   } else {
                     await showDialog(
                       context: context,
@@ -147,8 +154,10 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                     return;
                   }
 
-                  setState(() => FFAppState().noteIMG = '');
-                  setState(() => FFAppState().photoNotePoints = []);
+                  setState(() {
+                    FFAppState().noteIMG = '';
+                    FFAppState().photoNotePoints = [];
+                  });
 
                   context.pushNamed('Notes');
                 },
@@ -588,12 +597,16 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                         .getDocumentFromData(
                                             photoNotePointCreateData,
                                             photoNotePointRecordReference);
-                                    setState(() => FFAppState()
-                                        .photoNotePoints
-                                        .add(createdPoint!.reference));
-                                    setState(() => FFAppState().comment = '');
-                                    setState(() => FFAppState().dx = 0.0);
-                                    setState(() => FFAppState().dy = 0.0);
+                                    setState(() {
+                                      setState(() => FFAppState()
+                                          .addToPhotoNotePoints(
+                                              createdPoint!.reference));
+                                      FFAppState().comment = '';
+                                    });
+                                    setState(() {
+                                      FFAppState().dx = 0.0;
+                                      FFAppState().dy = 0.0;
+                                    });
                                   },
                                 ),
                               ),

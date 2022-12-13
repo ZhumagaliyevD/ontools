@@ -8,10 +8,11 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/upload_media.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class AddNewToolPageWidget extends StatefulWidget {
   const AddNewToolPageWidget({Key? key}) : super(key: key);
@@ -40,7 +41,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      setState(() => FFAppState().viewPhoto = false);
+      setState(() {
+        FFAppState().viewPhoto = false;
+      });
     });
 
     descriptionController = TextEditingController();
@@ -60,6 +63,8 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -78,10 +83,14 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
           ),
           onPressed: () async {
             context.pop();
-            setState(() => FFAppState().toolimg = '');
-            setState(() => FFAppState().toolBuyDate =
-                DateTime.fromMillisecondsSinceEpoch(1665846120000));
-            setState(() => FFAppState().chequeName = '');
+            setState(() {
+              FFAppState().toolimg = '';
+              FFAppState().toolBuyDate =
+                  DateTime.fromMillisecondsSinceEpoch(1665846120000);
+            });
+            setState(() {
+              FFAppState().chequeName = '';
+            });
           },
         ),
         title: Text(
@@ -226,8 +235,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
 
                               if (!(uploadedFileUrl1 == null ||
                                   uploadedFileUrl1 == '')) {
-                                setState(() =>
-                                    FFAppState().toolimg = uploadedFileUrl1);
+                                setState(() {
+                                  FFAppState().toolimg = uploadedFileUrl1;
+                                });
                               }
                             },
                             child: Icon(
@@ -261,8 +271,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                       onTap: () async {
                                         if (FFAppState().chequeName != null &&
                                             FFAppState().chequeName != '') {
-                                          setState(() =>
-                                              FFAppState().viewPhoto = true);
+                                          setState(() {
+                                            FFAppState().viewPhoto = true;
+                                          });
                                         }
                                       },
                                       child: Text(
@@ -311,12 +322,13 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                       size: 20,
                                     ),
                                     onPressed: () async {
-                                      setState(
-                                          () => FFAppState().chequeName = '');
-                                      setState(
-                                          () => FFAppState().chequeImg = '');
-                                      setState(
-                                          () => FFAppState().viewPhoto = false);
+                                      setState(() {
+                                        FFAppState().chequeName = '';
+                                        FFAppState().chequeImg = '';
+                                      });
+                                      setState(() {
+                                        FFAppState().viewPhoto = false;
+                                      });
                                     },
                                   ),
                                 if (FFAppState().chequeName == null ||
@@ -333,58 +345,51 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                       size: 20,
                                     ),
                                     onPressed: () async {
-                                      final selectedMedia =
-                                          await selectMediaWithSourceBottomSheet(
-                                        context: context,
-                                        allowPhoto: true,
-                                      );
-                                      if (selectedMedia != null &&
-                                          selectedMedia.every((m) =>
-                                              validateFileFormat(
-                                                  m.storagePath, context))) {
+                                      final selectedFile = await selectFile(
+                                          allowedExtensions: ['pdf']);
+                                      if (selectedFile != null) {
                                         setState(
                                             () => isMediaUploading2 = true);
-                                        var downloadUrls = <String>[];
+                                        String? downloadUrl;
                                         try {
                                           showUploadMessage(
                                             context,
                                             'Uploading file...',
                                             showLoading: true,
                                           );
-                                          downloadUrls = (await Future.wait(
-                                            selectedMedia.map(
-                                              (m) async => await uploadData(
-                                                  m.storagePath, m.bytes),
-                                            ),
-                                          ))
-                                              .where((u) => u != null)
-                                              .map((u) => u!)
-                                              .toList();
+                                          downloadUrl = await uploadData(
+                                              selectedFile.storagePath,
+                                              selectedFile.bytes);
                                         } finally {
                                           ScaffoldMessenger.of(context)
                                               .hideCurrentSnackBar();
                                           isMediaUploading2 = false;
                                         }
-                                        if (downloadUrls.length ==
-                                            selectedMedia.length) {
-                                          setState(() => uploadedFileUrl2 =
-                                              downloadUrls.first);
+                                        if (downloadUrl != null) {
+                                          setState(() =>
+                                              uploadedFileUrl2 = downloadUrl!);
                                           showUploadMessage(
-                                              context, 'Success!');
+                                            context,
+                                            'Success!',
+                                          );
                                         } else {
                                           setState(() {});
-                                          showUploadMessage(context,
-                                              'Failed to upload media');
+                                          showUploadMessage(
+                                            context,
+                                            'Failed to upload file',
+                                          );
                                           return;
                                         }
                                       }
 
                                       if (uploadedFileUrl2 != null &&
                                           uploadedFileUrl2 != '') {
-                                        setState(() => FFAppState().chequeName =
-                                            'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}');
-                                        setState(() => FFAppState().chequeImg =
-                                            uploadedFileUrl2);
+                                        setState(() {
+                                          FFAppState().chequeName =
+                                              'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
+                                          FFAppState().chequeImg =
+                                              uploadedFileUrl2;
+                                        });
                                       }
                                     },
                                   ),
@@ -527,19 +532,27 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                   ),
                                   InkWell(
                                     onTap: () async {
-                                      await DatePicker.showDatePicker(
-                                        context,
-                                        showTitleActions: true,
-                                        onConfirm: (date) {
-                                          setState(() => datePicked = date);
-                                        },
-                                        currentTime: getCurrentTimestamp,
-                                        minTime: DateTime(0, 0, 0),
+                                      final _datePickedDate =
+                                          await showDatePicker(
+                                        context: context,
+                                        initialDate: getCurrentTimestamp,
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime(2050),
                                       );
 
+                                      if (_datePickedDate != null) {
+                                        setState(
+                                          () => datePicked = DateTime(
+                                            _datePickedDate.year,
+                                            _datePickedDate.month,
+                                            _datePickedDate.day,
+                                          ),
+                                        );
+                                      }
                                       if (!(datePicked == null)) {
-                                        setState(() => FFAppState()
-                                            .toolBuyDate = datePicked);
+                                        setState(() {
+                                          FFAppState().toolBuyDate = datePicked;
+                                        });
                                       }
                                     },
                                     child: Container(
@@ -668,7 +681,7 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                               uploadedFileUrl2 != '') {
                             final toolsCreateData = createToolsRecordData(
                               toolName: toolNameController!.text,
-                              price: double.parse(priceController!.text),
+                              price: double.tryParse(priceController!.text),
                               description: descriptionController!.text,
                               shopName: shopNameController!.text,
                               createdBy: currentUserReference,
@@ -686,7 +699,7 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                           } else {
                             final toolsCreateData = createToolsRecordData(
                               toolName: toolNameController!.text,
-                              price: double.parse(priceController!.text),
+                              price: double.tryParse(priceController!.text),
                               description: descriptionController!.text,
                               shopName: shopNameController!.text,
                               createdBy: currentUserReference,
@@ -703,9 +716,13 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                 .set(toolsCreateData);
                           }
 
-                          setState(() => FFAppState().toolimg = '');
-                          setState(() => FFAppState().chequeName = '');
-                          setState(() => FFAppState().chequeImg = '');
+                          setState(() {
+                            FFAppState().toolimg = '';
+                            FFAppState().chequeName = '';
+                          });
+                          setState(() {
+                            FFAppState().chequeImg = '';
+                          });
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -748,7 +765,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                 (FFAppState().chequeImg != ''))
               InkWell(
                 onTap: () async {
-                  setState(() => FFAppState().viewPhoto = false);
+                  setState(() {
+                    FFAppState().viewPhoto = false;
+                  });
                 },
                 child: Container(
                   width: double.infinity,
@@ -760,7 +779,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                     alignment: AlignmentDirectional(0, 0),
                     child: InkWell(
                       onTap: () async {
-                        setState(() => FFAppState().viewPhoto = false);
+                        setState(() {
+                          FFAppState().viewPhoto = false;
+                        });
                       },
                       child: Image.network(
                         FFAppState().chequeImg,

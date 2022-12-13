@@ -5,6 +5,7 @@ import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class FilterWidget extends StatefulWidget {
   const FilterWidget({Key? key}) : super(key: key);
@@ -20,6 +21,8 @@ class _FilterWidgetState extends State<FilterWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<List<ToolsRecord>>(
       stream: queryToolsRecord(),
       builder: (context, snapshot) {
@@ -182,19 +185,24 @@ class _FilterWidgetState extends State<FilterWidget> {
                       FFButtonWidget(
                         onPressed: () async {
                           if (toolNameValue != null && toolNameValue != '') {
-                            setState(() => FFAppState().MarketplaceSearch =
-                                toolNameValue!);
+                            setState(() {
+                              FFAppState().MarketplaceSearch = toolNameValue!;
+                            });
                           }
                           if (shopNameValue != null && shopNameValue != '') {
-                            setState(() =>
-                                FFAppState().filterShopName = shopNameValue!);
+                            setState(() {
+                              FFAppState().filterShopName = shopNameValue!;
+                            });
                           }
                           if (chequeValue != null && chequeValue != '') {
-                            setState(
-                                () => FFAppState().isCheque = chequeValue!);
+                            setState(() {
+                              FFAppState().isCheque = chequeValue!;
+                            });
                           }
                           Navigator.pop(context);
-                          setState(() => FFAppState().sortBy = '');
+                          setState(() {
+                            FFAppState().sortBy = '';
+                          });
 
                           context.pushNamed(
                             'Marketplace',

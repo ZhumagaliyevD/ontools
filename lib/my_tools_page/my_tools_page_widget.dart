@@ -4,9 +4,11 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/custom_functions.dart' as functions;
+import 'package:styled_divider/styled_divider.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class MyToolsPageWidget extends StatefulWidget {
   const MyToolsPageWidget({Key? key}) : super(key: key);
@@ -33,26 +35,25 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      floatingActionButton: Visibility(
-        visible: currentUserDocument!.permissions.createDoc == true,
-        child: AuthUserStreamWidget(
-          child: FloatingActionButton(
-            onPressed: () async {
-              setState(() => FFAppState().SearchList = false);
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          setState(() {
+            FFAppState().SearchList = false;
+          });
 
-              context.pushNamed('AddNewToolPage');
-            },
-            backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-            elevation: 8,
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 36,
-            ),
-          ),
+          context.pushNamed('AddNewToolPage');
+        },
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+        elevation: 8,
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 36,
         ),
       ),
       appBar: AppBar(
@@ -199,12 +200,16 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                               children: [
                                 InkWell(
                                   onTap: () async {
-                                    setState(() => FFAppState().toolBuyDate =
-                                        searchToolListToolsRecord.buyDate);
-                                    setState(() => FFAppState().toolimg =
-                                        searchToolListToolsRecord.photo!);
-                                    setState(() => FFAppState().chequeName =
-                                        searchToolListToolsRecord.chequeName!);
+                                    setState(() {
+                                      FFAppState().toolBuyDate =
+                                          searchToolListToolsRecord.buyDate;
+                                      FFAppState().toolimg =
+                                          searchToolListToolsRecord.photo!;
+                                    });
+                                    setState(() {
+                                      FFAppState().chequeName =
+                                          searchToolListToolsRecord.chequeName!;
+                                    });
 
                                     context.pushNamed(
                                       'ToolDetailPage',

@@ -7,10 +7,11 @@ import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../custom_code/actions/index.dart' as actions;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ReportsPageWidget extends StatefulWidget {
   const ReportsPageWidget({Key? key}) : super(key: key);
@@ -22,10 +23,25 @@ class ReportsPageWidget extends StatefulWidget {
 class _ReportsPageWidgetState extends State<ReportsPageWidget> {
   DateTime? datePicked1;
   DateTime? datePicked2;
+  TextEditingController? textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    super.initState();
+    textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<List<ReportsRecord>>(
       stream: queryReportsRecord(
         parent: currentUserReference,
@@ -119,20 +135,28 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                       ),
                                       InkWell(
                                         onTap: () async {
-                                          await DatePicker.showDatePicker(
-                                            context,
-                                            showTitleActions: true,
-                                            onConfirm: (date) {
-                                              setState(
-                                                  () => datePicked1 = date);
-                                            },
-                                            currentTime: getCurrentTimestamp,
-                                            minTime: DateTime(0, 0, 0),
+                                          final _datePicked1Date =
+                                              await showDatePicker(
+                                            context: context,
+                                            initialDate: getCurrentTimestamp,
+                                            firstDate: DateTime(1900),
+                                            lastDate: DateTime(2050),
                                           );
 
+                                          if (_datePicked1Date != null) {
+                                            setState(
+                                              () => datePicked1 = DateTime(
+                                                _datePicked1Date.year,
+                                                _datePicked1Date.month,
+                                                _datePicked1Date.day,
+                                              ),
+                                            );
+                                          }
                                           if (!(datePicked1 == null)) {
-                                            setState(() => FFAppState()
-                                                .reportStart = datePicked1);
+                                            setState(() {
+                                              FFAppState().reportStart =
+                                                  datePicked1;
+                                            });
                                           }
                                         },
                                         child: Container(
@@ -187,20 +211,28 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                       ),
                                       InkWell(
                                         onTap: () async {
-                                          await DatePicker.showDatePicker(
-                                            context,
-                                            showTitleActions: true,
-                                            onConfirm: (date) {
-                                              setState(
-                                                  () => datePicked2 = date);
-                                            },
-                                            currentTime: getCurrentTimestamp,
-                                            minTime: DateTime(0, 0, 0),
+                                          final _datePicked2Date =
+                                              await showDatePicker(
+                                            context: context,
+                                            initialDate: getCurrentTimestamp,
+                                            firstDate: DateTime(1900),
+                                            lastDate: DateTime(2050),
                                           );
 
+                                          if (_datePicked2Date != null) {
+                                            setState(
+                                              () => datePicked2 = DateTime(
+                                                _datePicked2Date.year,
+                                                _datePicked2Date.month,
+                                                _datePicked2Date.day,
+                                              ),
+                                            );
+                                          }
                                           if (!(datePicked2 == null)) {
-                                            setState(() => FFAppState()
-                                                .reportEnd = datePicked2);
+                                            setState(() {
+                                              FFAppState().reportEnd =
+                                                  datePicked2;
+                                            });
                                           }
                                         },
                                         child: Container(
@@ -238,6 +270,57 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                 ],
                               ),
                             ),
+                            TextFormField(
+                              controller: textController,
+                              autofocus: true,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                hintText: '[Some hint text...]',
+                                hintStyle:
+                                    FlutterFlowTheme.of(context).bodyText2,
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF080101),
+                                    width: 1,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF080101),
+                                    width: 1,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                errorBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 1,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                focusedErrorBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 1,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                              ),
+                              style: FlutterFlowTheme.of(context).bodyText1,
+                            ),
                             Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
@@ -249,7 +332,9 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                       .where('created_at',
                                           isLessThan: datePicked2)
                                       .where('created_by',
-                                          isEqualTo: currentUserReference),
+                                          isEqualTo: currentUserReference)
+                                      .where('ToolName',
+                                          isEqualTo: textController!.text),
                                 ),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
@@ -334,6 +419,32 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                                 Duration(milliseconds: 4000),
                                             backgroundColor: Color(0x00000000),
                                           ),
+                                        );
+                                      }
+
+                                      if (buttonToolsRecordList
+                                              .where((e) =>
+                                                  e.toolName! ==
+                                                  textController!.text)
+                                              .toList()
+                                              .length ==
+                                          0) {
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              title: Text('hhh'),
+                                              content: Text('hhhh'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext),
+                                                  child: Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          },
                                         );
                                       }
                                     },

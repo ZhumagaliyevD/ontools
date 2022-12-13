@@ -8,9 +8,10 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/upload_media.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class EditToolPageWidget extends StatefulWidget {
   const EditToolPageWidget({
@@ -61,6 +62,8 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<ToolsRecord>(
       stream: ToolsRecord.getDocument(widget.tool!.reference),
       builder: (context, snapshot) {
@@ -94,10 +97,14 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                setState(() => FFAppState().toolBuyDate =
-                    DateTime.fromMillisecondsSinceEpoch(1665846120000));
-                setState(() => FFAppState().toolimg = '');
-                setState(() => FFAppState().chequeName = '');
+                setState(() {
+                  FFAppState().toolBuyDate =
+                      DateTime.fromMillisecondsSinceEpoch(1665846120000);
+                  FFAppState().toolimg = '';
+                });
+                setState(() {
+                  FFAppState().chequeName = '';
+                });
                 context.pop();
               },
             ),
@@ -203,8 +210,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
 
                             if (!(uploadedFileUrl1 == null ||
                                 uploadedFileUrl1 == '')) {
-                              setState(() =>
-                                  FFAppState().toolimg = uploadedFileUrl1);
+                              setState(() {
+                                FFAppState().toolimg = uploadedFileUrl1;
+                              });
                             }
                           },
                           child: Icon(
@@ -411,7 +419,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                   };
                                   await widget.tool!.reference
                                       .update(toolsUpdateData);
-                                  setState(() => FFAppState().chequeName = '');
+                                  setState(() {
+                                    FFAppState().chequeName = '';
+                                  });
                                 },
                               ),
                             if (widget.tool!.chequeName == null ||
@@ -472,8 +482,10 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                     }
                                   }
 
-                                  setState(() => FFAppState().chequeName =
-                                      'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}');
+                                  setState(() {
+                                    FFAppState().chequeName =
+                                        'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
+                                  });
 
                                   final toolsUpdateData = createToolsRecordData(
                                     chequeIMG: uploadedFileUrl2,
@@ -518,19 +530,27 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                   ),
                                   InkWell(
                                     onTap: () async {
-                                      await DatePicker.showDatePicker(
-                                        context,
-                                        showTitleActions: true,
-                                        onConfirm: (date) {
-                                          setState(() => datePicked = date);
-                                        },
-                                        currentTime: getCurrentTimestamp,
-                                        minTime: DateTime(0, 0, 0),
+                                      final _datePickedDate =
+                                          await showDatePicker(
+                                        context: context,
+                                        initialDate: getCurrentTimestamp,
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime(2050),
                                       );
 
+                                      if (_datePickedDate != null) {
+                                        setState(
+                                          () => datePicked = DateTime(
+                                            _datePickedDate.year,
+                                            _datePickedDate.month,
+                                            _datePickedDate.day,
+                                          ),
+                                        );
+                                      }
                                       if (!(datePicked == null)) {
-                                        setState(() => FFAppState()
-                                            .toolBuyDate = datePicked);
+                                        setState(() {
+                                          FFAppState().toolBuyDate = datePicked;
+                                        });
                                       }
                                     },
                                     child: Container(
@@ -723,7 +743,7 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                           }
 
                           final toolsUpdateData = createToolsRecordData(
-                            price: double.parse(priceController!.text),
+                            price: double.tryParse(priceController!.text),
                             description: descriptionController!.text,
                             shopName: shopNameController!.text,
                             toolName: toolNameController!.text,
@@ -731,11 +751,15 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                             chequeIMG: uploadedFileUrl2,
                           );
                           await widget.tool!.reference.update(toolsUpdateData);
-                          setState(() => FFAppState().toolBuyDate =
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  1665846120000));
-                          setState(() => FFAppState().chequeName = '');
-                          setState(() => FFAppState().toolimg = '');
+                          setState(() {
+                            FFAppState().toolBuyDate =
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    1665846120000);
+                            FFAppState().chequeName = '';
+                          });
+                          setState(() {
+                            FFAppState().toolimg = '';
+                          });
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(

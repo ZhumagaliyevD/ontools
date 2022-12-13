@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class NotesWidget extends StatefulWidget {
   const NotesWidget({Key? key}) : super(key: key);
@@ -35,6 +36,8 @@ class _NotesWidgetState extends State<NotesWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -55,7 +58,9 @@ class _NotesWidgetState extends State<NotesWidget> {
             size: 24,
           ),
           onPressed: () async {
-            setState(() => FFAppState().isCheckbox = false);
+            setState(() {
+              FFAppState().isCheckbox = false;
+            });
 
             final notesCreateData = createNotesRecordData();
             var notesRecordReference = NotesRecord.collection.doc();

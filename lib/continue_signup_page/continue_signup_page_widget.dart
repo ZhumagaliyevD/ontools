@@ -8,9 +8,10 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/upload_media.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ContinueSignupPageWidget extends StatefulWidget {
   const ContinueSignupPageWidget({Key? key}) : super(key: key);
@@ -55,6 +56,8 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Colors.white,
@@ -147,8 +150,9 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
 
                         if (!(uploadedFileUrl == null ||
                             uploadedFileUrl == '')) {
-                          setState(
-                              () => FFAppState().profileimg = uploadedFileUrl);
+                          setState(() {
+                            FFAppState().profileimg = uploadedFileUrl;
+                          });
                         }
                       },
                       child: Container(
@@ -376,15 +380,22 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
                     child: InkWell(
                       onTap: () async {
-                        await DatePicker.showDatePicker(
-                          context,
-                          showTitleActions: true,
-                          onConfirm: (date) {
-                            setState(() => datePicked = date);
-                          },
-                          currentTime: getCurrentTimestamp,
-                          minTime: DateTime(0, 0, 0),
+                        final _datePickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: getCurrentTimestamp,
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2050),
                         );
+
+                        if (_datePickedDate != null) {
+                          setState(
+                            () => datePicked = DateTime(
+                              _datePickedDate.year,
+                              _datePickedDate.month,
+                              _datePickedDate.day,
+                            ),
+                          );
+                        }
                       },
                       child: Container(
                         width: double.infinity,

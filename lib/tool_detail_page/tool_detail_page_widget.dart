@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ToolDetailPageWidget extends StatefulWidget {
   const ToolDetailPageWidget({
@@ -39,7 +40,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      setState(() => FFAppState().viewPhoto = false);
+      setState(() {
+        FFAppState().viewPhoto = false;
+      });
     });
 
     descriptionController =
@@ -61,6 +64,8 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<ToolsRecord>(
       stream: ToolsRecord.getDocument(widget.tool!.reference),
       builder: (context, snapshot) {
@@ -94,10 +99,14 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                setState(() => FFAppState().toolBuyDate =
-                    DateTime.fromMillisecondsSinceEpoch(1665846120000));
-                setState(() => FFAppState().toolimg = '');
-                setState(() => FFAppState().chequeName = '');
+                setState(() {
+                  FFAppState().toolBuyDate =
+                      DateTime.fromMillisecondsSinceEpoch(1665846120000);
+                  FFAppState().toolimg = '';
+                });
+                setState(() {
+                  FFAppState().chequeName = '';
+                });
                 context.pop();
               },
             ),
@@ -334,8 +343,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                     0, 10, 0, 10),
                                 child: InkWell(
                                   onTap: () async {
-                                    setState(
-                                        () => FFAppState().viewPhoto = true);
+                                    setState(() {
+                                      FFAppState().viewPhoto = true;
+                                    });
                                   },
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -429,9 +439,10 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                               }
                                             }
 
-                                            setState(() => FFAppState()
-                                                    .chequeName =
-                                                'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}');
+                                            setState(() {
+                                              FFAppState().chequeName =
+                                                  'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
+                                            });
 
                                             final toolsUpdateData =
                                                 createToolsRecordData(
@@ -801,7 +812,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                 if (FFAppState().viewPhoto)
                   InkWell(
                     onTap: () async {
-                      setState(() => FFAppState().viewPhoto = false);
+                      setState(() {
+                        FFAppState().viewPhoto = false;
+                      });
                     },
                     child: Container(
                       width: double.infinity,
@@ -814,7 +827,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                         alignment: AlignmentDirectional(0, 0),
                         child: InkWell(
                           onTap: () async {
-                            setState(() => FFAppState().viewPhoto = false);
+                            setState(() {
+                              FFAppState().viewPhoto = false;
+                            });
                           },
                           child: Image.network(
                             toolDetailPageToolsRecord.photo!,

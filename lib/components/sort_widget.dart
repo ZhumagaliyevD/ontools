@@ -3,6 +3,7 @@ import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class SortWidget extends StatefulWidget {
   const SortWidget({Key? key}) : super(key: key);
@@ -14,6 +15,8 @@ class SortWidget extends StatefulWidget {
 class _SortWidgetState extends State<SortWidget> {
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -64,7 +67,9 @@ class _SortWidgetState extends State<SortWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
                   child: InkWell(
                     onTap: () async {
-                      setState(() => FFAppState().sortBy = 'by date');
+                      setState(() {
+                        FFAppState().sortBy = 'by date';
+                      });
                     },
                     child: Container(
                       width: double.infinity,
@@ -99,7 +104,9 @@ class _SortWidgetState extends State<SortWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
                   child: InkWell(
                     onTap: () async {
-                      setState(() => FFAppState().sortBy = 'by newest');
+                      setState(() {
+                        FFAppState().sortBy = 'by newest';
+                      });
                     },
                     child: Container(
                       width: double.infinity,
@@ -134,7 +141,9 @@ class _SortWidgetState extends State<SortWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
                   child: InkWell(
                     onTap: () async {
-                      setState(() => FFAppState().sortBy = 'by price');
+                      setState(() {
+                        FFAppState().sortBy = 'by price';
+                      });
                     },
                     child: Container(
                       width: double.infinity,

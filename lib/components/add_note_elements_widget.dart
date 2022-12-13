@@ -7,6 +7,7 @@ import '../flutter_flow/upload_media.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class AddNoteElementsWidget extends StatefulWidget {
   const AddNoteElementsWidget({
@@ -32,6 +33,8 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<List<NotesRecord>>(
       stream: queryNotesRecord(
         singleRecord: true,
@@ -110,7 +113,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                       }
                     }
 
-                    setState(() => FFAppState().noteIMG = uploadedFileUrl1);
+                    setState(() {
+                      FFAppState().noteIMG = uploadedFileUrl1;
+                    });
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -192,7 +197,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                       }
                     }
 
-                    setState(() => FFAppState().noteIMG = uploadedFileUrl2);
+                    setState(() {
+                      FFAppState().noteIMG = uploadedFileUrl2;
+                    });
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -243,8 +250,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                           }
                         }
 
-                        setState(
-                            () => FFAppState().noteIMG = FFAppState().noteIMG);
+                        setState(() {
+                          FFAppState().noteIMG = FFAppState().noteIMG;
+                        });
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
@@ -283,7 +291,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                 if (FFAppState().isCheckbox == false)
                   InkWell(
                     onTap: () async {
-                      setState(() => FFAppState().isCheckbox = true);
+                      setState(() {
+                        FFAppState().isCheckbox = true;
+                      });
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -328,7 +338,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                 if (FFAppState().isCheckbox == true)
                   InkWell(
                     onTap: () async {
-                      setState(() => FFAppState().isCheckbox = false);
+                      setState(() {
+                        FFAppState().isCheckbox = false;
+                      });
                       Navigator.pop(context);
                     },
                     child: Container(

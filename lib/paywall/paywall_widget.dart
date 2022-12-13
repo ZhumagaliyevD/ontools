@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class PaywallWidget extends StatefulWidget {
   const PaywallWidget({Key? key}) : super(key: key);
@@ -23,6 +24,8 @@ class _PaywallWidgetState extends State<PaywallWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -206,7 +209,12 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    '1 год',
+                                                    revenue_cat
+                                                        .offerings!
+                                                        .current!
+                                                        .annual!
+                                                        .product
+                                                        .title,
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .title3
@@ -223,7 +231,12 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                                             .fromSTEB(
                                                                 0, 4, 0, 0),
                                                     child: Text(
-                                                      '\$ 49.99',
+                                                      revenue_cat
+                                                          .offerings!
+                                                          .current!
+                                                          .annual!
+                                                          .product
+                                                          .priceString,
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -341,7 +354,8 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                '1 месяц',
+                                                revenue_cat.offerings!.current!
+                                                    .monthly!.product.title,
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .title3
@@ -356,7 +370,12 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(0, 4, 0, 0),
                                                 child: Text(
-                                                  '\$ 5.99',
+                                                  revenue_cat
+                                                      .offerings!
+                                                      .current!
+                                                      .monthly!
+                                                      .product
+                                                      .priceString,
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .subtitle1,
