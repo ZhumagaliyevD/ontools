@@ -66,6 +66,16 @@ class _$ReportsRecordSerializer implements StructuredSerializer<ReportsRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.tool2;
+    if (value != null) {
+      result
+        ..add('Tool2')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(BuiltList, const [
+              const FullType(
+                  DocumentReference, const [const FullType.nullable(Object)])
+            ])));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -118,6 +128,13 @@ class _$ReportsRecordSerializer implements StructuredSerializer<ReportsRecord> {
           result.pdfFile = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'Tool2':
+          result.tool2.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(
+                    DocumentReference, const [const FullType.nullable(Object)])
+              ]))! as BuiltList<Object?>);
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -145,6 +162,8 @@ class _$ReportsRecord extends ReportsRecord {
   @override
   final String? pdfFile;
   @override
+  final BuiltList<DocumentReference<Object?>>? tool2;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$ReportsRecord([void Function(ReportsRecordBuilder)? updates]) =>
@@ -157,6 +176,7 @@ class _$ReportsRecord extends ReportsRecord {
       this.tools,
       this.createdAt,
       this.pdfFile,
+      this.tool2,
       this.ffRef})
       : super._();
 
@@ -177,6 +197,7 @@ class _$ReportsRecord extends ReportsRecord {
         tools == other.tools &&
         createdAt == other.createdAt &&
         pdfFile == other.pdfFile &&
+        tool2 == other.tool2 &&
         ffRef == other.ffRef;
   }
 
@@ -186,11 +207,13 @@ class _$ReportsRecord extends ReportsRecord {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, startDate.hashCode), endDate.hashCode),
-                        createdBy.hashCode),
-                    tools.hashCode),
-                createdAt.hashCode),
-            pdfFile.hashCode),
+                    $jc(
+                        $jc($jc($jc(0, startDate.hashCode), endDate.hashCode),
+                            createdBy.hashCode),
+                        tools.hashCode),
+                    createdAt.hashCode),
+                pdfFile.hashCode),
+            tool2.hashCode),
         ffRef.hashCode));
   }
 
@@ -203,6 +226,7 @@ class _$ReportsRecord extends ReportsRecord {
           ..add('tools', tools)
           ..add('createdAt', createdAt)
           ..add('pdfFile', pdfFile)
+          ..add('tool2', tool2)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -239,6 +263,12 @@ class ReportsRecordBuilder
   String? get pdfFile => _$this._pdfFile;
   set pdfFile(String? pdfFile) => _$this._pdfFile = pdfFile;
 
+  ListBuilder<DocumentReference<Object?>>? _tool2;
+  ListBuilder<DocumentReference<Object?>> get tool2 =>
+      _$this._tool2 ??= new ListBuilder<DocumentReference<Object?>>();
+  set tool2(ListBuilder<DocumentReference<Object?>>? tool2) =>
+      _$this._tool2 = tool2;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -256,6 +286,7 @@ class ReportsRecordBuilder
       _tools = $v.tools?.toBuilder();
       _createdAt = $v.createdAt;
       _pdfFile = $v.pdfFile;
+      _tool2 = $v.tool2?.toBuilder();
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -287,12 +318,16 @@ class ReportsRecordBuilder
               tools: _tools?.build(),
               createdAt: createdAt,
               pdfFile: pdfFile,
+              tool2: _tool2?.build(),
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'tools';
         _tools?.build();
+
+        _$failedField = 'tool2';
+        _tool2?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'ReportsRecord', _$failedField, e.toString());

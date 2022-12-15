@@ -1,15 +1,11 @@
 {
   "indexes": [
     {
-      "collectionGroup": "Tools",
+      "collectionGroup": "purchase",
       "queryScope": "COLLECTION",
       "fields": [
         {
           "fieldPath": "created_by",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "ToolName",
           "order": "ASCENDING"
         },
         {

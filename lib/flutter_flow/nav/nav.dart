@@ -246,6 +246,44 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => ToolDetailPageWidget(
                 tool: params.getParam('tool', ParamType.Document),
               ),
+            ),
+            FFRoute(
+              name: 'MyPurchases',
+              path: 'myPurchases',
+              requireAuth: true,
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'MyPurchases')
+                  : MyPurchasesWidget(),
+            ),
+            FFRoute(
+              name: 'AddPurchase',
+              path: 'addPurchase',
+              requireAuth: true,
+              builder: (context, params) => AddPurchaseWidget(),
+            ),
+            FFRoute(
+              name: 'EditPurchase',
+              path: 'editPurchase',
+              requireAuth: true,
+              asyncParams: {
+                'toolPurchase': getDoc('purchase', PurchaseRecord.serializer),
+              },
+              builder: (context, params) => EditPurchaseWidget(
+                toolPurchase:
+                    params.getParam('toolPurchase', ParamType.Document),
+              ),
+            ),
+            FFRoute(
+              name: 'PurchaseDetail',
+              path: 'purchaseDetail',
+              requireAuth: true,
+              asyncParams: {
+                'toolPurchase': getDoc('purchase', PurchaseRecord.serializer),
+              },
+              builder: (context, params) => PurchaseDetailWidget(
+                toolPurchase:
+                    params.getParam('toolPurchase', ParamType.Document),
+              ),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),

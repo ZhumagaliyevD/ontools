@@ -27,6 +27,9 @@ abstract class ReportsRecord
 
   String? get pdfFile;
 
+  @BuiltValueField(wireName: 'Tool2')
+  BuiltList<DocumentReference>? get tool2;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -35,7 +38,8 @@ abstract class ReportsRecord
 
   static void _initializeBuilder(ReportsRecordBuilder builder) => builder
     ..tools = ListBuilder()
-    ..pdfFile = '';
+    ..pdfFile = ''
+    ..tool2 = ListBuilder();
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
       parent != null
@@ -79,7 +83,8 @@ Map<String, dynamic> createReportsRecordData({
         ..createdBy = createdBy
         ..tools = null
         ..createdAt = createdAt
-        ..pdfFile = pdfFile,
+        ..pdfFile = pdfFile
+        ..tool2 = null,
     ),
   );
 

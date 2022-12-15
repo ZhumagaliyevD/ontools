@@ -324,17 +324,16 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                             Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
-                              child: StreamBuilder<List<ToolsRecord>>(
-                                stream: queryToolsRecord(
-                                  queryBuilder: (toolsRecord) => toolsRecord
-                                      .where('created_at',
-                                          isGreaterThan: datePicked1)
-                                      .where('created_at',
-                                          isLessThan: datePicked2)
-                                      .where('created_by',
-                                          isEqualTo: currentUserReference)
-                                      .where('ToolName',
-                                          isEqualTo: textController!.text),
+                              child: StreamBuilder<List<PurchaseRecord>>(
+                                stream: queryPurchaseRecord(
+                                  queryBuilder: (purchaseRecord) =>
+                                      purchaseRecord
+                                          .where('created_at',
+                                              isGreaterThan: datePicked1)
+                                          .where('created_at',
+                                              isLessThan: datePicked2)
+                                          .where('created_by',
+                                              isEqualTo: currentUserReference),
                                 ),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
@@ -350,8 +349,8 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                       ),
                                     );
                                   }
-                                  List<ToolsRecord> buttonToolsRecordList =
-                                      snapshot.data!;
+                                  List<PurchaseRecord>
+                                      buttonPurchaseRecordList = snapshot.data!;
                                   return FFButtonWidget(
                                     onPressed: () async {
                                       if (dateTimeFormat(
@@ -374,17 +373,17 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                               createdAt: getCurrentTimestamp,
                                               pdfFile: '',
                                             ),
-                                            'Tools': buttonToolsRecordList
+                                            'Tool2': buttonPurchaseRecordList
                                                 .map((e) => e.reference)
                                                 .toList(),
                                           };
                                           await ReportsRecord.createDoc(
                                                   currentUserReference!)
                                               .set(reportsCreateData);
-                                          await actions.convert(
-                                            buttonToolsRecordList.toList(),
-                                            FFAppState().reportStart,
-                                            FFAppState().reportEnd,
+                                          await actions.convertPurchase(
+                                            buttonPurchaseRecordList.toList(),
+                                            datePicked1,
+                                            datePicked2,
                                           );
                                         }
                                         ScaffoldMessenger.of(context)
@@ -422,7 +421,7 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                         );
                                       }
 
-                                      if (buttonToolsRecordList
+                                      if (buttonPurchaseRecordList
                                               .where((e) =>
                                                   e.toolName! ==
                                                   textController!.text)

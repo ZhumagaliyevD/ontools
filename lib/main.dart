@@ -130,10 +130,11 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'MyToolsPage': MyToolsPageWidget(),
       'Notes': NotesWidget(),
-      'Marketplace': MarketplaceWidget(),
       'ReportsPage': ReportsPageWidget(),
+      'MyToolsPage': MyToolsPageWidget(),
+      'MyPurchases': MyPurchasesWidget(),
+      'Marketplace': MarketplaceWidget(),
       'ProfileHomePage': ProfileHomePageWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
@@ -154,30 +155,10 @@ class _NavBarPageState extends State<NavBarPage> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              FFIcons.kbox,
-              size: 24,
-            ),
-            label: 'Инструменты',
-            tooltip: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
               FFIcons.kdocumentSigned,
               size: 24,
             ),
             label: 'Заметки',
-            tooltip: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.shopping_cart_outlined,
-              size: 24,
-            ),
-            activeIcon: Icon(
-              Icons.shopping_cart_rounded,
-              size: 24,
-            ),
-            label: 'Маркетплейс',
             tooltip: '',
           ),
           BottomNavigationBarItem(
@@ -190,6 +171,34 @@ class _NavBarPageState extends State<NavBarPage> {
               size: 24,
             ),
             label: 'Отчеты',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              FFIcons.kbox,
+              size: 24,
+            ),
+            label: 'Инструменты',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              FFIcons.kballot,
+              size: 24,
+            ),
+            label: 'Purchase',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.shopping_cart_outlined,
+              size: 24,
+            ),
+            activeIcon: Icon(
+              Icons.shopping_cart_rounded,
+              size: 24,
+            ),
+            label: 'Маркетплейс',
             tooltip: '',
           ),
           BottomNavigationBarItem(
