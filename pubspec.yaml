@@ -90,6 +90,8 @@ dependencies:
   cupertino_icons: ^1.0.0
   flutter_painter: ^1.0.1
   phosphor_flutter: ^1.4.0
+  firebase_messaging: ^11.4.4
+  cloud_functions: ^3.3.1
 
 dependency_overrides:
   rxdart: 0.27.4
