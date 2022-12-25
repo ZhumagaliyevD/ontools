@@ -44,7 +44,7 @@ class FlutterFlowChoiceChips extends StatefulWidget {
 
   final List<String>? initiallySelected;
   final List<ChipData> options;
-  final void Function(List<String>?) onChanged;
+  final void Function(List<String>?)? onChanged;
   final ChipStyle selectedChipStyle;
   final ChipStyle unselectedChipStyle;
   final double chipSpacing;
@@ -70,7 +70,11 @@ class _FlutterFlowChoiceChipsState extends State<FlutterFlowChoiceChips> {
     choiceChipValues = widget.initiallySelected ?? [];
     if (!widget.initialized && choiceChipValues.isNotEmpty) {
       SchedulerBinding.instance.addPostFrameCallback(
-        (_) => widget.onChanged(choiceChipValues),
+        (_) {
+          if (widget.onChanged != null) {
+            widget.onChanged!(choiceChipValues);
+          }
+        },
       );
     }
     changeSelectedValues?.addListener(() {
@@ -104,21 +108,23 @@ class _FlutterFlowChoiceChipsState extends State<FlutterFlowChoiceChips> {
                 height: _kChoiceChipsHeight,
                 child: ChoiceChip(
                   selected: selected,
-                  onSelected: (isSelected) {
-                    if (isSelected) {
-                      widget.multiselect
-                          ? choiceChipValues.add(option.label)
-                          : choiceChipValues = [option.label];
-                      widget.onChanged(choiceChipValues);
-                      setState(() {});
-                    } else {
-                      if (widget.multiselect) {
-                        choiceChipValues.remove(option.label);
-                        widget.onChanged(choiceChipValues);
-                        setState(() {});
-                      }
-                    }
-                  },
+                  onSelected: widget.onChanged != null
+                      ? (isSelected) {
+                          if (isSelected) {
+                            widget.multiselect
+                                ? choiceChipValues.add(option.label)
+                                : choiceChipValues = [option.label];
+                            widget.onChanged!(choiceChipValues);
+                            setState(() {});
+                          } else {
+                            if (widget.multiselect) {
+                              choiceChipValues.remove(option.label);
+                              widget.onChanged!(choiceChipValues);
+                              setState(() {});
+                            }
+                          }
+                        }
+                      : null,
                   label: Text(
                     option.label,
                     style: style.textStyle,

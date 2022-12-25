@@ -64,6 +64,13 @@ class _$PurchaseRecordSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(DateTime)));
     }
+    value = object.storeAddress;
+    if (value != null) {
+      result
+        ..add('storeAddress')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -113,6 +120,10 @@ class _$PurchaseRecordSerializer
           result.createdAt = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime?;
           break;
+        case 'storeAddress':
+          result.storeAddress = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -140,6 +151,8 @@ class _$PurchaseRecord extends PurchaseRecord {
   @override
   final DateTime? createdAt;
   @override
+  final String? storeAddress;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$PurchaseRecord([void Function(PurchaseRecordBuilder)? updates]) =>
@@ -152,6 +165,7 @@ class _$PurchaseRecord extends PurchaseRecord {
       this.buyDate,
       this.chequeName,
       this.createdAt,
+      this.storeAddress,
       this.ffRef})
       : super._();
 
@@ -173,6 +187,7 @@ class _$PurchaseRecord extends PurchaseRecord {
         buyDate == other.buyDate &&
         chequeName == other.chequeName &&
         createdAt == other.createdAt &&
+        storeAddress == other.storeAddress &&
         ffRef == other.ffRef;
   }
 
@@ -182,11 +197,13 @@ class _$PurchaseRecord extends PurchaseRecord {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, toolName.hashCode), chqueImg.hashCode),
-                        createdBy.hashCode),
-                    buyDate.hashCode),
-                chequeName.hashCode),
-            createdAt.hashCode),
+                    $jc(
+                        $jc($jc($jc(0, toolName.hashCode), chqueImg.hashCode),
+                            createdBy.hashCode),
+                        buyDate.hashCode),
+                    chequeName.hashCode),
+                createdAt.hashCode),
+            storeAddress.hashCode),
         ffRef.hashCode));
   }
 
@@ -199,6 +216,7 @@ class _$PurchaseRecord extends PurchaseRecord {
           ..add('buyDate', buyDate)
           ..add('chequeName', chequeName)
           ..add('createdAt', createdAt)
+          ..add('storeAddress', storeAddress)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -233,6 +251,10 @@ class PurchaseRecordBuilder
   DateTime? get createdAt => _$this._createdAt;
   set createdAt(DateTime? createdAt) => _$this._createdAt = createdAt;
 
+  String? _storeAddress;
+  String? get storeAddress => _$this._storeAddress;
+  set storeAddress(String? storeAddress) => _$this._storeAddress = storeAddress;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -250,6 +272,7 @@ class PurchaseRecordBuilder
       _buyDate = $v.buyDate;
       _chequeName = $v.chequeName;
       _createdAt = $v.createdAt;
+      _storeAddress = $v.storeAddress;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -279,6 +302,7 @@ class PurchaseRecordBuilder
             buyDate: buyDate,
             chequeName: chequeName,
             createdAt: createdAt,
+            storeAddress: storeAddress,
             ffRef: ffRef);
     replace(_$result);
     return _$result;

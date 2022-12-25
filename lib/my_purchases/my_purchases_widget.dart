@@ -4,7 +4,6 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/custom_functions.dart' as functions;
-import 'package:styled_divider/styled_divider.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,6 +18,7 @@ class MyPurchasesWidget extends StatefulWidget {
 
 class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
   TextEditingController? toolSearchController;
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -29,6 +29,7 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     toolSearchController?.dispose();
     super.dispose();
   }
@@ -42,9 +43,7 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          setState(() {
-            FFAppState().SearchList = false;
-          });
+          FFAppState().SearchList = false;
 
           context.pushNamed('AddPurchase');
         },
@@ -69,7 +68,7 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
       ),
       body: SafeArea(
         child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -203,19 +202,14 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                                 children: [
                                   InkWell(
                                     onTap: () async {
-                                      setState(() {
-                                        FFAppState().toolBuyDate =
-                                            searchToolListPurchaseRecord
-                                                .buyDate;
-                                        FFAppState().toolimg =
-                                            searchToolListPurchaseRecord
-                                                .chqueImg!;
-                                      });
-                                      setState(() {
-                                        FFAppState().chequeName =
-                                            searchToolListPurchaseRecord
-                                                .chequeName!;
-                                      });
+                                      FFAppState().toolBuyDate =
+                                          searchToolListPurchaseRecord.buyDate;
+                                      FFAppState().toolimg =
+                                          searchToolListPurchaseRecord
+                                              .chqueImg!;
+                                      FFAppState().chequeName =
+                                          searchToolListPurchaseRecord
+                                              .chequeName!;
 
                                       context.pushNamed(
                                         'PurchaseDetail',
@@ -242,8 +236,11 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                                           borderRadius:
                                               BorderRadius.circular(16),
                                           child: Image.network(
-                                            searchToolListPurchaseRecord
-                                                .chqueImg!,
+                                            valueOrDefault<String>(
+                                              searchToolListPurchaseRecord
+                                                  .chqueImg,
+                                              'https://consequence.net/wp-content/uploads/2021/08/the-weeknd-blinding-lights-record.jpg',
+                                            ),
                                             width: 80,
                                             height: 106,
                                             fit: BoxFit.cover,

@@ -10,6 +10,7 @@ class FlutterFlowIconButton extends StatefulWidget {
     this.borderWidth,
     this.buttonSize,
     this.fillColor,
+    this.disabledColor,
     this.onPressed,
     this.showLoadingIndicator = false,
   }) : super(key: key);
@@ -18,6 +19,7 @@ class FlutterFlowIconButton extends StatefulWidget {
   final double? borderRadius;
   final double? buttonSize;
   final Color? fillColor;
+  final Color? disabledColor;
   final Color? borderColor;
   final double? borderWidth;
   final bool showLoadingIndicator;
@@ -59,7 +61,9 @@ class _FlutterFlowIconButtonState extends State<FlutterFlowIconButton> {
         width: widget.buttonSize,
         height: widget.buttonSize,
         decoration: BoxDecoration(
-          color: widget.fillColor,
+          color: widget.onPressed != null
+              ? widget.fillColor
+              : widget.disabledColor,
           border: Border.all(
             color: widget.borderColor ?? Colors.transparent,
             width: widget.borderWidth ?? 0,

@@ -22,6 +22,7 @@ class PurchaseDetailWidget extends StatefulWidget {
 
 class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
   TextEditingController? toolNameController;
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -29,14 +30,13 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      setState(() {
-        FFAppState().viewPhoto = false;
-      });
+      FFAppState().viewPhoto = false;
     });
   }
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     toolNameController?.dispose();
     super.dispose();
   }
@@ -78,14 +78,10 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                setState(() {
-                  FFAppState().toolBuyDate =
-                      DateTime.fromMillisecondsSinceEpoch(1665846120000);
-                  FFAppState().toolimg = '';
-                });
-                setState(() {
-                  FFAppState().chequeName = '';
-                });
+                FFAppState().toolBuyDate =
+                    DateTime.fromMillisecondsSinceEpoch(1665846120000);
+                FFAppState().toolimg = '';
+                FFAppState().chequeName = '';
                 context.pop();
               },
             ),
@@ -128,7 +124,7 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
             elevation: 0,
           ),
           body: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
+            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
             child: Stack(
               children: [
                 SingleChildScrollView(
@@ -215,9 +211,7 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                                     0, 10, 0, 10),
                                 child: InkWell(
                                   onTap: () async {
-                                    setState(() {
-                                      FFAppState().viewPhoto = true;
-                                    });
+                                    FFAppState().viewPhoto = true;
                                   },
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -299,9 +293,8 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                                             12, 0, 0, 0),
                                         child: Text(
                                           valueOrDefault<String>(
-                                            FFAppState()
-                                                .toolBuyDate
-                                                ?.toString(),
+                                            dateTimeFormat('yMd',
+                                                FFAppState().toolBuyDate),
                                             '132132131',
                                           ),
                                           style: FlutterFlowTheme.of(context)
@@ -322,9 +315,7 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                 if (FFAppState().viewPhoto)
                   InkWell(
                     onTap: () async {
-                      setState(() {
-                        FFAppState().viewPhoto = false;
-                      });
+                      FFAppState().viewPhoto = false;
                     },
                     child: Container(
                       width: double.infinity,
@@ -337,9 +328,7 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                         alignment: AlignmentDirectional(0, 0),
                         child: InkWell(
                           onTap: () async {
-                            setState(() {
-                              FFAppState().viewPhoto = false;
-                            });
+                            FFAppState().viewPhoto = false;
                           },
                           child: Image.network(
                             purchaseDetailPurchaseRecord.chqueImg!,

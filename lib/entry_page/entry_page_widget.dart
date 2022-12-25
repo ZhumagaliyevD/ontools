@@ -17,10 +17,10 @@ class EntryPageWidget extends StatefulWidget {
 class _EntryPageWidgetState extends State<EntryPageWidget> {
   TextEditingController? emailLoginController;
   TextEditingController? passwordLoginController;
-
   late bool passwordLoginVisibility;
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -32,6 +32,7 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     emailLoginController?.dispose();
     passwordLoginController?.dispose();
     super.dispose();
@@ -45,7 +46,7 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 1,

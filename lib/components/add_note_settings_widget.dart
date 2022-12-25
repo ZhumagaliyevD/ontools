@@ -44,7 +44,7 @@ class _AddNoteSettingsWidgetState extends State<AddNoteSettingsWidget> {
           );
         }
         List<NotesRecord> bottomSheetMaterialNotesRecordList = snapshot.data!;
-        // Return an empty Container when the document does not exist.
+        // Return an empty Container when the item does not exist.
         if (snapshot.data!.isEmpty) {
           return Container();
         }

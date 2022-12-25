@@ -17,14 +17,13 @@ class SignUpPageWidget extends StatefulWidget {
 
 class _SignUpPageWidgetState extends State<SignUpPageWidget> {
   TextEditingController? confPasswordSignUpController;
-
   late bool confPasswordSignUpVisibility;
   TextEditingController? emailSignUpController;
   TextEditingController? passwordSignUpController;
-
   late bool passwordSignUpVisibility;
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -38,6 +37,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     confPasswordSignUpController?.dispose();
     emailSignUpController?.dispose();
     passwordSignUpController?.dispose();
@@ -52,7 +52,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 1,

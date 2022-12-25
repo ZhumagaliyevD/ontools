@@ -103,6 +103,20 @@ class _$UserRecordSerializer implements StructuredSerializer<UserRecord> {
         ..add(
             serializers.serialize(value, specifiedType: const FullType(bool)));
     }
+    value = object.city;
+    if (value != null) {
+      result
+        ..add('city')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.country;
+    if (value != null) {
+      result
+        ..add('country')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -178,6 +192,14 @@ class _$UserRecordSerializer implements StructuredSerializer<UserRecord> {
           result.isCompleteTrial = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool?;
           break;
+        case 'city':
+          result.city = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'country':
+          result.country = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -219,6 +241,10 @@ class _$UserRecord extends UserRecord {
   @override
   final bool? isCompleteTrial;
   @override
+  final String? city;
+  @override
+  final String? country;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$UserRecord([void Function(UserRecordBuilder)? updates]) =>
@@ -238,6 +264,8 @@ class _$UserRecord extends UserRecord {
       this.trialStart,
       required this.permissions,
       this.isCompleteTrial,
+      this.city,
+      this.country,
       this.ffRef})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(address, r'UserRecord', 'address');
@@ -269,6 +297,8 @@ class _$UserRecord extends UserRecord {
         trialStart == other.trialStart &&
         permissions == other.permissions &&
         isCompleteTrial == other.isCompleteTrial &&
+        city == other.city &&
+        country == other.country &&
         ffRef == other.ffRef;
   }
 
@@ -286,19 +316,28 @@ class _$UserRecord extends UserRecord {
                                         $jc(
                                             $jc(
                                                 $jc(
-                                                    $jc($jc(0, email.hashCode),
-                                                        displayName.hashCode),
-                                                    photoUrl.hashCode),
-                                                uid.hashCode),
-                                            createdTime.hashCode),
-                                        phoneNumber.hashCode),
-                                    address.hashCode),
-                                specialty.hashCode),
-                            birthday.hashCode),
-                        industry.hashCode),
-                    trialStart.hashCode),
-                permissions.hashCode),
-            isCompleteTrial.hashCode),
+                                                    $jc(
+                                                        $jc(
+                                                            $jc(
+                                                                $jc(
+                                                                    0,
+                                                                    email
+                                                                        .hashCode),
+                                                                displayName
+                                                                    .hashCode),
+                                                            photoUrl.hashCode),
+                                                        uid.hashCode),
+                                                    createdTime.hashCode),
+                                                phoneNumber.hashCode),
+                                            address.hashCode),
+                                        specialty.hashCode),
+                                    birthday.hashCode),
+                                industry.hashCode),
+                            trialStart.hashCode),
+                        permissions.hashCode),
+                    isCompleteTrial.hashCode),
+                city.hashCode),
+            country.hashCode),
         ffRef.hashCode));
   }
 
@@ -318,6 +357,8 @@ class _$UserRecord extends UserRecord {
           ..add('trialStart', trialStart)
           ..add('permissions', permissions)
           ..add('isCompleteTrial', isCompleteTrial)
+          ..add('city', city)
+          ..add('country', country)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -382,6 +423,14 @@ class UserRecordBuilder implements Builder<UserRecord, UserRecordBuilder> {
   set isCompleteTrial(bool? isCompleteTrial) =>
       _$this._isCompleteTrial = isCompleteTrial;
 
+  String? _city;
+  String? get city => _$this._city;
+  set city(String? city) => _$this._city = city;
+
+  String? _country;
+  String? get country => _$this._country;
+  set country(String? country) => _$this._country = country;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -406,6 +455,8 @@ class UserRecordBuilder implements Builder<UserRecord, UserRecordBuilder> {
       _trialStart = $v.trialStart;
       _permissions = $v.permissions.toBuilder();
       _isCompleteTrial = $v.isCompleteTrial;
+      _city = $v.city;
+      _country = $v.country;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -444,6 +495,8 @@ class UserRecordBuilder implements Builder<UserRecord, UserRecordBuilder> {
               trialStart: trialStart,
               permissions: permissions.build(),
               isCompleteTrial: isCompleteTrial,
+              city: city,
+              country: country,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;

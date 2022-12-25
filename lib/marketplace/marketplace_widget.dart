@@ -5,7 +5,6 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/custom_functions.dart' as functions;
-import 'package:styled_divider/styled_divider.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,6 +19,7 @@ class MarketplaceWidget extends StatefulWidget {
 
 class _MarketplaceWidgetState extends State<MarketplaceWidget> {
   TextEditingController? marketSearchController;
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -30,6 +30,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     marketSearchController?.dispose();
     super.dispose();
   }
@@ -45,9 +46,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
         onPressed: () async {
           context.pushNamed('AddNewToolPage');
 
-          setState(() {
-            FFAppState().SearchList = false;
-          });
+          FFAppState().SearchList = false;
         },
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         elevation: 8,
@@ -139,7 +138,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
       ),
       body: SafeArea(
         child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -236,13 +235,9 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                       setState(() {
                                         marketSearchController?.clear();
                                       });
-                                      setState(() {
-                                        FFAppState().MarketplaceSearch = '';
-                                        FFAppState().filterShopName = '';
-                                      });
-                                      setState(() {
-                                        FFAppState().isCheque = '';
-                                      });
+                                      FFAppState().MarketplaceSearch = '';
+                                      FFAppState().filterShopName = '';
+                                      FFAppState().isCheque = '';
                                     },
                                   ),
                                 ],
@@ -308,12 +303,10 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                 children: [
                                   InkWell(
                                     onTap: () async {
-                                      setState(() {
-                                        FFAppState().toolBuyDate =
-                                            fullListToolsRecord.buyDate;
-                                        FFAppState().toolimg =
-                                            fullListToolsRecord.photo!;
-                                      });
+                                      FFAppState().toolBuyDate =
+                                          fullListToolsRecord.buyDate;
+                                      FFAppState().toolimg =
+                                          fullListToolsRecord.photo!;
 
                                       context.pushNamed(
                                         'ToolDetailPage',
@@ -496,12 +489,10 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                               children: [
                                 InkWell(
                                   onTap: () async {
-                                    setState(() {
-                                      FFAppState().toolBuyDate =
-                                          byDateToolsRecord.buyDate;
-                                      FFAppState().toolimg =
-                                          byDateToolsRecord.photo!;
-                                    });
+                                    FFAppState().toolBuyDate =
+                                        byDateToolsRecord.buyDate;
+                                    FFAppState().toolimg =
+                                        byDateToolsRecord.photo!;
 
                                     context.pushNamed(
                                       'ToolDetailPage',
@@ -675,12 +666,10 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                               children: [
                                 InkWell(
                                   onTap: () async {
-                                    setState(() {
-                                      FFAppState().toolBuyDate =
-                                          byPriceToolsRecord.buyDate;
-                                      FFAppState().toolimg =
-                                          byPriceToolsRecord.photo!;
-                                    });
+                                    FFAppState().toolBuyDate =
+                                        byPriceToolsRecord.buyDate;
+                                    FFAppState().toolimg =
+                                        byPriceToolsRecord.photo!;
 
                                     context.pushNamed(
                                       'ToolDetailPage',
@@ -855,12 +844,10 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                               children: [
                                 InkWell(
                                   onTap: () async {
-                                    setState(() {
-                                      FFAppState().toolBuyDate =
-                                          byNewestToolsRecord.buyDate;
-                                      FFAppState().toolimg =
-                                          byNewestToolsRecord.photo!;
-                                    });
+                                    FFAppState().toolBuyDate =
+                                        byNewestToolsRecord.buyDate;
+                                    FFAppState().toolimg =
+                                        byNewestToolsRecord.photo!;
 
                                     context.pushNamed(
                                       'ToolDetailPage',

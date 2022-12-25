@@ -29,15 +29,18 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
   TextEditingController? industryController;
   TextEditingController? specialityController;
   TextEditingController? phoneController;
-  TextEditingController? addressController;
+  TextEditingController? countryController;
+  TextEditingController? cityController;
   DateTime? datePicked;
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    addressController = TextEditingController();
+    cityController = TextEditingController();
+    countryController = TextEditingController();
     industryController = TextEditingController();
     userNameController = TextEditingController();
     specialityController = TextEditingController();
@@ -46,7 +49,9 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
 
   @override
   void dispose() {
-    addressController?.dispose();
+    _unfocusNode.dispose();
+    cityController?.dispose();
+    countryController?.dispose();
     industryController?.dispose();
     userNameController?.dispose();
     specialityController?.dispose();
@@ -92,7 +97,7 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
       ),
       body: SafeArea(
         child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
           child: Container(
             width: MediaQuery.of(context).size.width,
             child: Form(
@@ -150,9 +155,7 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
 
                         if (!(uploadedFileUrl == null ||
                             uploadedFileUrl == '')) {
-                          setState(() {
-                            FFAppState().profileimg = uploadedFileUrl;
-                          });
+                          FFAppState().profileimg = uploadedFileUrl;
                         }
                       },
                       child: Container(
@@ -340,7 +343,46 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
                     child: TextFormField(
-                      controller: addressController,
+                      controller: countryController,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        labelText: 'Страна',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFFB3B3B3),
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFFB3B3B3),
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0x00000000),
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0x00000000),
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      style: FlutterFlowTheme.of(context).bodyText1,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                    child: TextFormField(
+                      controller: cityController,
                       obscureText: false,
                       decoration: InputDecoration(
                         labelText: 'Мой город',
@@ -434,6 +476,8 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                             photoUrl: uploadedFileUrl,
                             isCompleteTrial: false,
                             trialStart: datePicked,
+                            city: countryController!.text,
+                            country: countryController!.text,
                           );
                           await currentUserReference!.update(userUpdateData);
                         } else {
@@ -445,6 +489,8 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                             industry: industryController!.text,
                             isCompleteTrial: false,
                             trialStart: datePicked,
+                            city: countryController!.text,
+                            country: countryController!.text,
                           );
                           await currentUserReference!.update(userUpdateData);
                         }

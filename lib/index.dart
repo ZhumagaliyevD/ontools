@@ -33,3 +33,4 @@ export 'my_purchases/my_purchases_widget.dart' show MyPurchasesWidget;
 export 'add_purchase/add_purchase_widget.dart' show AddPurchaseWidget;
 export 'edit_purchase/edit_purchase_widget.dart' show EditPurchaseWidget;
 export 'purchase_detail/purchase_detail_widget.dart' show PurchaseDetailWidget;
+export 'about/about_widget.dart' show AboutWidget;

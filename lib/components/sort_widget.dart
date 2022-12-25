@@ -67,9 +67,7 @@ class _SortWidgetState extends State<SortWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
                   child: InkWell(
                     onTap: () async {
-                      setState(() {
-                        FFAppState().sortBy = 'by date';
-                      });
+                      FFAppState().sortBy = 'by date';
                     },
                     child: Container(
                       width: double.infinity,
@@ -104,9 +102,7 @@ class _SortWidgetState extends State<SortWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
                   child: InkWell(
                     onTap: () async {
-                      setState(() {
-                        FFAppState().sortBy = 'by newest';
-                      });
+                      FFAppState().sortBy = 'by newest';
                     },
                     child: Container(
                       width: double.infinity,
@@ -141,9 +137,7 @@ class _SortWidgetState extends State<SortWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
                   child: InkWell(
                     onTap: () async {
-                      setState(() {
-                        FFAppState().sortBy = 'by price';
-                      });
+                      FFAppState().sortBy = 'by price';
                     },
                     child: Container(
                       width: double.infinity,

@@ -4,7 +4,6 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/custom_functions.dart' as functions;
-import 'package:styled_divider/styled_divider.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,6 +18,7 @@ class MyToolsPageWidget extends StatefulWidget {
 
 class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
   TextEditingController? toolSearchController;
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -29,6 +29,7 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     toolSearchController?.dispose();
     super.dispose();
   }
@@ -42,9 +43,7 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          setState(() {
-            FFAppState().SearchList = false;
-          });
+          FFAppState().SearchList = false;
 
           context.pushNamed('AddNewToolPage');
         },
@@ -69,7 +68,7 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
       ),
       body: SafeArea(
         child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -200,16 +199,12 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                               children: [
                                 InkWell(
                                   onTap: () async {
-                                    setState(() {
-                                      FFAppState().toolBuyDate =
-                                          searchToolListToolsRecord.buyDate;
-                                      FFAppState().toolimg =
-                                          searchToolListToolsRecord.photo!;
-                                    });
-                                    setState(() {
-                                      FFAppState().chequeName =
-                                          searchToolListToolsRecord.chequeName!;
-                                    });
+                                    FFAppState().toolBuyDate =
+                                        searchToolListToolsRecord.buyDate;
+                                    FFAppState().toolimg =
+                                        searchToolListToolsRecord.photo!;
+                                    FFAppState().chequeName =
+                                        searchToolListToolsRecord.chequeName!;
 
                                     context.pushNamed(
                                       'ToolDetailPage',

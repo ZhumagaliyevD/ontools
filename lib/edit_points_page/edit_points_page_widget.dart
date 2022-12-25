@@ -27,10 +27,12 @@ class EditPointsPageWidget extends StatefulWidget {
 class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
   BulletsRecord? bullet;
   TextEditingController? optionController;
+  PhotoNotePointRecord? createdPoint;
   TextEditingController? noteDescriptionController;
   TextEditingController? noteTitleController;
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -43,6 +45,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     noteDescriptionController?.dispose();
     noteTitleController?.dispose();
     optionController?.dispose();
@@ -74,7 +77,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
           );
         }
         List<NotesRecord> editPointsPageNotesRecordList = snapshot.data!;
-        // Return an empty Container when the document does not exist.
+        // Return an empty Container when the item does not exist.
         if (snapshot.data!.isEmpty) {
           return Container();
         }
@@ -99,14 +102,12 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                setState(() {
-                  FFAppState().noteIMG = '';
-                });
+                FFAppState().noteIMG = '';
                 context.pop();
               },
             ),
             title: Text(
-              'Редактировать заметку',
+              'Edit note',
               style: FlutterFlowTheme.of(context).subtitle1,
             ),
             actions: [
@@ -139,7 +140,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
             elevation: 0,
           ),
           body: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
+            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,7 +161,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                               controller: noteTitleController,
                               obscureText: false,
                               decoration: InputDecoration(
-                                labelText: 'Название заметки',
+                                labelText: 'Note title',
                                 hintStyle:
                                     FlutterFlowTheme.of(context).bodyText2,
                                 enabledBorder: OutlineInputBorder(
@@ -206,7 +207,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                 controller: noteDescriptionController,
                                 obscureText: false,
                                 decoration: InputDecoration(
-                                  labelText: 'Начните писать',
+                                  labelText: 'Note description',
                                   hintStyle:
                                       FlutterFlowTheme.of(context).bodyText2,
                                   enabledBorder: OutlineInputBorder(
@@ -252,9 +253,33 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                 width: MediaQuery.of(context).size.width,
                                 height: MediaQuery.of(context).size.height * 1,
                                 image: widget.note!.image!,
-                                points: editPointsPageNotesRecord!.notePoints!
-                                    .toList(),
-                                onCreatePhotoNote: () async {},
+                                points: widget.note!.notePoints!.toList(),
+                                onCreatePhotoNote: () async {
+                                  await Future.delayed(
+                                      const Duration(milliseconds: 1));
+
+                                  final photoNotePointCreateData =
+                                      createPhotoNotePointRecordData(
+                                    dx: FFAppState().dx,
+                                    dy: FFAppState().dy,
+                                    description: FFAppState().comment,
+                                  );
+                                  var photoNotePointRecordReference =
+                                      PhotoNotePointRecord.collection.doc();
+                                  await photoNotePointRecordReference
+                                      .set(photoNotePointCreateData);
+                                  createdPoint =
+                                      PhotoNotePointRecord.getDocumentFromData(
+                                          photoNotePointCreateData,
+                                          photoNotePointRecordReference);
+                                  FFAppState().addToPhotoNotePoints(
+                                      createdPoint!.reference);
+                                  FFAppState().comment = '';
+                                  FFAppState().dx = 0.0;
+                                  FFAppState().dy = 0.0;
+
+                                  setState(() {});
+                                },
                               ),
                             ),
                           if (FFAppState().isCheckbox == true)
@@ -505,7 +530,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  height: 60,
+                  height: MediaQuery.of(context).size.height * 0.09,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),

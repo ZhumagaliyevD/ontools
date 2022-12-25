@@ -185,24 +185,16 @@ class _FilterWidgetState extends State<FilterWidget> {
                       FFButtonWidget(
                         onPressed: () async {
                           if (toolNameValue != null && toolNameValue != '') {
-                            setState(() {
-                              FFAppState().MarketplaceSearch = toolNameValue!;
-                            });
+                            FFAppState().MarketplaceSearch = toolNameValue!;
                           }
                           if (shopNameValue != null && shopNameValue != '') {
-                            setState(() {
-                              FFAppState().filterShopName = shopNameValue!;
-                            });
+                            FFAppState().filterShopName = shopNameValue!;
                           }
                           if (chequeValue != null && chequeValue != '') {
-                            setState(() {
-                              FFAppState().isCheque = chequeValue!;
-                            });
+                            FFAppState().isCheque = chequeValue!;
                           }
                           Navigator.pop(context);
-                          setState(() {
-                            FFAppState().sortBy = '';
-                          });
+                          FFAppState().sortBy = '';
 
                           context.pushNamed(
                             'Marketplace',

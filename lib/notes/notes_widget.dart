@@ -19,6 +19,7 @@ class NotesWidget extends StatefulWidget {
 
 class _NotesWidgetState extends State<NotesWidget> {
   NotesRecord? notes;
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController? searchController;
 
@@ -30,6 +31,7 @@ class _NotesWidgetState extends State<NotesWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     searchController?.dispose();
     super.dispose();
   }
@@ -58,9 +60,7 @@ class _NotesWidgetState extends State<NotesWidget> {
             size: 24,
           ),
           onPressed: () async {
-            setState(() {
-              FFAppState().isCheckbox = false;
-            });
+            FFAppState().isCheckbox = false;
 
             final notesCreateData = createNotesRecordData();
             var notesRecordReference = NotesRecord.collection.doc();
@@ -85,7 +85,7 @@ class _NotesWidgetState extends State<NotesWidget> {
       ),
       body: SafeArea(
         child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import '../flutter_flow_theme.dart';
 import '../../backend/backend.dart';
+
 import '../../auth/firebase_user_provider.dart';
 import '../../backend/push_notifications/push_notifications_handler.dart'
     show PushNotificationsHandler;
@@ -93,12 +94,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'chatPage',
               requireAuth: true,
               asyncParams: {
-                'chatUser': getDoc('user', UserRecord.serializer),
+                'chatUser': getDoc(['user'], UserRecord.serializer),
               },
               builder: (context, params) => ChatPageWidget(
                 chatUser: params.getParam('chatUser', ParamType.Document),
                 chatRef: params.getParam(
-                    'chatRef', ParamType.DocumentReference, false, 'chats'),
+                    'chatRef', ParamType.DocumentReference, false, ['chats']),
               ),
             ),
             FFRoute(
@@ -152,7 +153,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'editToolPage',
               requireAuth: true,
               asyncParams: {
-                'tool': getDoc('Tools', ToolsRecord.serializer),
+                'tool': getDoc(['Tools'], ToolsRecord.serializer),
               },
               builder: (context, params) => EditToolPageWidget(
                 tool: params.getParam('tool', ParamType.Document),
@@ -177,7 +178,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'pointsPage',
               requireAuth: true,
               asyncParams: {
-                'notepage': getDoc('notes', NotesRecord.serializer),
+                'notepage': getDoc(['notes'], NotesRecord.serializer),
               },
               builder: (context, params) => PointsPageWidget(
                 notepage: params.getParam('notepage', ParamType.Document),
@@ -213,7 +214,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'editPointsPage',
               requireAuth: true,
               asyncParams: {
-                'note': getDoc('notes', NotesRecord.serializer),
+                'note': getDoc(['notes'], NotesRecord.serializer),
               },
               builder: (context, params) => EditPointsPageWidget(
                 note: params.getParam('note', ParamType.Document),
@@ -230,7 +231,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'painterPage',
               requireAuth: true,
               asyncParams: {
-                'noteIMG': getDoc('notes', NotesRecord.serializer),
+                'noteIMG': getDoc(['notes'], NotesRecord.serializer),
               },
               builder: (context, params) => PainterPageWidget(
                 noteIMG: params.getParam('noteIMG', ParamType.Document),
@@ -241,7 +242,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'toolDetailPage',
               requireAuth: true,
               asyncParams: {
-                'tool': getDoc('Tools', ToolsRecord.serializer),
+                'tool': getDoc(['Tools'], ToolsRecord.serializer),
               },
               builder: (context, params) => ToolDetailPageWidget(
                 tool: params.getParam('tool', ParamType.Document),
@@ -266,7 +267,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'editPurchase',
               requireAuth: true,
               asyncParams: {
-                'toolPurchase': getDoc('purchase', PurchaseRecord.serializer),
+                'toolPurchase': getDoc(['purchase'], PurchaseRecord.serializer),
               },
               builder: (context, params) => EditPurchaseWidget(
                 toolPurchase:
@@ -278,12 +279,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'purchaseDetail',
               requireAuth: true,
               asyncParams: {
-                'toolPurchase': getDoc('purchase', PurchaseRecord.serializer),
+                'toolPurchase': getDoc(['purchase'], PurchaseRecord.serializer),
               },
               builder: (context, params) => PurchaseDetailWidget(
                 toolPurchase:
                     params.getParam('toolPurchase', ParamType.Document),
               ),
+            ),
+            FFRoute(
+              name: 'About',
+              path: 'about',
+              requireAuth: true,
+              builder: (context, params) => AboutWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),
@@ -396,7 +403,7 @@ class FFParameters {
     String paramName,
     ParamType type, [
     bool isList = false,
-    String? collectionName,
+    List<String>? collectionNamePath,
   ]) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
@@ -410,7 +417,7 @@ class FFParameters {
       return param;
     }
     // Return serialized value.
-    return deserializeParam<T>(param, type, isList, collectionName);
+    return deserializeParam<T>(param, type, isList, collectionNamePath);
   }
 }
 

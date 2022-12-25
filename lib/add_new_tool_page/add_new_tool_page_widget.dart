@@ -33,17 +33,16 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
   TextEditingController? shopNameController;
   DateTime? datePicked;
   TextEditingController? priceController;
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      setState(() {
-        FFAppState().viewPhoto = false;
-      });
+      FFAppState().viewPhoto = false;
     });
 
     descriptionController = TextEditingController();
@@ -54,6 +53,7 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     descriptionController?.dispose();
     toolNameController?.dispose();
     shopNameController?.dispose();
@@ -83,14 +83,10 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
           ),
           onPressed: () async {
             context.pop();
-            setState(() {
-              FFAppState().toolimg = '';
-              FFAppState().toolBuyDate =
-                  DateTime.fromMillisecondsSinceEpoch(1665846120000);
-            });
-            setState(() {
-              FFAppState().chequeName = '';
-            });
+            FFAppState().toolimg = '';
+            FFAppState().toolBuyDate =
+                DateTime.fromMillisecondsSinceEpoch(1665846120000);
+            FFAppState().chequeName = '';
           },
         ),
         title: Text(
@@ -102,7 +98,7 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
         elevation: 0,
       ),
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: Stack(
           children: [
             Form(
@@ -235,9 +231,7 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
 
                               if (!(uploadedFileUrl1 == null ||
                                   uploadedFileUrl1 == '')) {
-                                setState(() {
-                                  FFAppState().toolimg = uploadedFileUrl1;
-                                });
+                                FFAppState().toolimg = uploadedFileUrl1;
                               }
                             },
                             child: Icon(
@@ -271,9 +265,7 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                       onTap: () async {
                                         if (FFAppState().chequeName != null &&
                                             FFAppState().chequeName != '') {
-                                          setState(() {
-                                            FFAppState().viewPhoto = true;
-                                          });
+                                          FFAppState().viewPhoto = true;
                                         }
                                       },
                                       child: Text(
@@ -322,13 +314,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                       size: 20,
                                     ),
                                     onPressed: () async {
-                                      setState(() {
-                                        FFAppState().chequeName = '';
-                                        FFAppState().chequeImg = '';
-                                      });
-                                      setState(() {
-                                        FFAppState().viewPhoto = false;
-                                      });
+                                      FFAppState().chequeName = '';
+                                      FFAppState().chequeImg = '';
+                                      FFAppState().viewPhoto = false;
                                     },
                                   ),
                                 if (FFAppState().chequeName == null ||
@@ -384,12 +372,10 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
 
                                       if (uploadedFileUrl2 != null &&
                                           uploadedFileUrl2 != '') {
-                                        setState(() {
-                                          FFAppState().chequeName =
-                                              'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
-                                          FFAppState().chequeImg =
-                                              uploadedFileUrl2;
-                                        });
+                                        FFAppState().chequeName =
+                                            'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
+                                        FFAppState().chequeImg =
+                                            uploadedFileUrl2;
                                       }
                                     },
                                   ),
@@ -550,9 +536,7 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                         );
                                       }
                                       if (!(datePicked == null)) {
-                                        setState(() {
-                                          FFAppState().toolBuyDate = datePicked;
-                                        });
+                                        FFAppState().toolBuyDate = datePicked;
                                       }
                                     },
                                     child: Container(
@@ -716,13 +700,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                 .set(toolsCreateData);
                           }
 
-                          setState(() {
-                            FFAppState().toolimg = '';
-                            FFAppState().chequeName = '';
-                          });
-                          setState(() {
-                            FFAppState().chequeImg = '';
-                          });
+                          FFAppState().toolimg = '';
+                          FFAppState().chequeName = '';
+                          FFAppState().chequeImg = '';
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -765,9 +745,7 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                 (FFAppState().chequeImg != ''))
               InkWell(
                 onTap: () async {
-                  setState(() {
-                    FFAppState().viewPhoto = false;
-                  });
+                  FFAppState().viewPhoto = false;
                 },
                 child: Container(
                   width: double.infinity,
@@ -779,9 +757,7 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                     alignment: AlignmentDirectional(0, 0),
                     child: InkWell(
                       onTap: () async {
-                        setState(() {
-                          FFAppState().viewPhoto = false;
-                        });
+                        FFAppState().viewPhoto = false;
                       },
                       child: Image.network(
                         FFAppState().chequeImg,

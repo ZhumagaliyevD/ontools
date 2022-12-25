@@ -17,8 +17,9 @@ class PhoneVerifyWidget extends StatefulWidget {
 
 class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
   TextEditingController? pinCodeController;
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -28,6 +29,7 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     pinCodeController?.dispose();
     super.dispose();
   }
@@ -40,7 +42,7 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 1,

@@ -37,8 +37,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
 
   DateTime? datePicked;
   TextEditingController? priceController;
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -53,6 +54,7 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     descriptionController?.dispose();
     toolNameController?.dispose();
     shopNameController?.dispose();
@@ -97,14 +99,10 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                setState(() {
-                  FFAppState().toolBuyDate =
-                      DateTime.fromMillisecondsSinceEpoch(1665846120000);
-                  FFAppState().toolimg = '';
-                });
-                setState(() {
-                  FFAppState().chequeName = '';
-                });
+                FFAppState().toolBuyDate =
+                    DateTime.fromMillisecondsSinceEpoch(1665846120000);
+                FFAppState().toolimg = '';
+                FFAppState().chequeName = '';
                 context.pop();
               },
             ),
@@ -134,7 +132,7 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
             elevation: 0,
           ),
           body: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
+            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
             child: Form(
               key: formKey,
               autovalidateMode: AutovalidateMode.disabled,
@@ -210,9 +208,7 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
 
                             if (!(uploadedFileUrl1 == null ||
                                 uploadedFileUrl1 == '')) {
-                              setState(() {
-                                FFAppState().toolimg = uploadedFileUrl1;
-                              });
+                              FFAppState().toolimg = uploadedFileUrl1;
                             }
                           },
                           child: Icon(
@@ -419,9 +415,7 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                   };
                                   await widget.tool!.reference
                                       .update(toolsUpdateData);
-                                  setState(() {
-                                    FFAppState().chequeName = '';
-                                  });
+                                  FFAppState().chequeName = '';
                                 },
                               ),
                             if (widget.tool!.chequeName == null ||
@@ -482,10 +476,8 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                     }
                                   }
 
-                                  setState(() {
-                                    FFAppState().chequeName =
-                                        'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
-                                  });
+                                  FFAppState().chequeName =
+                                      'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
 
                                   final toolsUpdateData = createToolsRecordData(
                                     chequeIMG: uploadedFileUrl2,
@@ -548,9 +540,7 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                         );
                                       }
                                       if (!(datePicked == null)) {
-                                        setState(() {
-                                          FFAppState().toolBuyDate = datePicked;
-                                        });
+                                        FFAppState().toolBuyDate = datePicked;
                                       }
                                     },
                                     child: Container(
@@ -751,15 +741,11 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                             chequeIMG: uploadedFileUrl2,
                           );
                           await widget.tool!.reference.update(toolsUpdateData);
-                          setState(() {
-                            FFAppState().toolBuyDate =
-                                DateTime.fromMillisecondsSinceEpoch(
-                                    1665846120000);
-                            FFAppState().chequeName = '';
-                          });
-                          setState(() {
-                            FFAppState().toolimg = '';
-                          });
+                          FFAppState().toolBuyDate =
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  1665846120000);
+                          FFAppState().chequeName = '';
+                          FFAppState().toolimg = '';
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(

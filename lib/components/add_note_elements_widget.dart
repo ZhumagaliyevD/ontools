@@ -53,7 +53,7 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
           );
         }
         List<NotesRecord> bottomSheetMaterialNotesRecordList = snapshot.data!;
-        // Return an empty Container when the document does not exist.
+        // Return an empty Container when the item does not exist.
         if (snapshot.data!.isEmpty) {
           return Container();
         }
@@ -113,9 +113,7 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                       }
                     }
 
-                    setState(() {
-                      FFAppState().noteIMG = uploadedFileUrl1;
-                    });
+                    FFAppState().noteIMG = uploadedFileUrl1;
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -197,9 +195,7 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                       }
                     }
 
-                    setState(() {
-                      FFAppState().noteIMG = uploadedFileUrl2;
-                    });
+                    FFAppState().noteIMG = uploadedFileUrl2;
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -250,9 +246,7 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                           }
                         }
 
-                        setState(() {
-                          FFAppState().noteIMG = FFAppState().noteIMG;
-                        });
+                        FFAppState().noteIMG = FFAppState().noteIMG;
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
@@ -291,9 +285,7 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                 if (FFAppState().isCheckbox == false)
                   InkWell(
                     onTap: () async {
-                      setState(() {
-                        FFAppState().isCheckbox = true;
-                      });
+                      FFAppState().isCheckbox = true;
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -338,9 +330,7 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                 if (FFAppState().isCheckbox == true)
                   InkWell(
                     onTap: () async {
-                      setState(() {
-                        FFAppState().isCheckbox = false;
-                      });
+                      FFAppState().isCheckbox = false;
                       Navigator.pop(context);
                     },
                     child: Container(

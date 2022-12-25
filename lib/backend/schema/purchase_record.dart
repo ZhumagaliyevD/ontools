@@ -25,6 +25,8 @@ abstract class PurchaseRecord
   @BuiltValueField(wireName: 'created_at')
   DateTime? get createdAt;
 
+  String? get storeAddress;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -32,7 +34,8 @@ abstract class PurchaseRecord
   static void _initializeBuilder(PurchaseRecordBuilder builder) => builder
     ..toolName = ''
     ..chqueImg = ''
-    ..chequeName = '';
+    ..chequeName = ''
+    ..storeAddress = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('purchase');
@@ -62,6 +65,7 @@ Map<String, dynamic> createPurchaseRecordData({
   DateTime? buyDate,
   String? chequeName,
   DateTime? createdAt,
+  String? storeAddress,
 }) {
   final firestoreData = serializers.toFirestore(
     PurchaseRecord.serializer,
@@ -72,7 +76,8 @@ Map<String, dynamic> createPurchaseRecordData({
         ..createdBy = createdBy
         ..buyDate = buyDate
         ..chequeName = chequeName
-        ..createdAt = createdAt,
+        ..createdAt = createdAt
+        ..storeAddress = storeAddress,
     ),
   );
 

@@ -2,13 +2,10 @@ import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../backend/firebase_storage/storage.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_place_picker.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../flutter_flow/place.dart';
 import '../flutter_flow/upload_media.dart';
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,29 +26,38 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
   TextEditingController? usernameController;
   TextEditingController? industryController;
   TextEditingController? specialityController;
-  TextEditingController? textController4;
-  var placePickerValue = FFPlace();
+  TextEditingController? phoneController;
+  TextEditingController? countryController;
+  TextEditingController? cityController;
   DateTime? datePicked;
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
+    cityController = TextEditingController(
+        text: valueOrDefault(currentUserDocument?.city, ''));
+    countryController = TextEditingController(
+        text: valueOrDefault(currentUserDocument?.country, ''));
     industryController = TextEditingController(
         text: valueOrDefault(currentUserDocument?.industry, ''));
     usernameController = TextEditingController(text: currentUserDisplayName);
     specialityController = TextEditingController(
         text: valueOrDefault(currentUserDocument?.specialty, ''));
-    textController4 = TextEditingController(text: currentPhoneNumber);
+    phoneController = TextEditingController(text: currentPhoneNumber);
   }
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
+    cityController?.dispose();
+    countryController?.dispose();
     industryController?.dispose();
     usernameController?.dispose();
     specialityController?.dispose();
-    textController4?.dispose();
+    phoneController?.dispose();
     super.dispose();
   }
 
@@ -76,15 +82,11 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
             size: 30,
           ),
           onPressed: () async {
-            setState(() {
-              FFAppState().birthday =
-                  DateTime.fromMillisecondsSinceEpoch(1665846180000);
-              FFAppState().address = LatLng(40.18597, 44.515109);
-            });
-            setState(() {
-              FFAppState().profileimg =
-                  'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png';
-            });
+            FFAppState().birthday =
+                DateTime.fromMillisecondsSinceEpoch(1665846180000);
+            FFAppState().address = LatLng(40.18597, 44.515109);
+            FFAppState().profileimg =
+                'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png';
             context.pop();
           },
         ),
@@ -98,7 +100,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
       ),
       body: SafeArea(
         child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
           child: Container(
             width: MediaQuery.of(context).size.width,
             child: Form(
@@ -157,9 +159,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                             }
                           }
 
-                          setState(() {
-                            FFAppState().profileimg = uploadedFileUrl;
-                          });
+                          FFAppState().profileimg = uploadedFileUrl;
                         },
                         child: Container(
                           width: 80,
@@ -315,10 +315,94 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
                     child: AuthUserStreamWidget(
                       child: TextFormField(
-                        controller: textController4,
+                        controller: phoneController,
                         obscureText: false,
                         decoration: InputDecoration(
                           labelText: 'Номер телефона',
+                          hintText: '+7 (700) 123-45-67',
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).lineColor,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).lineColor,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        style: FlutterFlowTheme.of(context).bodyText1,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                    child: AuthUserStreamWidget(
+                      child: TextFormField(
+                        controller: countryController,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          labelText: 'Страна',
+                          hintText: '+7 (700) 123-45-67',
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).lineColor,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).lineColor,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        style: FlutterFlowTheme.of(context).bodyText1,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                    child: AuthUserStreamWidget(
+                      child: TextFormField(
+                        controller: cityController,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          labelText: 'Город',
                           hintText: '+7 (700) 123-45-67',
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -362,82 +446,6 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
                           child: Text(
-                            'Мой город',
-                            style:
-                                FlutterFlowTheme.of(context).bodyText1.override(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                    ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 2, 0, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: FlutterFlowTheme.of(context)
-                                          .lineColor,
-                                    ),
-                                  ),
-                                  alignment: AlignmentDirectional(-1, 0),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        12, 0, 0, 0),
-                                    child: Text(
-                                      '@address',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText1,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              FlutterFlowPlacePicker(
-                                iOSGoogleMapsApiKey: '',
-                                androidGoogleMapsApiKey: '',
-                                webGoogleMapsApiKey: '',
-                                onSelect: (place) async {
-                                  setState(() => placePickerValue = place);
-                                },
-                                defaultText: '',
-                                icon: Icon(
-                                  Icons.place,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  size: 24,
-                                ),
-                                buttonOptions: FFButtonOptions(
-                                  width: 50,
-                                  height: 50,
-                                  color: Colors.transparent,
-                                  textStyle:
-                                      FlutterFlowTheme.of(context).subtitle1,
-                                  elevation: 0,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
-                          child: Text(
                             'Дата рождения',
                             style:
                                 FlutterFlowTheme.of(context).bodyText1.override(
@@ -470,9 +478,7 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                           );
                         }
                         if (!(datePicked == null)) {
-                          setState(() {
-                            FFAppState().birthday = datePicked;
-                          });
+                          FFAppState().birthday = datePicked;
                         }
                       },
                       child: Container(
@@ -515,16 +521,14 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                           );
                           await currentUserReference!.update(userUpdateData);
                         }
-                        if (!(placePickerValue == null)) {
-                          final userUpdateData = createUserRecordData();
-                          await currentUserReference!.update(userUpdateData);
-                        }
 
                         final userUpdateData = createUserRecordData(
                           displayName: usernameController!.text,
-                          phoneNumber: textController4!.text,
+                          phoneNumber: phoneController!.text,
                           specialty: specialityController!.text,
                           industry: industryController!.text,
+                          country: countryController!.text,
+                          city: cityController!.text,
                         );
                         await currentUserReference!.update(userUpdateData);
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -539,16 +543,11 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                             backgroundColor: Color(0x00000000),
                           ),
                         );
-                        setState(() {
-                          FFAppState().birthday =
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  1665846180000);
-                          FFAppState().address = LatLng(40.18597, 44.515109);
-                        });
-                        setState(() {
-                          FFAppState().profileimg =
-                              'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png';
-                        });
+                        FFAppState().birthday =
+                            DateTime.fromMillisecondsSinceEpoch(1665846180000);
+                        FFAppState().address = LatLng(40.18597, 44.515109);
+                        FFAppState().profileimg =
+                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png';
 
                         context.pushNamed('ProfileHomePage');
                       },
@@ -575,16 +574,11 @@ class _ProfileEditPageWidgetState extends State<ProfileEditPageWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
                     child: FFButtonWidget(
                       onPressed: () async {
-                        setState(() {
-                          FFAppState().birthday =
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  1665846180000);
-                          FFAppState().address = LatLng(40.18597, 44.515109);
-                        });
-                        setState(() {
-                          FFAppState().profileimg =
-                              'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png';
-                        });
+                        FFAppState().birthday =
+                            DateTime.fromMillisecondsSinceEpoch(1665846180000);
+                        FFAppState().address = LatLng(40.18597, 44.515109);
+                        FFAppState().profileimg =
+                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/7jg4gg5vbuxs/account.png';
                         GoRouter.of(context).prepareAuthEvent();
                         await signOut();
 

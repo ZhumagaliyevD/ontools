@@ -24,6 +24,7 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
   DateTime? datePicked1;
   DateTime? datePicked2;
   TextEditingController? textController;
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -34,6 +35,7 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     textController?.dispose();
     super.dispose();
   }
@@ -76,7 +78,7 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
           ),
           body: SafeArea(
             child: GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
+              onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -153,10 +155,8 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                             );
                                           }
                                           if (!(datePicked1 == null)) {
-                                            setState(() {
-                                              FFAppState().reportStart =
-                                                  datePicked1;
-                                            });
+                                            FFAppState().reportStart =
+                                                datePicked1;
                                           }
                                         },
                                         child: Container(
@@ -229,10 +229,8 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                             );
                                           }
                                           if (!(datePicked2 == null)) {
-                                            setState(() {
-                                              FFAppState().reportEnd =
-                                                  datePicked2;
-                                            });
+                                            FFAppState().reportEnd =
+                                                datePicked2;
                                           }
                                         },
                                         child: Container(

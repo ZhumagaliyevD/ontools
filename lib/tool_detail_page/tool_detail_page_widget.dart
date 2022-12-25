@@ -6,7 +6,6 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/upload_media.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -33,6 +32,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
   TextEditingController? toolNameController;
   TextEditingController? shopNameController;
   TextEditingController? priceController;
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -40,9 +40,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      setState(() {
-        FFAppState().viewPhoto = false;
-      });
+      FFAppState().viewPhoto = false;
     });
 
     descriptionController =
@@ -55,6 +53,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     descriptionController?.dispose();
     toolNameController?.dispose();
     shopNameController?.dispose();
@@ -99,14 +98,10 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                setState(() {
-                  FFAppState().toolBuyDate =
-                      DateTime.fromMillisecondsSinceEpoch(1665846120000);
-                  FFAppState().toolimg = '';
-                });
-                setState(() {
-                  FFAppState().chequeName = '';
-                });
+                FFAppState().toolBuyDate =
+                    DateTime.fromMillisecondsSinceEpoch(1665846120000);
+                FFAppState().toolimg = '';
+                FFAppState().chequeName = '';
                 context.pop();
               },
             ),
@@ -149,7 +144,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
             elevation: 0,
           ),
           body: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
+            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
             child: Stack(
               children: [
                 SingleChildScrollView(
@@ -167,9 +162,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                 .secondaryBackground,
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: CachedNetworkImageProvider(
-                                FFAppState().toolimg,
-                              ),
+                              image: Image.network(
+                                widget.tool!.photo!,
+                              ).image,
                             ),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
@@ -343,9 +338,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                     0, 10, 0, 10),
                                 child: InkWell(
                                   onTap: () async {
-                                    setState(() {
-                                      FFAppState().viewPhoto = true;
-                                    });
+                                    FFAppState().viewPhoto = true;
                                   },
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -439,10 +432,8 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                               }
                                             }
 
-                                            setState(() {
-                                              FFAppState().chequeName =
-                                                  'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
-                                            });
+                                            FFAppState().chequeName =
+                                                'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
 
                                             final toolsUpdateData =
                                                 createToolsRecordData(
@@ -812,9 +803,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                 if (FFAppState().viewPhoto)
                   InkWell(
                     onTap: () async {
-                      setState(() {
-                        FFAppState().viewPhoto = false;
-                      });
+                      FFAppState().viewPhoto = false;
                     },
                     child: Container(
                       width: double.infinity,
@@ -827,9 +816,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                         alignment: AlignmentDirectional(0, 0),
                         child: InkWell(
                           onTap: () async {
-                            setState(() {
-                              FFAppState().viewPhoto = false;
-                            });
+                            FFAppState().viewPhoto = false;
                           },
                           child: Image.network(
                             toolDetailPageToolsRecord.photo!,

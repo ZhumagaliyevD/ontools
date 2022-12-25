@@ -71,6 +71,7 @@ class FFChatManager {
   static Map<String, List<ChatMessagesRecord>> _chatMessagesCache = {};
   // Keep a map from user uid to the respective chat document reference.
   static Map<String, DocumentReference> _userChats = {};
+  static DocumentReference? _currentUser;
 
   static FFChatManager? _instance;
   static FFChatManager get instance => _instance ??= FFChatManager._();
@@ -153,7 +154,12 @@ class FFChatManager {
   Future<DocumentReference> _getChatReference(
     DocumentReference otherUser,
   ) async {
-    _userChats.clear();
+    // Clear the cached user chats in the event of a new user login.
+    if (_currentUser != currentUserReference) {
+      _userChats.clear();
+      _currentUser = currentUserReference;
+    }
+
     var chatRef = _userChats[otherUser.id];
     if (chatRef != null) {
       return chatRef;
@@ -175,8 +181,17 @@ class FFChatManager {
       _userChats[otherUser.id] = chat.first.reference;
       return chat.first.reference;
     }
-    // Otherwise, create a chat between these two users.
+    // Otherwise, ensure that in the meantime (while checking existence) the
+    // chat reference has not already been created by another call. In this
+    // case, it's safer to wait a second to ensure the document was created.
+    chatRef = _userChats[otherUser.id];
+    if (chatRef != null) {
+      await Future.delayed(Duration(seconds: 1));
+      return chatRef;
+    }
+    // Finally, create and cache a chat between these two users.
     chatRef = ChatsRecord.collection.doc();
+    _userChats[otherUser.id] = chatRef;
     await chatRef.set({
       ...createChatsRecordData(
         userA: users.first,

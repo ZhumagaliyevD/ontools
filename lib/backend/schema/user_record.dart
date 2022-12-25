@@ -40,6 +40,10 @@ abstract class UserRecord implements Built<UserRecord, UserRecordBuilder> {
 
   bool? get isCompleteTrial;
 
+  String? get city;
+
+  String? get country;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -54,7 +58,9 @@ abstract class UserRecord implements Built<UserRecord, UserRecordBuilder> {
     ..specialty = ''
     ..industry = ''
     ..permissions = PermissionsStructBuilder()
-    ..isCompleteTrial = false;
+    ..isCompleteTrial = false
+    ..city = ''
+    ..country = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('user');
@@ -90,6 +96,8 @@ Map<String, dynamic> createUserRecordData({
   DateTime? trialStart,
   PermissionsStruct? permissions,
   bool? isCompleteTrial,
+  String? city,
+  String? country,
 }) {
   final firestoreData = serializers.toFirestore(
     UserRecord.serializer,
@@ -107,7 +115,9 @@ Map<String, dynamic> createUserRecordData({
         ..industry = industry
         ..trialStart = trialStart
         ..permissions = PermissionsStructBuilder()
-        ..isCompleteTrial = isCompleteTrial,
+        ..isCompleteTrial = isCompleteTrial
+        ..city = city
+        ..country = country,
     ),
   );
 

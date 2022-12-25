@@ -29,24 +29,28 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
   bool isMediaUploading = false;
   String uploadedFileUrl = '';
 
+  TextEditingController? storeAddressController;
   TextEditingController? toolNameController;
   DateTime? datePicked;
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      setState(() {
-        FFAppState().chequeName = widget.toolPurchase!.chequeName!;
-      });
+      FFAppState().chequeName = widget.toolPurchase!.chequeName!;
+      FFAppState().chequeImg = widget.toolPurchase!.chqueImg!;
+      FFAppState().toolBuyDate = widget.toolPurchase!.buyDate;
     });
   }
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
+    storeAddressController?.dispose();
     toolNameController?.dispose();
     super.dispose();
   }
@@ -88,14 +92,10 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                setState(() {
-                  FFAppState().toolBuyDate =
-                      DateTime.fromMillisecondsSinceEpoch(1665846120000);
-                  FFAppState().toolimg = '';
-                });
-                setState(() {
-                  FFAppState().chequeName = '';
-                });
+                FFAppState().toolBuyDate =
+                    DateTime.fromMillisecondsSinceEpoch(1665846120000);
+                FFAppState().toolimg = '';
+                FFAppState().chequeName = '';
                 context.pop();
               },
             ),
@@ -150,7 +150,7 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
             elevation: 0,
           ),
           body: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
+            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
             child: Form(
               key: formKey,
               autovalidateMode: AutovalidateMode.disabled,
@@ -168,7 +168,53 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                         ),
                         obscureText: false,
                         decoration: InputDecoration(
-                          labelText: 'Tool Name',
+                          labelText: 'Store Name',
+                          hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).lineColor,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).lineColor,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          filled: true,
+                          fillColor:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                        ),
+                        style: FlutterFlowTheme.of(context).bodyText1,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                      child: TextFormField(
+                        controller: storeAddressController ??=
+                            TextEditingController(
+                          text: editPurchasePurchaseRecord.storeAddress,
+                        ),
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          labelText: 'Store Address',
                           hintStyle: FlutterFlowTheme.of(context).bodyText2,
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -213,107 +259,121 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                               FlutterFlowTheme.of(context).secondaryBackground,
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: Row(
+                        child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
-                                child: Text(
-                                  FFAppState().chequeName,
-                                  style: FlutterFlowTheme.of(context).bodyText1,
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        12, 3, 0, 3),
+                                    child: Text(
+                                      FFAppState().chequeName,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            if (uploadedFileUrl != null &&
-                                uploadedFileUrl != '')
-                              FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30,
-                                borderWidth: 1,
-                                buttonSize: 50,
-                                icon: Icon(
-                                  FFIcons.kcrossCircle,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  size: 20,
-                                ),
-                                onPressed: () async {
-                                  final purchaseUpdateData = {
-                                    'chequeName': FieldValue.delete(),
-                                    'chqueImg': FieldValue.delete(),
-                                  };
-                                  await editPurchasePurchaseRecord.reference
-                                      .update(purchaseUpdateData);
-                                  setState(() {
-                                    FFAppState().chequeName = '';
-                                  });
-                                },
-                              ),
-                            if (editPurchasePurchaseRecord.chqueImg == null ||
-                                editPurchasePurchaseRecord.chqueImg == '')
-                              FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30,
-                                borderWidth: 1,
-                                buttonSize: 50,
-                                icon: Icon(
-                                  FFIcons.kfreeIconFontDownload3917330,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  size: 20,
-                                ),
-                                onPressed: () async {
-                                  final selectedMedia =
-                                      await selectMediaWithSourceBottomSheet(
-                                    context: context,
-                                    allowPhoto: true,
-                                  );
-                                  if (selectedMedia != null &&
-                                      selectedMedia.every((m) =>
-                                          validateFileFormat(
-                                              m.storagePath, context))) {
-                                    setState(() => isMediaUploading = true);
-                                    var downloadUrls = <String>[];
-                                    try {
-                                      showUploadMessage(
-                                        context,
-                                        'Uploading file...',
-                                        showLoading: true,
+                                if (FFAppState().chequeName != null &&
+                                    FFAppState().chequeName != '')
+                                  FlutterFlowIconButton(
+                                    borderColor: Colors.transparent,
+                                    borderRadius: 30,
+                                    borderWidth: 1,
+                                    buttonSize: 50,
+                                    icon: Icon(
+                                      FFIcons.kcrossCircle,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      size: 20,
+                                    ),
+                                    onPressed: () async {
+                                      FFAppState().chequeName = '';
+                                      FFAppState().chequeImg = '';
+                                    },
+                                  ),
+                                if (FFAppState().chequeName == null ||
+                                    FFAppState().chequeName == '')
+                                  FlutterFlowIconButton(
+                                    borderColor: Colors.transparent,
+                                    borderRadius: 30,
+                                    borderWidth: 1,
+                                    buttonSize: 50,
+                                    icon: Icon(
+                                      FFIcons.kfreeIconFontDownload3917330,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      size: 20,
+                                    ),
+                                    onPressed: () async {
+                                      final selectedMedia =
+                                          await selectMediaWithSourceBottomSheet(
+                                        context: context,
+                                        allowPhoto: true,
                                       );
-                                      downloadUrls = (await Future.wait(
-                                        selectedMedia.map(
-                                          (m) async => await uploadData(
-                                              m.storagePath, m.bytes),
-                                        ),
-                                      ))
-                                          .where((u) => u != null)
-                                          .map((u) => u!)
-                                          .toList();
-                                    } finally {
-                                      ScaffoldMessenger.of(context)
-                                          .hideCurrentSnackBar();
-                                      isMediaUploading = false;
-                                    }
-                                    if (downloadUrls.length ==
-                                        selectedMedia.length) {
-                                      setState(() =>
-                                          uploadedFileUrl = downloadUrls.first);
-                                      showUploadMessage(context, 'Success!');
-                                    } else {
-                                      setState(() {});
-                                      showUploadMessage(
-                                          context, 'Failed to upload media');
-                                      return;
-                                    }
-                                  }
+                                      if (selectedMedia != null &&
+                                          selectedMedia.every((m) =>
+                                              validateFileFormat(
+                                                  m.storagePath, context))) {
+                                        setState(() => isMediaUploading = true);
+                                        var downloadUrls = <String>[];
+                                        try {
+                                          showUploadMessage(
+                                            context,
+                                            'Uploading file...',
+                                            showLoading: true,
+                                          );
+                                          downloadUrls = (await Future.wait(
+                                            selectedMedia.map(
+                                              (m) async => await uploadData(
+                                                  m.storagePath, m.bytes),
+                                            ),
+                                          ))
+                                              .where((u) => u != null)
+                                              .map((u) => u!)
+                                              .toList();
+                                        } finally {
+                                          ScaffoldMessenger.of(context)
+                                              .hideCurrentSnackBar();
+                                          isMediaUploading = false;
+                                        }
+                                        if (downloadUrls.length ==
+                                            selectedMedia.length) {
+                                          setState(() => uploadedFileUrl =
+                                              downloadUrls.first);
+                                          showUploadMessage(
+                                              context, 'Success!');
+                                        } else {
+                                          setState(() {});
+                                          showUploadMessage(context,
+                                              'Failed to upload media');
+                                          return;
+                                        }
+                                      }
 
-                                  setState(() {
-                                    FFAppState().chequeName =
-                                        'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
-                                  });
-                                },
+                                      FFAppState().chequeName =
+                                          'Cheque:${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
+                                      FFAppState().chequeImg = uploadedFileUrl;
+                                    },
+                                  ),
+                              ],
+                            ),
+                            if (FFAppState().chequeImg != null &&
+                                FFAppState().chequeImg != '')
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.5,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                ),
+                                child: Image.network(
+                                  FFAppState().chequeImg,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                           ],
                         ),
@@ -337,7 +397,7 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         8, 0, 0, 2),
                                     child: Text(
-                                      'Дата покупки',
+                                      'Purchase date',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
@@ -366,9 +426,7 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                                         );
                                       }
                                       if (!(datePicked == null)) {
-                                        setState(() {
-                                          FFAppState().toolBuyDate = datePicked;
-                                        });
+                                        FFAppState().toolBuyDate = datePicked;
                                       }
                                     },
                                     child: Container(
@@ -388,8 +446,8 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             12, 0, 0, 0),
                                         child: Text(
-                                          editPurchasePurchaseRecord.buyDate!
-                                              .toString(),
+                                          dateTimeFormat(
+                                              'yMd', FFAppState().toolBuyDate),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1,
                                         ),
@@ -407,8 +465,10 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                       padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          if (uploadedFileUrl == null ||
-                              uploadedFileUrl == '') {
+                          if ((uploadedFileUrl == null ||
+                                  uploadedFileUrl == '') ||
+                              (FFAppState().chequeName == null ||
+                                  FFAppState().chequeName == '')) {
                             await showDialog(
                               context: context,
                               builder: (alertDialogContext) {
@@ -444,20 +504,17 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
 
                           final purchaseUpdateData = createPurchaseRecordData(
                             chequeName: FFAppState().chequeName,
-                            toolName: toolNameController?.text ?? '',
+                            toolName: storeAddressController?.text ?? '',
                             chqueImg: uploadedFileUrl,
+                            storeAddress: storeAddressController?.text ?? '',
                           );
                           await widget.toolPurchase!.reference
                               .update(purchaseUpdateData);
-                          setState(() {
-                            FFAppState().toolBuyDate =
-                                DateTime.fromMillisecondsSinceEpoch(
-                                    1665846120000);
-                            FFAppState().chequeName = '';
-                          });
-                          setState(() {
-                            FFAppState().toolimg = '';
-                          });
+                          FFAppState().toolBuyDate =
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  1665846120000);
+                          FFAppState().chequeName = '';
+                          FFAppState().toolimg = '';
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(

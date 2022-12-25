@@ -24,26 +24,29 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
   bool isMediaUploading = false;
   String uploadedFileUrl = '';
 
+  TextEditingController? storeAddressController;
   TextEditingController? toolNameController;
   DateTime? datePicked;
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      setState(() {
-        FFAppState().viewPhoto = false;
-      });
+      FFAppState().viewPhoto = false;
     });
 
+    storeAddressController = TextEditingController();
     toolNameController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
+    storeAddressController?.dispose();
     toolNameController?.dispose();
     super.dispose();
   }
@@ -70,14 +73,11 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
           ),
           onPressed: () async {
             context.pop();
-            setState(() {
-              FFAppState().toolimg = '';
-              FFAppState().toolBuyDate =
-                  DateTime.fromMillisecondsSinceEpoch(1665846120000);
-            });
-            setState(() {
-              FFAppState().chequeName = '';
-            });
+            FFAppState().toolimg = '';
+            FFAppState().toolBuyDate =
+                DateTime.fromMillisecondsSinceEpoch(1665846120000);
+            FFAppState().chequeName = '';
+            FFAppState().chequeImg = '';
           },
         ),
         title: Text(
@@ -89,7 +89,7 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
         elevation: 0,
       ),
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: Stack(
           children: [
             Form(
@@ -107,7 +107,51 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
                       autofocus: true,
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Tool name',
+                        labelText: 'Store name',
+                        hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).lineColor,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).lineColor,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0x00000000),
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0x00000000),
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        filled: true,
+                        fillColor:
+                            FlutterFlowTheme.of(context).secondaryBackground,
+                      ),
+                      style: FlutterFlowTheme.of(context).bodyText1,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                    child: TextFormField(
+                      controller: storeAddressController,
+                      autofocus: true,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        labelText: 'Store address',
                         hintStyle: FlutterFlowTheme.of(context).bodyText2,
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -165,9 +209,7 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
                                     onTap: () async {
                                       if (FFAppState().chequeName != null &&
                                           FFAppState().chequeName != '') {
-                                        setState(() {
-                                          FFAppState().viewPhoto = true;
-                                        });
+                                        FFAppState().viewPhoto = true;
                                       }
                                     },
                                     child: Text(
@@ -215,13 +257,9 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
                                     size: 20,
                                   ),
                                   onPressed: () async {
-                                    setState(() {
-                                      FFAppState().chequeName = '';
-                                      FFAppState().chequeImg = '';
-                                    });
-                                    setState(() {
-                                      FFAppState().viewPhoto = false;
-                                    });
+                                    FFAppState().chequeName = '';
+                                    FFAppState().chequeImg = '';
+                                    FFAppState().viewPhoto = false;
                                   },
                                 ),
                               if (FFAppState().chequeName == null ||
@@ -238,55 +276,74 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
                                     size: 20,
                                   ),
                                   onPressed: () async {
-                                    final selectedFile = await selectFile(
-                                        allowedExtensions: ['pdf']);
-                                    if (selectedFile != null) {
+                                    final selectedMedia =
+                                        await selectMediaWithSourceBottomSheet(
+                                      context: context,
+                                      allowPhoto: true,
+                                    );
+                                    if (selectedMedia != null &&
+                                        selectedMedia.every((m) =>
+                                            validateFileFormat(
+                                                m.storagePath, context))) {
                                       setState(() => isMediaUploading = true);
-                                      String? downloadUrl;
+                                      var downloadUrls = <String>[];
                                       try {
                                         showUploadMessage(
                                           context,
                                           'Uploading file...',
                                           showLoading: true,
                                         );
-                                        downloadUrl = await uploadData(
-                                            selectedFile.storagePath,
-                                            selectedFile.bytes);
+                                        downloadUrls = (await Future.wait(
+                                          selectedMedia.map(
+                                            (m) async => await uploadData(
+                                                m.storagePath, m.bytes),
+                                          ),
+                                        ))
+                                            .where((u) => u != null)
+                                            .map((u) => u!)
+                                            .toList();
                                       } finally {
                                         ScaffoldMessenger.of(context)
                                             .hideCurrentSnackBar();
                                         isMediaUploading = false;
                                       }
-                                      if (downloadUrl != null) {
-                                        setState(() =>
-                                            uploadedFileUrl = downloadUrl!);
-                                        showUploadMessage(
-                                          context,
-                                          'Success!',
-                                        );
+                                      if (downloadUrls.length ==
+                                          selectedMedia.length) {
+                                        setState(() => uploadedFileUrl =
+                                            downloadUrls.first);
+                                        showUploadMessage(context, 'Success!');
                                       } else {
                                         setState(() {});
                                         showUploadMessage(
-                                          context,
-                                          'Failed to upload file',
-                                        );
+                                            context, 'Failed to upload media');
                                         return;
                                       }
                                     }
 
                                     if (uploadedFileUrl != null &&
                                         uploadedFileUrl != '') {
-                                      setState(() {
-                                        FFAppState().chequeName =
-                                            'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
-                                        FFAppState().chequeImg =
-                                            uploadedFileUrl;
-                                      });
+                                      FFAppState().chequeName =
+                                          'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
+                                      FFAppState().chequeImg = uploadedFileUrl;
                                     }
                                   },
                                 ),
                             ],
                           ),
+                          if (FFAppState().chequeImg != null &&
+                              FFAppState().chequeImg != '')
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              height: MediaQuery.of(context).size.height * 0.5,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                              ),
+                              child: Image.network(
+                                uploadedFileUrl,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -308,7 +365,7 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       8, 0, 0, 2),
                                   child: Text(
-                                    'Дата покупки',
+                                    'Date of purchase',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyText1
                                         .override(
@@ -337,9 +394,7 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
                                       );
                                     }
                                     if (!(datePicked == null)) {
-                                      setState(() {
-                                        FFAppState().toolBuyDate = datePicked;
-                                      });
+                                      FFAppState().toolBuyDate = datePicked;
                                     }
                                   },
                                   child: Container(
@@ -390,10 +445,28 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
                             toolName: toolNameController!.text,
                             chqueImg: uploadedFileUrl,
                             buyDate: datePicked,
+                            storeAddress: storeAddressController!.text,
                           );
                           await PurchaseRecord.collection
                               .doc()
                               .set(purchaseCreateData);
+                          FFAppState().toolimg = '';
+                          FFAppState().chequeName = '';
+                          FFAppState().viewPhoto = false;
+                          FFAppState().chequeImg = '';
+                          FFAppState().chequeImg = '';
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Purchase added',
+                                style: FlutterFlowTheme.of(context).bodyText1,
+                              ),
+                              duration: Duration(milliseconds: 4000),
+                              backgroundColor: Color(0x00000000),
+                            ),
+                          );
+
+                          context.pushNamed('MyPurchases');
                         } else {
                           await showDialog(
                             context: context,
@@ -412,27 +485,8 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
                               );
                             },
                           );
+                          return;
                         }
-
-                        setState(() {
-                          FFAppState().toolimg = '';
-                          FFAppState().chequeName = '';
-                        });
-                        setState(() {
-                          FFAppState().chequeImg = '';
-                        });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Purchase added',
-                              style: FlutterFlowTheme.of(context).bodyText1,
-                            ),
-                            duration: Duration(milliseconds: 4000),
-                            backgroundColor: Color(0x00000000),
-                          ),
-                        );
-
-                        context.pushNamed('MyPurchases');
                       },
                       text: 'Save',
                       options: FFButtonOptions(
@@ -462,9 +516,7 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
                 (FFAppState().chequeImg != ''))
               InkWell(
                 onTap: () async {
-                  setState(() {
-                    FFAppState().viewPhoto = false;
-                  });
+                  FFAppState().viewPhoto = false;
                 },
                 child: Container(
                   width: double.infinity,
@@ -476,9 +528,7 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
                     alignment: AlignmentDirectional(0, 0),
                     child: InkWell(
                       onTap: () async {
-                        setState(() {
-                          FFAppState().viewPhoto = false;
-                        });
+                        FFAppState().viewPhoto = false;
                       },
                       child: Image.network(
                         FFAppState().chequeImg,

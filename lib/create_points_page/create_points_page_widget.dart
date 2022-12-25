@@ -30,8 +30,9 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
   TextEditingController? noteTitleController;
   String? choiceChipsValue;
   PhotoNotePointRecord? createdPoint;
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     noteDescriptionController?.dispose();
     noteTitleController?.dispose();
     optionController?.dispose();
@@ -71,7 +73,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
           );
         }
         List<NotesRecord> createPointsPageNotesRecordList = snapshot.data!;
-        // Return an empty Container when the document does not exist.
+        // Return an empty Container when the item does not exist.
         if (snapshot.data!.isEmpty) {
           return Container();
         }
@@ -96,9 +98,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                setState(() {
-                  FFAppState().noteIMG = '';
-                });
+                FFAppState().noteIMG = '';
                 context.pop();
               },
             ),
@@ -131,9 +131,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                       'note_points': FFAppState().photoNotePoints,
                     };
                     await NotesRecord.collection.doc().set(notesCreateData);
-                    setState(() {
-                      FFAppState().photoNotePoints = [];
-                    });
+                    FFAppState().photoNotePoints = [];
                   } else {
                     await showDialog(
                       context: context,
@@ -154,10 +152,8 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                     return;
                   }
 
-                  setState(() {
-                    FFAppState().noteIMG = '';
-                    FFAppState().photoNotePoints = [];
-                  });
+                  FFAppState().noteIMG = '';
+                  FFAppState().photoNotePoints = [];
 
                   context.pushNamed('Notes');
                 },
@@ -167,7 +163,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
             elevation: 0,
           ),
           body: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
+            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -597,16 +593,13 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                         .getDocumentFromData(
                                             photoNotePointCreateData,
                                             photoNotePointRecordReference);
-                                    setState(() {
-                                      setState(() => FFAppState()
-                                          .addToPhotoNotePoints(
-                                              createdPoint!.reference));
-                                      FFAppState().comment = '';
-                                    });
-                                    setState(() {
-                                      FFAppState().dx = 0.0;
-                                      FFAppState().dy = 0.0;
-                                    });
+                                    FFAppState().addToPhotoNotePoints(
+                                        createdPoint!.reference);
+                                    FFAppState().comment = '';
+                                    FFAppState().dx = 0.0;
+                                    FFAppState().dy = 0.0;
+
+                                    setState(() {});
                                   },
                                 ),
                               ),

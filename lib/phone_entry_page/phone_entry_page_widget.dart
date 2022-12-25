@@ -16,8 +16,9 @@ class PhoneEntryPageWidget extends StatefulWidget {
 
 class _PhoneEntryPageWidgetState extends State<PhoneEntryPageWidget> {
   TextEditingController? phoneLoginController;
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -27,6 +28,7 @@ class _PhoneEntryPageWidgetState extends State<PhoneEntryPageWidget> {
 
   @override
   void dispose() {
+    _unfocusNode.dispose();
     phoneLoginController?.dispose();
     super.dispose();
   }
@@ -39,7 +41,7 @@ class _PhoneEntryPageWidgetState extends State<PhoneEntryPageWidget> {
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 1,
@@ -207,7 +209,10 @@ class _PhoneEntryPageWidgetState extends State<PhoneEntryPageWidget> {
                                             phoneNumber: phoneNumberVal,
                                             onCodeSent: () async {
                                               context.goNamedAuth(
-                                                  'PhoneVerify', mounted);
+                                                'PhoneVerify',
+                                                mounted,
+                                                ignoreRedirect: true,
+                                              );
                                             },
                                           );
                                         },
