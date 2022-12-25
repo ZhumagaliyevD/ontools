@@ -27,6 +27,7 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
   TextEditingController? storeAddressController;
   TextEditingController? toolNameController;
   DateTime? datePicked;
+  TextEditingController? priceController;
   final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
@@ -39,6 +40,7 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
       FFAppState().viewPhoto = false;
     });
 
+    priceController = TextEditingController();
     storeAddressController = TextEditingController();
     toolNameController = TextEditingController();
   }
@@ -46,6 +48,7 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
   @override
   void dispose() {
     _unfocusNode.dispose();
+    priceController?.dispose();
     storeAddressController?.dispose();
     toolNameController?.dispose();
     super.dispose();
@@ -365,7 +368,7 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       8, 0, 0, 2),
                                   child: Text(
-                                    'Date of purchase',
+                                    'Purchase date',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyText1
                                         .override(
@@ -425,6 +428,76 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
                             ),
                           ),
                         ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(6, 0, 0, 0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      8, 0, 0, 2),
+                                  child: Text(
+                                    'Price written on cheque',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyText1
+                                        .override(
+                                          fontFamily: 'Montserrat',
+                                          fontSize: 12,
+                                        ),
+                                  ),
+                                ),
+                                TextFormField(
+                                  controller: priceController,
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                    hintText: '9999',
+                                    hintStyle:
+                                        FlutterFlowTheme.of(context).bodyText2,
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context)
+                                            .lineColor,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context)
+                                            .lineColor,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    filled: true,
+                                    fillColor: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                  ),
+                                  style: FlutterFlowTheme.of(context).bodyText1,
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                          signed: true, decimal: true),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -446,6 +519,7 @@ class _AddPurchaseWidgetState extends State<AddPurchaseWidget> {
                             chqueImg: uploadedFileUrl,
                             buyDate: datePicked,
                             storeAddress: storeAddressController!.text,
+                            price: double.tryParse(priceController!.text),
                           );
                           await PurchaseRecord.collection
                               .doc()

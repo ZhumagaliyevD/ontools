@@ -21,6 +21,8 @@ class PurchaseDetailWidget extends StatefulWidget {
 }
 
 class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
+  TextEditingController? priceController;
+  TextEditingController? toolName2Controller;
   TextEditingController? toolNameController;
   final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -37,6 +39,8 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
   @override
   void dispose() {
     _unfocusNode.dispose();
+    priceController?.dispose();
+    toolName2Controller?.dispose();
     toolNameController?.dispose();
     super.dispose();
   }
@@ -142,7 +146,7 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                           readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
-                            labelText: 'Tool Name',
+                            labelText: 'Store Name',
                             hintStyle: FlutterFlowTheme.of(context).bodyText2,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -181,71 +185,127 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(8, 0, 0, 2),
-                              child: Text(
-                                'Добавить чек',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyText1
-                                    .override(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                    ),
+                        child: TextFormField(
+                          controller: toolName2Controller ??=
+                              TextEditingController(
+                            text: purchaseDetailPurchaseRecord.storeAddress,
+                          ),
+                          readOnly: true,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'Store Address',
+                            hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).lineColor,
+                                width: 1,
                               ),
+                              borderRadius: BorderRadius.circular(16),
                             ),
-                            Container(
-                              width: double.infinity,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                borderRadius: BorderRadius.circular(16),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).lineColor,
+                                width: 1,
                               ),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0, 10, 0, 10),
-                                child: InkWell(
-                                  onTap: () async {
-                                    FFAppState().viewPhoto = true;
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  12, 0, 0, 0),
-                                          child: Text(
-                                            valueOrDefault<String>(
-                                              purchaseDetailPurchaseRecord
-                                                  .chequeName,
-                                              'cheque',
-                                            ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText1
-                                                .override(
-                                                  fontFamily: 'Montserrat',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryColor,
-                                                  decoration:
-                                                      TextDecoration.underline,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            filled: true,
+                            fillColor: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                          ),
+                          style: FlutterFlowTheme.of(context).bodyText1,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(14, 10, 14, 0),
+                        child: Container(
+                          width: 100,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 10, 0, 10),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          FFAppState().viewPhoto = true;
+                                        },
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                valueOrDefault<String>(
+                                                  purchaseDetailPurchaseRecord
+                                                      .chequeName,
+                                                  'cheque',
                                                 ),
-                                          ),
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyText1
+                                                    .override(
+                                                      fontFamily: 'Montserrat',
+                                                      color: Colors.black,
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                    ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.5,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 0, 15),
+                                        child: Image.network(
+                                          FFAppState().chequeImg,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                       Padding(
@@ -266,7 +326,7 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           8, 0, 0, 2),
                                       child: Text(
-                                        'Дата покупки',
+                                        'Purchase date',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1
                                             .override(
@@ -301,6 +361,85 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                                               .bodyText1,
                                         ),
                                       ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(6, 0, 0, 0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          8, 0, 0, 2),
+                                      child: Text(
+                                        'Price written on cheque',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText1
+                                            .override(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 12,
+                                            ),
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      controller: priceController ??=
+                                          TextEditingController(
+                                        text: purchaseDetailPurchaseRecord.price
+                                            ?.toString(),
+                                      ),
+                                      autofocus: true,
+                                      readOnly: true,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        hintStyle: FlutterFlowTheme.of(context)
+                                            .bodyText2,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .lineColor,
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .lineColor,
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                        filled: true,
+                                        fillColor: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1,
+                                      keyboardType: TextInputType.number,
                                     ),
                                   ],
                                 ),

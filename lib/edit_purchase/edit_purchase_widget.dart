@@ -32,6 +32,7 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
   TextEditingController? storeAddressController;
   TextEditingController? toolNameController;
   DateTime? datePicked;
+  TextEditingController? priceController;
   final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
@@ -45,11 +46,15 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
       FFAppState().chequeImg = widget.toolPurchase!.chqueImg!;
       FFAppState().toolBuyDate = widget.toolPurchase!.buyDate;
     });
+
+    priceController =
+        TextEditingController(text: widget.toolPurchase!.price?.toString());
   }
 
   @override
   void dispose() {
     _unfocusNode.dispose();
+    priceController?.dispose();
     storeAddressController?.dispose();
     toolNameController?.dispose();
     super.dispose();
@@ -458,6 +463,76 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                               ),
                             ),
                           ),
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(6, 0, 0, 0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        8, 0, 0, 2),
+                                    child: Text(
+                                      'Price written on cheque',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1
+                                          .override(
+                                            fontFamily: 'Montserrat',
+                                            fontSize: 12,
+                                          ),
+                                    ),
+                                  ),
+                                  TextFormField(
+                                    controller: priceController,
+                                    autofocus: true,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .lineColor,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .lineColor,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      filled: true,
+                                      fillColor: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                    ),
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyText1,
+                                    keyboardType: TextInputType.number,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -507,6 +582,7 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                             toolName: storeAddressController?.text ?? '',
                             chqueImg: uploadedFileUrl,
                             storeAddress: storeAddressController?.text ?? '',
+                            price: double.tryParse(priceController!.text),
                           );
                           await widget.toolPurchase!.reference
                               .update(purchaseUpdateData);
@@ -515,6 +591,7 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                                   1665846120000);
                           FFAppState().chequeName = '';
                           FFAppState().toolimg = '';
+                          FFAppState().chequeImg = '';
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
