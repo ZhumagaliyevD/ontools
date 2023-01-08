@@ -98,12 +98,16 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                FFAppState().noteIMG = '';
+                FFAppState().update(() {
+                  FFAppState().noteIMG = '';
+                });
                 context.pop();
               },
             ),
             title: Text(
-              'Создать заметку',
+              FFLocalizations.of(context).getText(
+                'yre4l98x' /* Создать заметку */,
+              ),
               style: FlutterFlowTheme.of(context).subtitle1,
             ),
             actions: [
@@ -131,7 +135,9 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                       'note_points': FFAppState().photoNotePoints,
                     };
                     await NotesRecord.collection.doc().set(notesCreateData);
-                    FFAppState().photoNotePoints = [];
+                    FFAppState().update(() {
+                      FFAppState().photoNotePoints = [];
+                    });
                   } else {
                     await showDialog(
                       context: context,
@@ -152,8 +158,10 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                     return;
                   }
 
-                  FFAppState().noteIMG = '';
-                  FFAppState().photoNotePoints = [];
+                  FFAppState().update(() {
+                    FFAppState().noteIMG = '';
+                    FFAppState().photoNotePoints = [];
+                  });
 
                   context.pushNamed('Notes');
                 },
@@ -184,7 +192,9 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                               controller: noteTitleController,
                               obscureText: false,
                               decoration: InputDecoration(
-                                labelText: 'Название заметки',
+                                labelText: FFLocalizations.of(context).getText(
+                                  'r9rfk6rh' /* Название заметки */,
+                                ),
                                 hintStyle:
                                     FlutterFlowTheme.of(context).bodyText2,
                                 enabledBorder: OutlineInputBorder(
@@ -222,7 +232,9 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                               style: FlutterFlowTheme.of(context).bodyText2,
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
-                                  return 'Обязательно к заполнению';
+                                  return FFLocalizations.of(context).getText(
+                                    '0j7vnj1w' /* Обязательно к заполнению */,
+                                  );
                                 }
 
                                 return null;
@@ -237,7 +249,10 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                 controller: noteDescriptionController,
                                 obscureText: false,
                                 decoration: InputDecoration(
-                                  labelText: 'Начните писать',
+                                  labelText:
+                                      FFLocalizations.of(context).getText(
+                                    'opxmprue' /* Начните писать */,
+                                  ),
                                   hintStyle:
                                       FlutterFlowTheme.of(context).bodyText2,
                                   enabledBorder: OutlineInputBorder(
@@ -422,7 +437,10 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                     controller: optionController,
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      hintText: 'Начните писать',
+                                      hintText:
+                                          FFLocalizations.of(context).getText(
+                                        'ua78911f' /* Начните писать */,
+                                      ),
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodyText2,
                                       enabledBorder: OutlineInputBorder(
@@ -508,7 +526,9 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                         setState(() {});
                                       },
                                       child: Text(
-                                        '+ Новый пункт',
+                                        FFLocalizations.of(context).getText(
+                                          'zsp9mljc' /* + Новый пункт */,
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1,
                                       ),
@@ -519,10 +539,22 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                             ),
                           if (uploadedFileUrl != null && uploadedFileUrl != '')
                             FlutterFlowChoiceChips(
-                              initiallySelected: ['Comment'],
+                              initiallySelected: [
+                                FFLocalizations.of(context).getText(
+                                  'w5yq23iy' /* Comment */,
+                                )
+                              ],
                               options: [
-                                ChipData('Draw', FontAwesomeIcons.pen),
-                                ChipData('Comment', Icons.add_comment)
+                                ChipData(
+                                    FFLocalizations.of(context).getText(
+                                      'b56avqfi' /* Draw */,
+                                    ),
+                                    FontAwesomeIcons.pen),
+                                ChipData(
+                                    FFLocalizations.of(context).getText(
+                                      'i89uw3y1' /* Comment */,
+                                    ),
+                                    Icons.add_comment)
                               ],
                               onChanged: (val) =>
                                   setState(() => choiceChipsValue = val?.first),
@@ -593,11 +625,15 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                         .getDocumentFromData(
                                             photoNotePointCreateData,
                                             photoNotePointRecordReference);
-                                    FFAppState().addToPhotoNotePoints(
-                                        createdPoint!.reference);
-                                    FFAppState().comment = '';
-                                    FFAppState().dx = 0.0;
-                                    FFAppState().dy = 0.0;
+                                    FFAppState().update(() {
+                                      FFAppState().addToPhotoNotePoints(
+                                          createdPoint!.reference);
+                                      FFAppState().comment = '';
+                                    });
+                                    FFAppState().update(() {
+                                      FFAppState().dx = 0.0;
+                                      FFAppState().dy = 0.0;
+                                    });
 
                                     setState(() {});
                                   },
@@ -618,7 +654,11 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                             ),
                           if (uploadedFileUrl == null || uploadedFileUrl == '')
                             Text(
-                              'Пожалуйста добавьте фото,\nНажмите на + внизу',
+                              FFLocalizations.of(context).getText(
+                                '0w2weuw5' /* Пожалуйста добавьте фото,
+Нажм... */
+                                ,
+                              ),
                               textAlign: TextAlign.center,
                               style: FlutterFlowTheme.of(context)
                                   .bodyText1

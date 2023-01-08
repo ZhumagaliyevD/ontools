@@ -42,7 +42,9 @@ class _AllChatsWidgetState extends State<AllChatsWidget> {
           },
         ),
         title: Text(
-          'Все сообщения',
+          FFLocalizations.of(context).getText(
+            'q3pbrm0z' /* Все сообщения */,
+          ),
           style: FlutterFlowTheme.of(context).bodyText1.override(
                 fontFamily: 'Montserrat',
                 color: Colors.black,

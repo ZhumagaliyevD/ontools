@@ -113,7 +113,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                       }
                     }
 
-                    FFAppState().noteIMG = uploadedFileUrl1;
+                    FFAppState().update(() {
+                      FFAppState().noteIMG = uploadedFileUrl1;
+                    });
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -146,7 +148,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                           child: Text(
-                            'Сделать снимок',
+                            FFLocalizations.of(context).getText(
+                              'j5x81b84' /* Сделать снимок */,
+                            ),
                             style: FlutterFlowTheme.of(context).bodyText1,
                           ),
                         ),
@@ -195,7 +199,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                       }
                     }
 
-                    FFAppState().noteIMG = uploadedFileUrl2;
+                    FFAppState().update(() {
+                      FFAppState().noteIMG = uploadedFileUrl2;
+                    });
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -246,7 +252,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                           }
                         }
 
-                        FFAppState().noteIMG = FFAppState().noteIMG;
+                        FFAppState().update(() {
+                          FFAppState().noteIMG = FFAppState().noteIMG;
+                        });
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
@@ -273,7 +281,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                             child: Text(
-                              'Выбрать изображение',
+                              FFLocalizations.of(context).getText(
+                                'gnhcecgm' /* Выбрать изображение */,
+                              ),
                               style: FlutterFlowTheme.of(context).bodyText1,
                             ),
                           ),
@@ -285,7 +295,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                 if (FFAppState().isCheckbox == false)
                   InkWell(
                     onTap: () async {
-                      FFAppState().isCheckbox = true;
+                      FFAppState().update(() {
+                        FFAppState().isCheckbox = true;
+                      });
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -319,7 +331,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                             child: Text(
-                              'Преобразовать в список',
+                              FFLocalizations.of(context).getText(
+                                '0wcpxcqh' /* Преобразовать в список */,
+                              ),
                               style: FlutterFlowTheme.of(context).bodyText1,
                             ),
                           ),
@@ -330,7 +344,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                 if (FFAppState().isCheckbox == true)
                   InkWell(
                     onTap: () async {
-                      FFAppState().isCheckbox = false;
+                      FFAppState().update(() {
+                        FFAppState().isCheckbox = false;
+                      });
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -364,7 +380,9 @@ class _AddNoteElementsWidgetState extends State<AddNoteElementsWidget> {
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                             child: Text(
-                              'Обычный список',
+                              FFLocalizations.of(context).getText(
+                                '8nxjr8ao' /* Обычный список */,
+                              ),
                               style: FlutterFlowTheme.of(context).bodyText1,
                             ),
                           ),

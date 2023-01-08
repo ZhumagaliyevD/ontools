@@ -46,7 +46,9 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
         onPressed: () async {
           context.pushNamed('AddNewToolPage');
 
-          FFAppState().SearchList = false;
+          FFAppState().update(() {
+            FFAppState().SearchList = false;
+          });
         },
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         elevation: 8,
@@ -77,7 +79,9 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
           },
         ),
         title: Text(
-          'Маркетплэйс',
+          FFLocalizations.of(context).getText(
+            'q7tgaacn' /* Маркетплэйс */,
+          ),
           style: FlutterFlowTheme.of(context).subtitle1,
         ),
         actions: [
@@ -179,7 +183,10 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        hintText: 'Поиск',
+                                        hintText:
+                                            FFLocalizations.of(context).getText(
+                                          '1swglqle' /* Поиск */,
+                                        ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
@@ -235,9 +242,13 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                       setState(() {
                                         marketSearchController?.clear();
                                       });
-                                      FFAppState().MarketplaceSearch = '';
-                                      FFAppState().filterShopName = '';
-                                      FFAppState().isCheque = '';
+                                      FFAppState().update(() {
+                                        FFAppState().MarketplaceSearch = '';
+                                        FFAppState().filterShopName = '';
+                                      });
+                                      FFAppState().update(() {
+                                        FFAppState().isCheque = '';
+                                      });
                                     },
                                   ),
                                 ],
@@ -303,10 +314,12 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                 children: [
                                   InkWell(
                                     onTap: () async {
-                                      FFAppState().toolBuyDate =
-                                          fullListToolsRecord.buyDate;
-                                      FFAppState().toolimg =
-                                          fullListToolsRecord.photo!;
+                                      FFAppState().update(() {
+                                        FFAppState().toolBuyDate =
+                                            fullListToolsRecord.buyDate;
+                                        FFAppState().toolimg =
+                                            fullListToolsRecord.photo!;
+                                      });
 
                                       context.pushNamed(
                                         'ToolDetailPage',
@@ -398,9 +411,14 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                     ),
                                                     Text(
                                                       dateTimeFormat(
-                                                          'd/M/y',
-                                                          fullListToolsRecord
-                                                              .buyDate!),
+                                                        'd/M/y',
+                                                        fullListToolsRecord
+                                                            .buyDate!,
+                                                        locale:
+                                                            FFLocalizations.of(
+                                                                    context)
+                                                                .languageCode,
+                                                      ),
                                                       textAlign:
                                                           TextAlign.center,
                                                       style:
@@ -489,10 +507,12 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                               children: [
                                 InkWell(
                                   onTap: () async {
-                                    FFAppState().toolBuyDate =
-                                        byDateToolsRecord.buyDate;
-                                    FFAppState().toolimg =
-                                        byDateToolsRecord.photo!;
+                                    FFAppState().update(() {
+                                      FFAppState().toolBuyDate =
+                                          byDateToolsRecord.buyDate;
+                                      FFAppState().toolimg =
+                                          byDateToolsRecord.photo!;
+                                    });
 
                                     context.pushNamed(
                                       'ToolDetailPage',
@@ -581,9 +601,14 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                   ),
                                                   Text(
                                                     dateTimeFormat(
-                                                        'd/M/y',
-                                                        byDateToolsRecord
-                                                            .buyDate!),
+                                                      'd/M/y',
+                                                      byDateToolsRecord
+                                                          .buyDate!,
+                                                      locale:
+                                                          FFLocalizations.of(
+                                                                  context)
+                                                              .languageCode,
+                                                    ),
                                                     textAlign: TextAlign.center,
                                                     style: FlutterFlowTheme.of(
                                                             context)
@@ -666,10 +691,12 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                               children: [
                                 InkWell(
                                   onTap: () async {
-                                    FFAppState().toolBuyDate =
-                                        byPriceToolsRecord.buyDate;
-                                    FFAppState().toolimg =
-                                        byPriceToolsRecord.photo!;
+                                    FFAppState().update(() {
+                                      FFAppState().toolBuyDate =
+                                          byPriceToolsRecord.buyDate;
+                                      FFAppState().toolimg =
+                                          byPriceToolsRecord.photo!;
+                                    });
 
                                     context.pushNamed(
                                       'ToolDetailPage',
@@ -758,9 +785,14 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                   ),
                                                   Text(
                                                     dateTimeFormat(
-                                                        'd/M/y',
-                                                        byPriceToolsRecord
-                                                            .buyDate!),
+                                                      'd/M/y',
+                                                      byPriceToolsRecord
+                                                          .buyDate!,
+                                                      locale:
+                                                          FFLocalizations.of(
+                                                                  context)
+                                                              .languageCode,
+                                                    ),
                                                     textAlign: TextAlign.center,
                                                     style: FlutterFlowTheme.of(
                                                             context)
@@ -844,10 +876,12 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                               children: [
                                 InkWell(
                                   onTap: () async {
-                                    FFAppState().toolBuyDate =
-                                        byNewestToolsRecord.buyDate;
-                                    FFAppState().toolimg =
-                                        byNewestToolsRecord.photo!;
+                                    FFAppState().update(() {
+                                      FFAppState().toolBuyDate =
+                                          byNewestToolsRecord.buyDate;
+                                      FFAppState().toolimg =
+                                          byNewestToolsRecord.photo!;
+                                    });
 
                                     context.pushNamed(
                                       'ToolDetailPage',
@@ -936,9 +970,14 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                   ),
                                                   Text(
                                                     dateTimeFormat(
-                                                        'd/M/y',
-                                                        byNewestToolsRecord
-                                                            .buyDate!),
+                                                      'd/M/y',
+                                                      byNewestToolsRecord
+                                                          .buyDate!,
+                                                      locale:
+                                                          FFLocalizations.of(
+                                                                  context)
+                                                              .languageCode,
+                                                    ),
                                                     textAlign: TextAlign.center,
                                                     style: FlutterFlowTheme.of(
                                                             context)

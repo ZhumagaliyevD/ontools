@@ -42,9 +42,11 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      FFAppState().chequeName = widget.toolPurchase!.chequeName!;
-      FFAppState().chequeImg = widget.toolPurchase!.chqueImg!;
-      FFAppState().toolBuyDate = widget.toolPurchase!.buyDate;
+      FFAppState().update(() {
+        FFAppState().chequeName = widget.toolPurchase!.chequeName!;
+        FFAppState().chequeImg = widget.toolPurchase!.chqueImg!;
+        FFAppState().toolBuyDate = widget.toolPurchase!.buyDate;
+      });
     });
 
     priceController =
@@ -97,15 +99,21 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                FFAppState().toolBuyDate =
-                    DateTime.fromMillisecondsSinceEpoch(1665846120000);
-                FFAppState().toolimg = '';
-                FFAppState().chequeName = '';
+                FFAppState().update(() {
+                  FFAppState().toolBuyDate =
+                      DateTime.fromMillisecondsSinceEpoch(1665846120000);
+                  FFAppState().toolimg = '';
+                });
+                FFAppState().update(() {
+                  FFAppState().chequeName = '';
+                });
                 context.pop();
               },
             ),
             title: Text(
-              'Edit',
+              FFLocalizations.of(context).getText(
+                'ru8ggcqw' /* Edit */,
+              ),
               style: FlutterFlowTheme.of(context).subtitle1,
             ),
             actions: [
@@ -173,7 +181,9 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                         ),
                         obscureText: false,
                         decoration: InputDecoration(
-                          labelText: 'Store Name',
+                          labelText: FFLocalizations.of(context).getText(
+                            'tgutrb0p' /* Store Name */,
+                          ),
                           hintStyle: FlutterFlowTheme.of(context).bodyText2,
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -219,7 +229,9 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                         ),
                         obscureText: false,
                         decoration: InputDecoration(
-                          labelText: 'Store Address',
+                          labelText: FFLocalizations.of(context).getText(
+                            'c2lordig' /* Store Address */,
+                          ),
                           hintStyle: FlutterFlowTheme.of(context).bodyText2,
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -295,8 +307,10 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                                       size: 20,
                                     ),
                                     onPressed: () async {
-                                      FFAppState().chequeName = '';
-                                      FFAppState().chequeImg = '';
+                                      FFAppState().update(() {
+                                        FFAppState().chequeName = '';
+                                        FFAppState().chequeImg = '';
+                                      });
                                     },
                                   ),
                                 if (FFAppState().chequeName == null ||
@@ -358,9 +372,17 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                                         }
                                       }
 
-                                      FFAppState().chequeName =
-                                          'Cheque:${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
-                                      FFAppState().chequeImg = uploadedFileUrl;
+                                      FFAppState().update(() {
+                                        FFAppState().chequeName =
+                                            'Cheque:${dateTimeFormat(
+                                          'd/M H:mm',
+                                          getCurrentTimestamp,
+                                          locale: FFLocalizations.of(context)
+                                              .languageCode,
+                                        )}';
+                                        FFAppState().chequeImg =
+                                            uploadedFileUrl;
+                                      });
                                     },
                                   ),
                               ],
@@ -402,7 +424,9 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         8, 0, 0, 2),
                                     child: Text(
-                                      'Purchase date',
+                                      FFLocalizations.of(context).getText(
+                                        'qfi0baeq' /* Purchase date */,
+                                      ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
@@ -431,12 +455,14 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                                         );
                                       }
                                       if (!(datePicked == null)) {
-                                        FFAppState().toolBuyDate = datePicked;
+                                        FFAppState().update(() {
+                                          FFAppState().toolBuyDate = datePicked;
+                                        });
                                       }
                                     },
                                     child: Container(
                                       width: double.infinity,
-                                      height: 50,
+                                      height: 52,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
@@ -452,7 +478,11 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                                             12, 0, 0, 0),
                                         child: Text(
                                           dateTimeFormat(
-                                              'yMd', FFAppState().toolBuyDate),
+                                            'yMd',
+                                            FFAppState().toolBuyDate,
+                                            locale: FFLocalizations.of(context)
+                                                .languageCode,
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1,
                                         ),
@@ -475,7 +505,9 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         8, 0, 0, 2),
                                     child: Text(
-                                      'Price written on cheque',
+                                      FFLocalizations.of(context).getText(
+                                        'uwyckriu' /* Price written on cheque */,
+                                      ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
@@ -527,7 +559,9 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).bodyText1,
-                                    keyboardType: TextInputType.number,
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            signed: true, decimal: true),
                                   ),
                                 ],
                               ),
@@ -540,8 +574,8 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                       padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          if ((uploadedFileUrl == null ||
-                                  uploadedFileUrl == '') ||
+                          if ((FFAppState().chequeImg == null ||
+                                  FFAppState().chequeImg == '') ||
                               (FFAppState().chequeName == null ||
                                   FFAppState().chequeName == '')) {
                             await showDialog(
@@ -580,18 +614,22 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
                           final purchaseUpdateData = createPurchaseRecordData(
                             chequeName: FFAppState().chequeName,
                             toolName: storeAddressController?.text ?? '',
-                            chqueImg: uploadedFileUrl,
+                            chqueImg: FFAppState().chequeImg,
                             storeAddress: storeAddressController?.text ?? '',
                             price: double.tryParse(priceController!.text),
                           );
                           await widget.toolPurchase!.reference
                               .update(purchaseUpdateData);
-                          FFAppState().toolBuyDate =
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  1665846120000);
-                          FFAppState().chequeName = '';
-                          FFAppState().toolimg = '';
-                          FFAppState().chequeImg = '';
+                          FFAppState().update(() {
+                            FFAppState().toolBuyDate =
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    1665846120000);
+                            FFAppState().chequeName = '';
+                          });
+                          FFAppState().update(() {
+                            FFAppState().toolimg = '';
+                            FFAppState().chequeImg = '';
+                          });
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -605,7 +643,9 @@ class _EditPurchaseWidgetState extends State<EditPurchaseWidget> {
 
                           context.pushNamed('MyPurchases');
                         },
-                        text: 'Save edit',
+                        text: FFLocalizations.of(context).getText(
+                          '3t3ptkt3' /* Save edit */,
+                        ),
                         options: FFButtonOptions(
                           width: 130,
                           height: 48,

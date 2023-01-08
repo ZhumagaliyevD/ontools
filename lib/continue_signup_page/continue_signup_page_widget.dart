@@ -84,7 +84,9 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
           },
         ),
         title: Text(
-          'Завершение регистрации',
+          FFLocalizations.of(context).getText(
+            'v9hjwnvr' /* Завершение регистрации */,
+          ),
           style: FlutterFlowTheme.of(context).title2.override(
                 fontFamily: 'Montserrat',
                 color: FlutterFlowTheme.of(context).primaryColor,
@@ -155,7 +157,9 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
 
                         if (!(uploadedFileUrl == null ||
                             uploadedFileUrl == '')) {
-                          FFAppState().profileimg = uploadedFileUrl;
+                          FFAppState().update(() {
+                            FFAppState().profileimg = uploadedFileUrl;
+                          });
                         }
                       },
                       child: Container(
@@ -178,7 +182,9 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 6, 0, 0),
                     child: Text(
-                      'Изменить фото',
+                      FFLocalizations.of(context).getText(
+                        'gxy6zakw' /* Изменить фото */,
+                      ),
                       textAlign: TextAlign.center,
                       style: FlutterFlowTheme.of(context).bodyText1,
                     ),
@@ -189,7 +195,9 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                       controller: userNameController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'ФИО',
+                        labelText: FFLocalizations.of(context).getText(
+                          'kunlbrxt' /* ФИО */,
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0xFFB3B3B3),
@@ -228,7 +236,9 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                       controller: industryController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Индустрия',
+                        labelText: FFLocalizations.of(context).getText(
+                          'z1sxs3e4' /* Индустрия */,
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0xFFB3B3B3),
@@ -267,7 +277,9 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                       controller: specialityController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Специальность',
+                        labelText: FFLocalizations.of(context).getText(
+                          'nsj054dk' /* Специальность */,
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0xFFB3B3B3),
@@ -306,7 +318,9 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                       controller: phoneController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Номер телефона',
+                        labelText: FFLocalizations.of(context).getText(
+                          'jbl6ygla' /* Номер телефона */,
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0xFFB3B3B3),
@@ -346,7 +360,9 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                       controller: countryController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Страна',
+                        labelText: FFLocalizations.of(context).getText(
+                          'to3cml9j' /* Страна */,
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0xFFB3B3B3),
@@ -385,7 +401,9 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                       controller: cityController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Мой город',
+                        labelText: FFLocalizations.of(context).getText(
+                          'txo2f3r9' /* Мой город */,
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0xFFB3B3B3),
@@ -453,7 +471,12 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
                           child: Text(
                             valueOrDefault<String>(
-                              dateTimeFormat('d/M/y', datePicked),
+                              dateTimeFormat(
+                                'd/M/y',
+                                datePicked,
+                                locale:
+                                    FFLocalizations.of(context).languageCode,
+                              ),
                               'Дата рождения',
                             ),
                             style: FlutterFlowTheme.of(context).bodyText1,
@@ -466,6 +489,11 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
                     child: FFButtonWidget(
                       onPressed: () async {
+                        if (formKey.currentState == null ||
+                            !formKey.currentState!.validate()) {
+                          return;
+                        }
+
                         if (uploadedFileUrl != null && uploadedFileUrl != '') {
                           final userUpdateData = createUserRecordData(
                             displayName: userNameController!.text,
@@ -497,7 +525,9 @@ class _ContinueSignupPageWidgetState extends State<ContinueSignupPageWidget> {
 
                         context.pushNamed('Paywall');
                       },
-                      text: 'Продолжить',
+                      text: FFLocalizations.of(context).getText(
+                        'jrh0s4gd' /* Продолжить */,
+                      ),
                       options: FFButtonOptions(
                         width: 130,
                         height: 48,

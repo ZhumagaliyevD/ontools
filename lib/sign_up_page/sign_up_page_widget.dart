@@ -92,7 +92,9 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                               child: Text(
-                                'Создайте аккаунт',
+                                FFLocalizations.of(context).getText(
+                                  'w9rk4ehb' /* Создайте аккаунт */,
+                                ),
                                 textAlign: TextAlign.start,
                                 style: FlutterFlowTheme.of(context).title1,
                               ),
@@ -112,7 +114,10 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                       controller: emailSignUpController,
                                       obscureText: false,
                                       decoration: InputDecoration(
-                                        labelText: 'Email',
+                                        labelText:
+                                            FFLocalizations.of(context).getText(
+                                          'ijo1xg10' /* Email */,
+                                        ),
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .bodyText2,
                                         enabledBorder: OutlineInputBorder(
@@ -167,7 +172,10 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                         controller: passwordSignUpController,
                                         obscureText: !passwordSignUpVisibility,
                                         decoration: InputDecoration(
-                                          labelText: 'Введите пароль',
+                                          labelText: FFLocalizations.of(context)
+                                              .getText(
+                                            '3l0kpmhd' /* Введите пароль */,
+                                          ),
                                           enabledBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                               color:
@@ -241,7 +249,10 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                         obscureText:
                                             !confPasswordSignUpVisibility,
                                         decoration: InputDecoration(
-                                          labelText: 'Введите пароль',
+                                          labelText: FFLocalizations.of(context)
+                                              .getText(
+                                            'w7i7e64i' /* Введите пароль */,
+                                          ),
                                           enabledBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                               color:
@@ -349,7 +360,10 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                           context.pushNamedAuth(
                                               'ContinueSignupPage', mounted);
                                         },
-                                        text: 'Создать аккаунт',
+                                        text:
+                                            FFLocalizations.of(context).getText(
+                                          'hp4cd48t' /* Создать аккаунт */,
+                                        ),
                                         options: FFButtonOptions(
                                           width: 130,
                                           height: 48,
@@ -377,7 +391,9 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 12, 0, 0),
                                       child: Text(
-                                        'Нажимая кнопку Создать аккаунт, Вы соглашаетесь с Политикой конфиденциальности',
+                                        FFLocalizations.of(context).getText(
+                                          '11mxs9rw' /* Нажимая кнопку Создать аккаунт... */,
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1
                                             .override(
@@ -390,7 +406,9 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 12, 0, 0),
                                       child: Text(
-                                        'Нажимая кнопку Создать аккаунт, Вы соглашаетесь с',
+                                        FFLocalizations.of(context).getText(
+                                          'lgxnxeua' /* Нажимая кнопку Создать аккаунт... */,
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1
                                             .override(
@@ -405,7 +423,9 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                             'https://docs.google.com/document/d/1c_O6H8qCjNQmTIKaWTwYpCmhJ569835QFmgOIu8mkAs/edit');
                                       },
                                       child: Text(
-                                        'Политикой конфиденциальности и',
+                                        FFLocalizations.of(context).getText(
+                                          'eoqrrcll' /* Политикой конфиденциальности и */,
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1
                                             .override(
@@ -422,7 +442,9 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                             'https://docs.google.com/document/d/1Fbw-bhcVuUF23JB2cNrXYxgi5SAzbchRsBRYRD8REmg/edit');
                                       },
                                       child: Text(
-                                        'Пользовательским соглашением',
+                                        FFLocalizations.of(context).getText(
+                                          '67fgmcmv' /* Пользовательским соглашением */,
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1
                                             .override(
@@ -441,7 +463,9 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                           context.pushNamed('EntryPage');
                                         },
                                         child: Text(
-                                          'У Вас есть аккаунт? Войти',
+                                          FFLocalizations.of(context).getText(
+                                            'g1rvyn1e' /* У Вас есть аккаунт? Войти */,
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1
                                               .override(
@@ -475,7 +499,10 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                           ),
                                           Expanded(
                                             child: Text(
-                                              'или',
+                                              FFLocalizations.of(context)
+                                                  .getText(
+                                                'x1ol3f58' /* или */,
+                                              ),
                                               textAlign: TextAlign.center,
                                               style: FlutterFlowTheme.of(
                                                       context)
@@ -513,64 +540,103 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Container(
-                                    width: 56,
-                                    height: 56,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      shape: BoxShape.rectangle,
-                                      border: Border.all(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
+                                  InkWell(
+                                    onTap: () async {
+                                      GoRouter.of(context).prepareAuthEvent();
+                                      final user =
+                                          await signInWithGoogle(context);
+                                      if (user == null) {
+                                        return;
+                                      }
+
+                                      context.goNamedAuth(
+                                          'ProfileHomePage', mounted);
+                                    },
+                                    child: Container(
+                                      width: 56,
+                                      height: 56,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        shape: BoxShape.rectangle,
+                                        border: Border.all(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          width: 1,
+                                        ),
                                       ),
-                                    ),
-                                    alignment: AlignmentDirectional(0, 0),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.google,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryColor,
-                                      size: 24,
+                                      alignment: AlignmentDirectional(0, 0),
+                                      child: FaIcon(
+                                        FontAwesomeIcons.google,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryColor,
+                                        size: 24,
+                                      ),
                                     ),
                                   ),
-                                  Container(
-                                    width: 56,
-                                    height: 56,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      shape: BoxShape.rectangle,
-                                      border: Border.all(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
+                                  InkWell(
+                                    onTap: () async {
+                                      GoRouter.of(context).prepareAuthEvent();
+                                      final user =
+                                          await signInWithApple(context);
+                                      if (user == null) {
+                                        return;
+                                      }
+
+                                      context.goNamedAuth(
+                                          'ProfileHomePage', mounted);
+                                    },
+                                    child: Container(
+                                      width: 56,
+                                      height: 56,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        shape: BoxShape.rectangle,
+                                        border: Border.all(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          width: 1,
+                                        ),
                                       ),
-                                    ),
-                                    alignment: AlignmentDirectional(0, 0),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.apple,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryColor,
-                                      size: 24,
+                                      alignment: AlignmentDirectional(0, 0),
+                                      child: FaIcon(
+                                        FontAwesomeIcons.apple,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryColor,
+                                        size: 24,
+                                      ),
                                     ),
                                   ),
-                                  Container(
-                                    width: 56,
-                                    height: 56,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      shape: BoxShape.rectangle,
-                                      border: Border.all(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
+                                  InkWell(
+                                    onTap: () async {
+                                      GoRouter.of(context).prepareAuthEvent();
+                                      final user =
+                                          await signInWithFacebook(context);
+                                      if (user == null) {
+                                        return;
+                                      }
+
+                                      context.goNamedAuth(
+                                          'ProfileHomePage', mounted);
+                                    },
+                                    child: Container(
+                                      width: 56,
+                                      height: 56,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        shape: BoxShape.rectangle,
+                                        border: Border.all(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          width: 1,
+                                        ),
                                       ),
-                                    ),
-                                    alignment: AlignmentDirectional(0, 0),
-                                    child: Icon(
-                                      FFIcons.kfacebook,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryColor,
-                                      size: 24,
+                                      alignment: AlignmentDirectional(0, 0),
+                                      child: Icon(
+                                        FFIcons.kfacebook,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryColor,
+                                        size: 24,
+                                      ),
                                     ),
                                   ),
                                   InkWell(

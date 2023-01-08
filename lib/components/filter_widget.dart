@@ -78,7 +78,9 @@ class _FilterWidgetState extends State<FilterWidget> {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 12),
                       child: Text(
-                        'Фильтры',
+                        FFLocalizations.of(context).getText(
+                          'a8gtujkn' /* Фильтры */,
+                        ),
                         style: FlutterFlowTheme.of(context).title2.override(
                               fontFamily: 'Montserrat',
                               color: FlutterFlowTheme.of(context).primaryText,
@@ -91,14 +93,17 @@ class _FilterWidgetState extends State<FilterWidget> {
                         options: bottomSheetMaterialToolsRecordList
                             .where((e) => e.inSale!)
                             .toList()
-                            .map((e) => e.toolName!)
+                            .map((e) => e.toolName)
+                            .withoutNulls
                             .toList()
                             .toList(),
                         onChanged: (val) => setState(() => toolNameValue = val),
                         width: double.infinity,
                         height: 50,
                         textStyle: FlutterFlowTheme.of(context).bodyText1,
-                        hintText: 'Название инструмента',
+                        hintText: FFLocalizations.of(context).getText(
+                          'j76bwclh' /* Название инструмента */,
+                        ),
                         fillColor:
                             FlutterFlowTheme.of(context).primaryBackground,
                         elevation: 2,
@@ -115,7 +120,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                         options: bottomSheetMaterialToolsRecordList
                             .where((e) => e.inSale!)
                             .toList()
-                            .map((e) => e.shopName!)
+                            .map((e) => e.shopName)
+                            .withoutNulls
                             .toList()
                             .toList(),
                         onChanged: (val) => setState(() => shopNameValue = val),
@@ -126,7 +132,9 @@ class _FilterWidgetState extends State<FilterWidget> {
                                   fontFamily: 'Montserrat',
                                   color: Colors.black,
                                 ),
-                        hintText: 'Название магазина',
+                        hintText: FFLocalizations.of(context).getText(
+                          'ut388fjt' /* Название магазина */,
+                        ),
                         fillColor:
                             FlutterFlowTheme.of(context).primaryBackground,
                         elevation: 2,
@@ -140,7 +148,14 @@ class _FilterWidgetState extends State<FilterWidget> {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
                       child: FlutterFlowDropDown<String>(
-                        options: ['Есть', 'Нет'],
+                        options: [
+                          FFLocalizations.of(context).getText(
+                            '7e6e4a7j' /* Есть */,
+                          ),
+                          FFLocalizations.of(context).getText(
+                            '8mzey73b' /* Нет */,
+                          )
+                        ],
                         onChanged: (val) => setState(() => chequeValue = val),
                         width: double.infinity,
                         height: 50,
@@ -149,7 +164,9 @@ class _FilterWidgetState extends State<FilterWidget> {
                                   fontFamily: 'Montserrat',
                                   color: Colors.black,
                                 ),
-                        hintText: 'Наличие чека',
+                        hintText: FFLocalizations.of(context).getText(
+                          'j5nps9d4' /* Наличие чека */,
+                        ),
                         fillColor:
                             FlutterFlowTheme.of(context).primaryBackground,
                         elevation: 2,
@@ -185,16 +202,24 @@ class _FilterWidgetState extends State<FilterWidget> {
                       FFButtonWidget(
                         onPressed: () async {
                           if (toolNameValue != null && toolNameValue != '') {
-                            FFAppState().MarketplaceSearch = toolNameValue!;
+                            FFAppState().update(() {
+                              FFAppState().MarketplaceSearch = toolNameValue!;
+                            });
                           }
                           if (shopNameValue != null && shopNameValue != '') {
-                            FFAppState().filterShopName = shopNameValue!;
+                            FFAppState().update(() {
+                              FFAppState().filterShopName = shopNameValue!;
+                            });
                           }
                           if (chequeValue != null && chequeValue != '') {
-                            FFAppState().isCheque = chequeValue!;
+                            FFAppState().update(() {
+                              FFAppState().isCheque = chequeValue!;
+                            });
                           }
                           Navigator.pop(context);
-                          FFAppState().sortBy = '';
+                          FFAppState().update(() {
+                            FFAppState().sortBy = '';
+                          });
 
                           context.pushNamed(
                             'Marketplace',
@@ -207,7 +232,9 @@ class _FilterWidgetState extends State<FilterWidget> {
                             },
                           );
                         },
-                        text: 'Применить',
+                        text: FFLocalizations.of(context).getText(
+                          '07sb0wk2' /* Применить */,
+                        ),
                         options: FFButtonOptions(
                           width: 343,
                           height: 48,

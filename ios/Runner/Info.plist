@@ -16,6 +16,11 @@
 	<string>onTools</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>ru</string>
+	</array>
 
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
@@ -56,9 +61,9 @@
 	<false/>
 
 	<key>NSCameraUsageDescription</key>
-      <string>In order to take a picture or video, this app requires permission to access the camera.</string>
+    <string>In order to take a picture or video, this app requires permission to access the camera.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-      <string>In order to upload media, this app requires permission to access the photo library.</string>
+    <string>In order to upload media, this app requires permission to access the photo library.</string>
 
     <key>UIBackgroundModes</key>
     <array>

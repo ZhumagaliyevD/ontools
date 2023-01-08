@@ -20,6 +20,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initFirebase();
 
+  await FFLocalizations.initialize();
+
   final appState = FFAppState(); // Initialize FFAppState
   await revenue_cat.initialize(
     "appl_JjjGUOgUAUmNChluvNjbdpcivbw",
@@ -44,7 +46,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale? _locale;
+  Locale? _locale = FFLocalizations.getStoredLocale();
   ThemeMode _themeMode = ThemeMode.system;
 
   late Stream<OnToolsFirebaseUser> userStream;
@@ -80,6 +82,7 @@ class _MyAppState extends State<MyApp> {
 
   void setLocale(String language) {
     setState(() => _locale = createLocale(language));
+    FFLocalizations.storeLocale(language);
   }
 
   void setThemeMode(ThemeMode mode) => setState(() {
@@ -97,7 +100,10 @@ class _MyAppState extends State<MyApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       locale: _locale,
-      supportedLocales: const [Locale('en', '')],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ru'),
+      ],
       theme: ThemeData(brightness: Brightness.light),
       themeMode: _themeMode,
       routeInformationParser: _router.routeInformationParser,
@@ -159,7 +165,9 @@ class _NavBarPageState extends State<NavBarPage> {
               FFIcons.kdocumentSigned,
               size: 24,
             ),
-            label: 'Заметки',
+            label: FFLocalizations.of(context).getText(
+              'vevbov21' /* Заметки */,
+            ),
             tooltip: '',
           ),
           BottomNavigationBarItem(
@@ -171,7 +179,9 @@ class _NavBarPageState extends State<NavBarPage> {
               FontAwesomeIcons.solidFile,
               size: 24,
             ),
-            label: 'Отчеты',
+            label: FFLocalizations.of(context).getText(
+              '9bh1f4hy' /* Отчеты */,
+            ),
             tooltip: '',
           ),
           BottomNavigationBarItem(
@@ -179,7 +189,9 @@ class _NavBarPageState extends State<NavBarPage> {
               FFIcons.kbox,
               size: 24,
             ),
-            label: 'Инструменты',
+            label: FFLocalizations.of(context).getText(
+              '1yq0zf1u' /* Инструменты */,
+            ),
             tooltip: '',
           ),
           BottomNavigationBarItem(
@@ -187,7 +199,9 @@ class _NavBarPageState extends State<NavBarPage> {
               FFIcons.kballot,
               size: 24,
             ),
-            label: 'Purchase',
+            label: FFLocalizations.of(context).getText(
+              '4fn6w8za' /* Purchase */,
+            ),
             tooltip: '',
           ),
           BottomNavigationBarItem(
@@ -199,7 +213,9 @@ class _NavBarPageState extends State<NavBarPage> {
               Icons.shopping_cart_rounded,
               size: 24,
             ),
-            label: 'Маркетплейс',
+            label: FFLocalizations.of(context).getText(
+              'sqgzos07' /* Маркетплейс */,
+            ),
             tooltip: '',
           ),
           BottomNavigationBarItem(
@@ -211,7 +227,9 @@ class _NavBarPageState extends State<NavBarPage> {
               FFIcons.kfreeIconFontHome3917032,
               size: 24,
             ),
-            label: 'Профиль',
+            label: FFLocalizations.of(context).getText(
+              'wwam51wy' /* Профиль */,
+            ),
             tooltip: '',
           )
         ],

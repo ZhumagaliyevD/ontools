@@ -60,7 +60,9 @@ class _NotesWidgetState extends State<NotesWidget> {
             size: 24,
           ),
           onPressed: () async {
-            FFAppState().isCheckbox = false;
+            FFAppState().update(() {
+              FFAppState().isCheckbox = false;
+            });
 
             final notesCreateData = createNotesRecordData();
             var notesRecordReference = NotesRecord.collection.doc();
@@ -76,7 +78,9 @@ class _NotesWidgetState extends State<NotesWidget> {
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         automaticallyImplyLeading: false,
         title: Text(
-          'Заметки',
+          FFLocalizations.of(context).getText(
+            'at3oyld2' /* Заметки */,
+          ),
           style: FlutterFlowTheme.of(context).subtitle1,
         ),
         actions: [],
@@ -119,7 +123,9 @@ class _NotesWidgetState extends State<NotesWidget> {
                               obscureText: false,
                               decoration: InputDecoration(
                                 isDense: true,
-                                hintText: 'Поиск',
+                                hintText: FFLocalizations.of(context).getText(
+                                  'ztbj6y9n' /* Поиск */,
+                                ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
@@ -461,9 +467,13 @@ class _NotesWidgetState extends State<NotesWidget> {
                                           children: [
                                             Text(
                                               dateTimeFormat(
-                                                  'd/M/y',
-                                                  searchNoteListNotesRecord
-                                                      .createdAt!),
+                                                'd/M/y',
+                                                searchNoteListNotesRecord
+                                                    .createdAt!,
+                                                locale:
+                                                    FFLocalizations.of(context)
+                                                        .languageCode,
+                                              ),
                                               textAlign: TextAlign.start,
                                               style:
                                                   FlutterFlowTheme.of(context)

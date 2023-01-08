@@ -77,7 +77,9 @@ class _AuthPageWidgetState extends State<AuthPageWidget> {
                             ),
                           ),
                           Text(
-                            'Добро пожаловать',
+                            FFLocalizations.of(context).getText(
+                              'yo0i6sv5' /* Добро пожаловать */,
+                            ),
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context).title1,
                           ),
@@ -85,7 +87,9 @@ class _AuthPageWidgetState extends State<AuthPageWidget> {
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                             child: Text(
-                              'Orci, ante in platea lectus pulvinar. Cursus vestibulum nullam tincidunt diam. Aenean quis.',
+                              FFLocalizations.of(context).getText(
+                                '443v0iwp' /* Orci, ante in platea lectus pu... */,
+                              ),
                               textAlign: TextAlign.center,
                               maxLines: 2,
                               style: FlutterFlowTheme.of(context)
@@ -103,7 +107,9 @@ class _AuthPageWidgetState extends State<AuthPageWidget> {
                               onPressed: () async {
                                 context.pushNamed('SignUpPage');
                               },
-                              text: 'Я новый пользователь',
+                              text: FFLocalizations.of(context).getText(
+                                'hihw4rv9' /* Я новый пользователь */,
+                              ),
                               options: FFButtonOptions(
                                 width: 130,
                                 height: 48,
@@ -130,7 +136,9 @@ class _AuthPageWidgetState extends State<AuthPageWidget> {
                               onPressed: () async {
                                 context.pushNamed('EntryPage');
                               },
-                              text: 'У меня есть аккаунт',
+                              text: FFLocalizations.of(context).getText(
+                                'e7c1i4oz' /* У меня есть аккаунт */,
+                              ),
                               options: FFButtonOptions(
                                 width: 130,
                                 height: 48,

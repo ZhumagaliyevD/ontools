@@ -83,7 +83,9 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                             ),
                           ),
                           Text(
-                            'Выбери подписку',
+                            FFLocalizations.of(context).getText(
+                              'dmhg0icv' /* Выбери подписку */,
+                            ),
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context).title1,
                           ),
@@ -91,7 +93,9 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                             child: Text(
-                              'Orci, ante in platea lectus pulvinar. Cursus vestibulum nullam tincidunt diam. Aenean quis.',
+                              FFLocalizations.of(context).getText(
+                                'suu2w2v5' /* Orci, ante in platea lectus pu... */,
+                              ),
                               textAlign: TextAlign.center,
                               maxLines: 2,
                               style: FlutterFlowTheme.of(context)
@@ -467,7 +471,10 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'Пробный доступ',
+                                                FFLocalizations.of(context)
+                                                    .getText(
+                                                  'xz05n7mn' /* Пробный доступ */,
+                                                ),
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .title3
@@ -482,7 +489,10 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(0, 4, 0, 0),
                                                 child: Text(
-                                                  'Бесплатно 30 дней',
+                                                  FFLocalizations.of(context)
+                                                      .getText(
+                                                    'xn5ioao0' /* Бесплатно 30 дней */,
+                                                  ),
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .subtitle1,

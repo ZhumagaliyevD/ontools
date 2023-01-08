@@ -56,7 +56,9 @@ class _SortWidgetState extends State<SortWidget> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 12),
                   child: Text(
-                    'Сортировка',
+                    FFLocalizations.of(context).getText(
+                      '9rz39htq' /* Сортировка */,
+                    ),
                     style: FlutterFlowTheme.of(context).title2.override(
                           fontFamily: 'Montserrat',
                           color: FlutterFlowTheme.of(context).primaryText,
@@ -67,7 +69,9 @@ class _SortWidgetState extends State<SortWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
                   child: InkWell(
                     onTap: () async {
-                      FFAppState().sortBy = 'by date';
+                      FFAppState().update(() {
+                        FFAppState().sortBy = 'by date';
+                      });
                     },
                     child: Container(
                       width: double.infinity,
@@ -83,7 +87,9 @@ class _SortWidgetState extends State<SortWidget> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'По дате',
+                              FFLocalizations.of(context).getText(
+                                'njltgsz3' /* По дате */,
+                              ),
                               style: FlutterFlowTheme.of(context).bodyText1,
                             ),
                             if (FFAppState().sortBy == 'by date')
@@ -102,7 +108,9 @@ class _SortWidgetState extends State<SortWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
                   child: InkWell(
                     onTap: () async {
-                      FFAppState().sortBy = 'by newest';
+                      FFAppState().update(() {
+                        FFAppState().sortBy = 'by newest';
+                      });
                     },
                     child: Container(
                       width: double.infinity,
@@ -118,7 +126,9 @@ class _SortWidgetState extends State<SortWidget> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'По новизне',
+                              FFLocalizations.of(context).getText(
+                                'svqxqqzb' /* По новизне */,
+                              ),
                               style: FlutterFlowTheme.of(context).bodyText1,
                             ),
                             if (FFAppState().sortBy == 'by newest')
@@ -137,7 +147,9 @@ class _SortWidgetState extends State<SortWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
                   child: InkWell(
                     onTap: () async {
-                      FFAppState().sortBy = 'by price';
+                      FFAppState().update(() {
+                        FFAppState().sortBy = 'by price';
+                      });
                     },
                     child: Container(
                       width: double.infinity,
@@ -153,7 +165,9 @@ class _SortWidgetState extends State<SortWidget> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'По стоимости',
+                              FFLocalizations.of(context).getText(
+                                'k7jvndlt' /* По стоимости */,
+                              ),
                               style: FlutterFlowTheme.of(context).bodyText1,
                             ),
                             if (FFAppState().sortBy == 'by price')
@@ -196,7 +210,9 @@ class _SortWidgetState extends State<SortWidget> {
 
                       context.pushNamed('Marketplace');
                     },
-                    text: 'Применить',
+                    text: FFLocalizations.of(context).getText(
+                      '20xen1yc' /* Применить */,
+                    ),
                     options: FFButtonOptions(
                       width: 343,
                       height: 48,

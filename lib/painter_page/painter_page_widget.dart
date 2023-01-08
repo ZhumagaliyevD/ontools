@@ -55,7 +55,9 @@ class _PainterPageWidgetState extends State<PainterPageWidget> {
           },
         ),
         title: Text(
-          'Изменено:10:15',
+          FFLocalizations.of(context).getText(
+            'c69nsf5h' /* Изменено:10:15 */,
+          ),
           style: FlutterFlowTheme.of(context).subtitle1,
         ),
         actions: [

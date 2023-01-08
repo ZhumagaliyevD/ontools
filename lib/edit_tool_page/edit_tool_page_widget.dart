@@ -99,15 +99,21 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                FFAppState().toolBuyDate =
-                    DateTime.fromMillisecondsSinceEpoch(1665846120000);
-                FFAppState().toolimg = '';
-                FFAppState().chequeName = '';
+                FFAppState().update(() {
+                  FFAppState().toolBuyDate =
+                      DateTime.fromMillisecondsSinceEpoch(1665846120000);
+                  FFAppState().toolimg = '';
+                });
+                FFAppState().update(() {
+                  FFAppState().chequeName = '';
+                });
                 context.pop();
               },
             ),
             title: Text(
-              'Редактировать',
+              FFLocalizations.of(context).getText(
+                'jhni1uyi' /* Редактировать */,
+              ),
               style: FlutterFlowTheme.of(context).subtitle1,
             ),
             actions: [
@@ -208,7 +214,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
 
                             if (!(uploadedFileUrl1 == null ||
                                 uploadedFileUrl1 == '')) {
-                              FFAppState().toolimg = uploadedFileUrl1;
+                              FFAppState().update(() {
+                                FFAppState().toolimg = uploadedFileUrl1;
+                              });
                             }
                           },
                           child: Icon(
@@ -225,7 +233,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                         controller: toolNameController,
                         obscureText: false,
                         decoration: InputDecoration(
-                          labelText: 'Наименование инстумента',
+                          labelText: FFLocalizations.of(context).getText(
+                            'y492qare' /* Наименование инстумента */,
+                          ),
                           hintStyle: FlutterFlowTheme.of(context).bodyText2,
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -262,7 +272,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                         style: FlutterFlowTheme.of(context).bodyText1,
                         validator: (val) {
                           if (val == null || val.isEmpty) {
-                            return 'Обязательное поле';
+                            return FFLocalizations.of(context).getText(
+                              '173p52vv' /* Обязательное поле */,
+                            );
                           }
 
                           return null;
@@ -275,8 +287,12 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                         controller: descriptionController,
                         obscureText: false,
                         decoration: InputDecoration(
-                          labelText: 'Описание инструмента',
-                          hintText: 'Введите описание инструмента',
+                          labelText: FFLocalizations.of(context).getText(
+                            '14swoqn7' /* Описание инструмента */,
+                          ),
+                          hintText: FFLocalizations.of(context).getText(
+                            'k8h81yah' /* Введите описание инструмента */,
+                          ),
                           hintStyle: FlutterFlowTheme.of(context).bodyText2,
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -314,7 +330,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                         maxLines: 8,
                         validator: (val) {
                           if (val == null || val.isEmpty) {
-                            return 'Обязательное поле';
+                            return FFLocalizations.of(context).getText(
+                              'a5b86i6k' /* Обязательное поле */,
+                            );
                           }
 
                           return null;
@@ -327,7 +345,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                         controller: shopNameController,
                         obscureText: false,
                         decoration: InputDecoration(
-                          labelText: 'Наименование магазина',
+                          labelText: FFLocalizations.of(context).getText(
+                            '7wh60bvd' /* Наименование магазина */,
+                          ),
                           hintStyle: FlutterFlowTheme.of(context).bodyText2,
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -364,7 +384,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                         style: FlutterFlowTheme.of(context).bodyText1,
                         validator: (val) {
                           if (val == null || val.isEmpty) {
-                            return 'Обязательное поле';
+                            return FFLocalizations.of(context).getText(
+                              'tsrtpde8' /* Обязательное поле */,
+                            );
                           }
 
                           return null;
@@ -415,7 +437,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                   };
                                   await widget.tool!.reference
                                       .update(toolsUpdateData);
-                                  FFAppState().chequeName = '';
+                                  FFAppState().update(() {
+                                    FFAppState().chequeName = '';
+                                  });
                                 },
                               ),
                             if (widget.tool!.chequeName == null ||
@@ -476,13 +500,24 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                     }
                                   }
 
-                                  FFAppState().chequeName =
-                                      'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
+                                  FFAppState().update(() {
+                                    FFAppState().chequeName =
+                                        'Чек ${dateTimeFormat(
+                                      'd/M H:mm',
+                                      getCurrentTimestamp,
+                                      locale: FFLocalizations.of(context)
+                                          .languageCode,
+                                    )}';
+                                  });
 
                                   final toolsUpdateData = createToolsRecordData(
                                     chequeIMG: uploadedFileUrl2,
-                                    chequeName:
-                                        'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}',
+                                    chequeName: 'Чек ${dateTimeFormat(
+                                      'd/M H:mm',
+                                      getCurrentTimestamp,
+                                      locale: FFLocalizations.of(context)
+                                          .languageCode,
+                                    )}',
                                     isCheque: 'Есть',
                                   );
                                   await widget.tool!.reference
@@ -511,7 +546,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         8, 0, 0, 2),
                                     child: Text(
-                                      'Дата покупки',
+                                      FFLocalizations.of(context).getText(
+                                        'cnzgmy3x' /* Дата покупки */,
+                                      ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
@@ -540,7 +577,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                         );
                                       }
                                       if (!(datePicked == null)) {
-                                        FFAppState().toolBuyDate = datePicked;
+                                        FFAppState().update(() {
+                                          FFAppState().toolBuyDate = datePicked;
+                                        });
                                       }
                                     },
                                     child: Container(
@@ -560,8 +599,12 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             12, 0, 0, 0),
                                         child: Text(
-                                          dateTimeFormat('d/M/y',
-                                              FFAppState().toolBuyDate),
+                                          dateTimeFormat(
+                                            'd/M/y',
+                                            FFAppState().toolBuyDate,
+                                            locale: FFLocalizations.of(context)
+                                                .languageCode,
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1,
                                         ),
@@ -584,7 +627,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         8, 0, 0, 2),
                                     child: Text(
-                                      'Цена, тенге',
+                                      FFLocalizations.of(context).getText(
+                                        'dttlvuad' /* Цена, тенге */,
+                                      ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
@@ -656,7 +701,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                 .update(toolsUpdateData);
                             context.pop();
                           },
-                          text: 'Выставить на продажу',
+                          text: FFLocalizations.of(context).getText(
+                            'x5yy8sw6' /* Выставить на продажу */,
+                          ),
                           options: FFButtonOptions(
                             width: 130,
                             height: 48,
@@ -690,7 +737,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                                 .update(toolsUpdateData);
                             context.pop();
                           },
-                          text: 'Снять с продаж',
+                          text: FFLocalizations.of(context).getText(
+                            'l8f8x8w7' /* Снять с продаж */,
+                          ),
                           options: FFButtonOptions(
                             width: 130,
                             height: 48,
@@ -741,11 +790,15 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
                             chequeIMG: uploadedFileUrl2,
                           );
                           await widget.tool!.reference.update(toolsUpdateData);
-                          FFAppState().toolBuyDate =
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  1665846120000);
-                          FFAppState().chequeName = '';
-                          FFAppState().toolimg = '';
+                          FFAppState().update(() {
+                            FFAppState().toolBuyDate =
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    1665846120000);
+                            FFAppState().chequeName = '';
+                          });
+                          FFAppState().update(() {
+                            FFAppState().toolimg = '';
+                          });
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -759,7 +812,9 @@ class _EditToolPageWidgetState extends State<EditToolPageWidget> {
 
                           context.pushNamed('MyToolsPage');
                         },
-                        text: 'Сохранить',
+                        text: FFLocalizations.of(context).getText(
+                          'e2ytcx1x' /* Сохранить */,
+                        ),
                         options: FFButtonOptions(
                           width: 130,
                           height: 48,

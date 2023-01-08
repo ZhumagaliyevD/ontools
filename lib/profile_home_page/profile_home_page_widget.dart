@@ -138,7 +138,9 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Настройки',
+                                    FFLocalizations.of(context).getText(
+                                      '73b4coes' /* Настройки */,
+                                    ),
                                     textAlign: TextAlign.start,
                                     style:
                                         FlutterFlowTheme.of(context).subtitle1,
@@ -153,7 +155,9 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
                       child: Text(
-                        'Общие настройки',
+                        FFLocalizations.of(context).getText(
+                          'pcjsyzjc' /* Общие настройки */,
+                        ),
                         style: FlutterFlowTheme.of(context).title3,
                       ),
                     ),
@@ -165,7 +169,9 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                           setState(() => switchListTileValue = newValue!);
                         },
                         title: Text(
-                          'Уведомления',
+                          FFLocalizations.of(context).getText(
+                            '0lw50ux3' /* Уведомления */,
+                          ),
                           style: FlutterFlowTheme.of(context)
                               .subtitle2
                               .override(
@@ -186,7 +192,9 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                       },
                       child: ListTile(
                         title: Text(
-                          'Политика конфиденциальности данных',
+                          FFLocalizations.of(context).getText(
+                            'wnn4cltx' /* Политика конфиденциальности да... */,
+                          ),
                           style: FlutterFlowTheme.of(context)
                               .subtitle2
                               .override(
@@ -209,7 +217,9 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                       },
                       child: ListTile(
                         title: Text(
-                          'О приложении',
+                          FFLocalizations.of(context).getText(
+                            'avj87nhf' /* О приложении */,
+                          ),
                           style: FlutterFlowTheme.of(context)
                               .subtitle2
                               .override(
@@ -232,7 +242,9 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                       },
                       child: ListTile(
                         title: Text(
-                          'Отменить подписку',
+                          FFLocalizations.of(context).getText(
+                            'zr3ei8fz' /* Отменить подписку */,
+                          ),
                           style: FlutterFlowTheme.of(context)
                               .subtitle2
                               .override(
@@ -260,7 +272,9 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Text(
-                                'Текущая подписка',
+                                FFLocalizations.of(context).getText(
+                                  'tbf3qxuc' /* Текущая подписка */,
+                                ),
                                 style: FlutterFlowTheme.of(context)
                                     .subtitle1
                                     .override(
@@ -517,7 +531,10 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  'Пробный доступ',
+                                                  FFLocalizations.of(context)
+                                                      .getText(
+                                                    'pj7mqiyc' /* Пробный доступ */,
+                                                  ),
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .title3
@@ -532,7 +549,10 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                   padding: EdgeInsetsDirectional
                                                       .fromSTEB(0, 4, 0, 0),
                                                   child: Text(
-                                                    'Бесплатно 30 дней',
+                                                    FFLocalizations.of(context)
+                                                        .getText(
+                                                      '1h1pa61i' /* Бесплатно 30 дней */,
+                                                    ),
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .subtitle1,
@@ -560,7 +580,9 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                     await revenue_cat.restorePurchases();
                                   },
                                   child: Text(
-                                    'Отмена подписки',
+                                    FFLocalizations.of(context).getText(
+                                      'nyk699iv' /* Отмена подписки */,
+                                    ),
                                     style: FlutterFlowTheme.of(context)
                                         .subtitle1
                                         .override(
@@ -584,7 +606,9 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             automaticallyImplyLeading: false,
             title: Text(
-              'Главная страница',
+              FFLocalizations.of(context).getText(
+                'gdkvduyn' /* Главная страница */,
+              ),
               style: FlutterFlowTheme.of(context).subtitle1,
             ),
             actions: [
@@ -626,7 +650,7 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             AuthUserStreamWidget(
-                              child: Container(
+                              builder: (context) => Container(
                                 width: 80,
                                 height: 80,
                                 clipBehavior: Clip.antiAlias,
@@ -652,12 +676,14 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                       CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
-                                      'Добро пожаловать,',
+                                      FFLocalizations.of(context).getText(
+                                        '70fgqw00' /* Добро пожаловать, */,
+                                      ),
                                       style: FlutterFlowTheme.of(context)
                                           .subtitle1,
                                     ),
                                     AuthUserStreamWidget(
-                                      child: Text(
+                                      builder: (context) => Text(
                                         currentUserDisplayName,
                                         style: FlutterFlowTheme.of(context)
                                             .subtitle1
@@ -670,18 +696,24 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                     Spacer(),
                                     InkWell(
                                       onTap: () async {
-                                        FFAppState().birthday =
-                                            currentUserDocument!.birthday;
-                                        FFAppState().address =
-                                            currentUserDocument!
-                                                .address.location;
-                                        FFAppState().profileimg =
-                                            currentUserPhoto;
+                                        FFAppState().update(() {
+                                          FFAppState().birthday =
+                                              currentUserDocument!.birthday;
+                                          FFAppState().address =
+                                              currentUserDocument!
+                                                  .address.location;
+                                        });
+                                        FFAppState().update(() {
+                                          FFAppState().profileimg =
+                                              currentUserPhoto;
+                                        });
 
                                         context.pushNamed('ProfileEditPage');
                                       },
                                       child: Text(
-                                        'Посмотреть профиль',
+                                        FFLocalizations.of(context).getText(
+                                          'v333pgi1' /* Посмотреть профиль */,
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1,
                                       ),
@@ -748,7 +780,9 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Мои инструменты',
+                                          FFLocalizations.of(context).getText(
+                                            'vt2osvnv' /* Мои инструменты */,
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .subtitle1,
                                         ),
@@ -757,7 +791,10 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                             onPressed: () async {
                                               context.pushNamed('MyToolsPage');
                                             },
-                                            text: 'Смотреть все',
+                                            text: FFLocalizations.of(context)
+                                                .getText(
+                                              'qc5ogjsq' /* Смотреть все */,
+                                            ),
                                             options: FFButtonOptions(
                                               width: 110,
                                               height: 31,
@@ -939,9 +976,13 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                                 ),
                                                                 Text(
                                                                   dateTimeFormat(
-                                                                      'd/M/y',
-                                                                      listViewToolsRecord
-                                                                          .buyDate!),
+                                                                    'd/M/y',
+                                                                    listViewToolsRecord
+                                                                        .buyDate!,
+                                                                    locale: FFLocalizations.of(
+                                                                            context)
+                                                                        .languageCode,
+                                                                  ),
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,
@@ -1045,7 +1086,9 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Мои отчеты',
+                                          FFLocalizations.of(context).getText(
+                                            'ew9kd6ks' /* Мои отчеты */,
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .subtitle1,
                                         ),
@@ -1063,7 +1106,10 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                 context
                                                     .pushNamed('ReportsPage');
                                               },
-                                              text: 'Смотреть все',
+                                              text: FFLocalizations.of(context)
+                                                  .getText(
+                                                'bttsi936' /* Смотреть все */,
+                                              ),
                                               options: FFButtonOptions(
                                                 width: 110,
                                                 height: 31,
@@ -1143,9 +1189,14 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                   children: [
                                                     Text(
                                                       dateTimeFormat(
-                                                          'd/M/y',
-                                                          listViewReportsRecord
-                                                              .startDate!),
+                                                        'd/M/y',
+                                                        listViewReportsRecord
+                                                            .startDate!,
+                                                        locale:
+                                                            FFLocalizations.of(
+                                                                    context)
+                                                                .languageCode,
+                                                      ),
                                                       style: FlutterFlowTheme
                                                               .of(context)
                                                           .bodyText1
@@ -1158,7 +1209,11 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                           ),
                                                     ),
                                                     Text(
-                                                      ' - ',
+                                                      FFLocalizations.of(
+                                                              context)
+                                                          .getText(
+                                                        '09ptez06' /*  -  */,
+                                                      ),
                                                       style: FlutterFlowTheme
                                                               .of(context)
                                                           .bodyText1
@@ -1172,9 +1227,14 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                     ),
                                                     Text(
                                                       dateTimeFormat(
-                                                          'd/M/y',
-                                                          listViewReportsRecord
-                                                              .endDate!),
+                                                        'd/M/y',
+                                                        listViewReportsRecord
+                                                            .endDate!,
+                                                        locale:
+                                                            FFLocalizations.of(
+                                                                    context)
+                                                                .languageCode,
+                                                      ),
                                                       style: FlutterFlowTheme
                                                               .of(context)
                                                           .bodyText1

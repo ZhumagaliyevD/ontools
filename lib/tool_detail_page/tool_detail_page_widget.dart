@@ -40,7 +40,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      FFAppState().viewPhoto = false;
+      FFAppState().update(() {
+        FFAppState().viewPhoto = false;
+      });
     });
 
     descriptionController =
@@ -98,10 +100,14 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                FFAppState().toolBuyDate =
-                    DateTime.fromMillisecondsSinceEpoch(1665846120000);
-                FFAppState().toolimg = '';
-                FFAppState().chequeName = '';
+                FFAppState().update(() {
+                  FFAppState().toolBuyDate =
+                      DateTime.fromMillisecondsSinceEpoch(1665846120000);
+                  FFAppState().toolimg = '';
+                });
+                FFAppState().update(() {
+                  FFAppState().chequeName = '';
+                });
                 context.pop();
               },
             ),
@@ -181,7 +187,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                           readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
-                            labelText: 'Наименование инстумента',
+                            labelText: FFLocalizations.of(context).getText(
+                              '6g79p2q3' /* Наименование инстумента */,
+                            ),
                             hintStyle: FlutterFlowTheme.of(context).bodyText2,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -225,8 +233,12 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                           readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
-                            labelText: 'Описание инструмента',
-                            hintText: 'Введите описание инструмента',
+                            labelText: FFLocalizations.of(context).getText(
+                              '5czac6e7' /* Описание инструмента */,
+                            ),
+                            hintText: FFLocalizations.of(context).getText(
+                              'o6t0s707' /* Введите описание инструмента */,
+                            ),
                             hintStyle: FlutterFlowTheme.of(context).bodyText2,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -271,7 +283,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                           readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
-                            labelText: 'Наименование магазина',
+                            labelText: FFLocalizations.of(context).getText(
+                              'w9h2pmjn' /* Наименование магазина */,
+                            ),
                             hintStyle: FlutterFlowTheme.of(context).bodyText2,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -318,7 +332,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(8, 0, 0, 2),
                               child: Text(
-                                'Добавить чек',
+                                FFLocalizations.of(context).getText(
+                                  '3s8ldint' /* Добавить чек */,
+                                ),
                                 style: FlutterFlowTheme.of(context)
                                     .bodyText1
                                     .override(
@@ -338,7 +354,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                     0, 10, 0, 10),
                                 child: InkWell(
                                   onTap: () async {
-                                    FFAppState().viewPhoto = true;
+                                    FFAppState().update(() {
+                                      FFAppState().viewPhoto = true;
+                                    });
                                   },
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -432,14 +450,27 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                               }
                                             }
 
-                                            FFAppState().chequeName =
-                                                'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
+                                            FFAppState().update(() {
+                                              FFAppState().chequeName =
+                                                  'Чек ${dateTimeFormat(
+                                                'd/M H:mm',
+                                                getCurrentTimestamp,
+                                                locale:
+                                                    FFLocalizations.of(context)
+                                                        .languageCode,
+                                              )}';
+                                            });
 
                                             final toolsUpdateData =
                                                 createToolsRecordData(
                                               chequeIMG: uploadedFileUrl,
-                                              chequeName:
-                                                  'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}',
+                                              chequeName: 'Чек ${dateTimeFormat(
+                                                'd/M H:mm',
+                                                getCurrentTimestamp,
+                                                locale:
+                                                    FFLocalizations.of(context)
+                                                        .languageCode,
+                                              )}',
                                             );
                                             await widget.tool!.reference
                                                 .update(toolsUpdateData);
@@ -471,7 +502,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           8, 0, 0, 2),
                                       child: Text(
-                                        'Дата покупки',
+                                        FFLocalizations.of(context).getText(
+                                          '8njgpx48' /* Дата покупки */,
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1
                                             .override(
@@ -497,8 +530,12 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             12, 0, 0, 0),
                                         child: Text(
-                                          dateTimeFormat('d/M/y',
-                                              FFAppState().toolBuyDate),
+                                          dateTimeFormat(
+                                            'd/M/y',
+                                            FFAppState().toolBuyDate,
+                                            locale: FFLocalizations.of(context)
+                                                .languageCode,
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1,
                                         ),
@@ -520,7 +557,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           8, 0, 0, 2),
                                       child: Text(
-                                        'Цена, тенге',
+                                        FFLocalizations.of(context).getText(
+                                          'keqb5fko' /* Цена, тенге */,
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1
                                             .override(
@@ -645,7 +684,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 8, 0, 0),
                                           child: Text(
-                                            'Продавца',
+                                            FFLocalizations.of(context).getText(
+                                              '5q7sslpa' /* Продавца */,
+                                            ),
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyText1,
                                           ),
@@ -700,7 +741,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                     },
                                   );
                                 },
-                                text: 'Связаться',
+                                text: FFLocalizations.of(context).getText(
+                                  '4kajw6ay' /* Связаться */,
+                                ),
                                 options: FFButtonOptions(
                                   width: 130,
                                   height: 48,
@@ -738,7 +781,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                   .update(toolsUpdateData);
                               context.pop();
                             },
-                            text: 'Выставить на продажу',
+                            text: FFLocalizations.of(context).getText(
+                              'znm3rki1' /* Выставить на продажу */,
+                            ),
                             options: FFButtonOptions(
                               width: 130,
                               height: 48,
@@ -775,7 +820,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                   .update(toolsUpdateData);
                               context.pop();
                             },
-                            text: 'Снять с продаж',
+                            text: FFLocalizations.of(context).getText(
+                              'tzvubz9k' /* Снять с продаж */,
+                            ),
                             options: FFButtonOptions(
                               width: 130,
                               height: 48,
@@ -803,7 +850,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                 if (FFAppState().viewPhoto)
                   InkWell(
                     onTap: () async {
-                      FFAppState().viewPhoto = false;
+                      FFAppState().update(() {
+                        FFAppState().viewPhoto = false;
+                      });
                     },
                     child: Container(
                       width: double.infinity,
@@ -816,7 +865,9 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                         alignment: AlignmentDirectional(0, 0),
                         child: InkWell(
                           onTap: () async {
-                            FFAppState().viewPhoto = false;
+                            FFAppState().update(() {
+                              FFAppState().viewPhoto = false;
+                            });
                           },
                           child: Image.network(
                             toolDetailPageToolsRecord.photo!,

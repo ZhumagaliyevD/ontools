@@ -46,20 +46,26 @@ class _ReportDelWidgetState extends State<ReportDelWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'Удалить отчет?',
+                  FFLocalizations.of(context).getText(
+                    'kv0eyeyl' /* Удалить отчет? */,
+                  ),
                   style: FlutterFlowTheme.of(context).title3,
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                   child: Text(
-                    'Вы действительно хотите удалить:',
+                    FFLocalizations.of(context).getText(
+                      'by72996b' /* Вы действительно хотите удалит... */,
+                    ),
                     style: FlutterFlowTheme.of(context).subtitle2,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                   child: Text(
-                    'Отчет за 15.08.2022 - 16.08.2022',
+                    FFLocalizations.of(context).getText(
+                      '82ho97ba' /* Отчет за 15.08.2022 - 16.08.20... */,
+                    ),
                     style: FlutterFlowTheme.of(context).subtitle2,
                   ),
                 ),
@@ -93,7 +99,9 @@ class _ReportDelWidgetState extends State<ReportDelWidget> {
                         },
                       );
                     },
-                    text: 'Да удалить',
+                    text: FFLocalizations.of(context).getText(
+                      'giftxoe8' /* Да удалить */,
+                    ),
                     options: FFButtonOptions(
                       width: 230,
                       height: 44,
@@ -117,7 +125,9 @@ class _ReportDelWidgetState extends State<ReportDelWidget> {
                     onPressed: () async {
                       Navigator.pop(context);
                     },
-                    text: 'Отменить',
+                    text: FFLocalizations.of(context).getText(
+                      'd5149d2a' /* Отменить */,
+                    ),
                     options: FFButtonOptions(
                       width: 230,
                       height: 44,

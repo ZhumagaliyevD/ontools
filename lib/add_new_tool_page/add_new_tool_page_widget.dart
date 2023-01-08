@@ -42,7 +42,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      FFAppState().viewPhoto = false;
+      FFAppState().update(() {
+        FFAppState().viewPhoto = false;
+      });
     });
 
     descriptionController = TextEditingController();
@@ -83,14 +85,20 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
           ),
           onPressed: () async {
             context.pop();
-            FFAppState().toolimg = '';
-            FFAppState().toolBuyDate =
-                DateTime.fromMillisecondsSinceEpoch(1665846120000);
-            FFAppState().chequeName = '';
+            FFAppState().update(() {
+              FFAppState().toolimg = '';
+              FFAppState().toolBuyDate =
+                  DateTime.fromMillisecondsSinceEpoch(1665846120000);
+            });
+            FFAppState().update(() {
+              FFAppState().chequeName = '';
+            });
           },
         ),
         title: Text(
-          'Добавить инструмент',
+          FFLocalizations.of(context).getText(
+            'ms8sxg3a' /* Добавить инструмент */,
+          ),
           style: FlutterFlowTheme.of(context).subtitle1,
         ),
         actions: [],
@@ -116,7 +124,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                         autofocus: true,
                         obscureText: false,
                         decoration: InputDecoration(
-                          labelText: 'Наименование инстумента',
+                          labelText: FFLocalizations.of(context).getText(
+                            'a297mh43' /* Наименование инстумента */,
+                          ),
                           hintStyle: FlutterFlowTheme.of(context).bodyText2,
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -153,7 +163,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                         style: FlutterFlowTheme.of(context).bodyText1,
                         validator: (val) {
                           if (val == null || val.isEmpty) {
-                            return 'Обязательное поле';
+                            return FFLocalizations.of(context).getText(
+                              '48kml06p' /* Обязательное поле */,
+                            );
                           }
 
                           return null;
@@ -231,7 +243,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
 
                               if (!(uploadedFileUrl1 == null ||
                                   uploadedFileUrl1 == '')) {
-                                FFAppState().toolimg = uploadedFileUrl1;
+                                FFAppState().update(() {
+                                  FFAppState().toolimg = uploadedFileUrl1;
+                                });
                               }
                             },
                             child: Icon(
@@ -265,7 +279,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                       onTap: () async {
                                         if (FFAppState().chequeName != null &&
                                             FFAppState().chequeName != '') {
-                                          FFAppState().viewPhoto = true;
+                                          FFAppState().update(() {
+                                            FFAppState().viewPhoto = true;
+                                          });
                                         }
                                       },
                                       child: Text(
@@ -314,9 +330,13 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                       size: 20,
                                     ),
                                     onPressed: () async {
-                                      FFAppState().chequeName = '';
-                                      FFAppState().chequeImg = '';
-                                      FFAppState().viewPhoto = false;
+                                      FFAppState().update(() {
+                                        FFAppState().chequeName = '';
+                                        FFAppState().chequeImg = '';
+                                      });
+                                      FFAppState().update(() {
+                                        FFAppState().viewPhoto = false;
+                                      });
                                     },
                                   ),
                                 if (FFAppState().chequeName == null ||
@@ -372,10 +392,17 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
 
                                       if (uploadedFileUrl2 != null &&
                                           uploadedFileUrl2 != '') {
-                                        FFAppState().chequeName =
-                                            'Чек ${dateTimeFormat('d/M H:mm', getCurrentTimestamp)}';
-                                        FFAppState().chequeImg =
-                                            uploadedFileUrl2;
+                                        FFAppState().update(() {
+                                          FFAppState().chequeName =
+                                              'Чек ${dateTimeFormat(
+                                            'd/M H:mm',
+                                            getCurrentTimestamp,
+                                            locale: FFLocalizations.of(context)
+                                                .languageCode,
+                                          )}';
+                                          FFAppState().chequeImg =
+                                              uploadedFileUrl2;
+                                        });
                                       }
                                     },
                                   ),
@@ -392,8 +419,12 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                         autofocus: true,
                         obscureText: false,
                         decoration: InputDecoration(
-                          labelText: 'Описание инструмента',
-                          hintText: 'Введите описание инструмента',
+                          labelText: FFLocalizations.of(context).getText(
+                            'w8r186o0' /* Описание инструмента */,
+                          ),
+                          hintText: FFLocalizations.of(context).getText(
+                            'zdsfqmfk' /* Введите описание инструмента */,
+                          ),
                           hintStyle: FlutterFlowTheme.of(context).bodyText2,
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -431,7 +462,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                         maxLines: 8,
                         validator: (val) {
                           if (val == null || val.isEmpty) {
-                            return 'Обязательное поле';
+                            return FFLocalizations.of(context).getText(
+                              'ptcubvfr' /* Обязательное поле */,
+                            );
                           }
 
                           return null;
@@ -445,7 +478,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                         autofocus: true,
                         obscureText: false,
                         decoration: InputDecoration(
-                          labelText: 'Наименование магазина',
+                          labelText: FFLocalizations.of(context).getText(
+                            '8f8f5g0d' /* Наименование магазина */,
+                          ),
                           hintStyle: FlutterFlowTheme.of(context).bodyText2,
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -482,7 +517,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                         style: FlutterFlowTheme.of(context).bodyText1,
                         validator: (val) {
                           if (val == null || val.isEmpty) {
-                            return 'Обязательное поле';
+                            return FFLocalizations.of(context).getText(
+                              'xa4b0iy9' /* Обязательное поле */,
+                            );
                           }
 
                           return null;
@@ -507,7 +544,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         8, 0, 0, 2),
                                     child: Text(
-                                      'Дата покупки',
+                                      FFLocalizations.of(context).getText(
+                                        'uhz5nhgd' /* Дата покупки */,
+                                      ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
@@ -536,7 +575,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                         );
                                       }
                                       if (!(datePicked == null)) {
-                                        FFAppState().toolBuyDate = datePicked;
+                                        FFAppState().update(() {
+                                          FFAppState().toolBuyDate = datePicked;
+                                        });
                                       }
                                     },
                                     child: Container(
@@ -556,7 +597,12 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             12, 0, 0, 0),
                                         child: Text(
-                                          dateTimeFormat('d/M/y', datePicked),
+                                          dateTimeFormat(
+                                            'd/M/y',
+                                            datePicked,
+                                            locale: FFLocalizations.of(context)
+                                                .languageCode,
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1,
                                         ),
@@ -579,7 +625,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         8, 0, 0, 2),
                                     child: Text(
-                                      'Цена, тенге',
+                                      FFLocalizations.of(context).getText(
+                                        'eqenrtq8' /* Цена, тенге */,
+                                      ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
@@ -700,9 +748,13 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                                 .set(toolsCreateData);
                           }
 
-                          FFAppState().toolimg = '';
-                          FFAppState().chequeName = '';
-                          FFAppState().chequeImg = '';
+                          FFAppState().update(() {
+                            FFAppState().toolimg = '';
+                            FFAppState().chequeName = '';
+                          });
+                          FFAppState().update(() {
+                            FFAppState().chequeImg = '';
+                          });
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -716,7 +768,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
 
                           context.pushNamed('MyToolsPage');
                         },
-                        text: 'Опубликовать',
+                        text: FFLocalizations.of(context).getText(
+                          'krmln518' /* Опубликовать */,
+                        ),
                         options: FFButtonOptions(
                           width: 130,
                           height: 48,
@@ -745,7 +799,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                 (FFAppState().chequeImg != ''))
               InkWell(
                 onTap: () async {
-                  FFAppState().viewPhoto = false;
+                  FFAppState().update(() {
+                    FFAppState().viewPhoto = false;
+                  });
                 },
                 child: Container(
                   width: double.infinity,
@@ -757,7 +813,9 @@ class _AddNewToolPageWidgetState extends State<AddNewToolPageWidget> {
                     alignment: AlignmentDirectional(0, 0),
                     child: InkWell(
                       onTap: () async {
-                        FFAppState().viewPhoto = false;
+                        FFAppState().update(() {
+                          FFAppState().viewPhoto = false;
+                        });
                       },
                       child: Image.network(
                         FFAppState().chequeImg,

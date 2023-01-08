@@ -69,7 +69,9 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             automaticallyImplyLeading: false,
             title: Text(
-              'Отчеты',
+              FFLocalizations.of(context).getText(
+                'h3cf4yqu' /* Отчеты */,
+              ),
               style: FlutterFlowTheme.of(context).subtitle1,
             ),
             actions: [],
@@ -99,7 +101,9 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                               child: Text(
-                                'Выберите период',
+                                FFLocalizations.of(context).getText(
+                                  'yn6982zc' /* Выберите период */,
+                                ),
                                 style: FlutterFlowTheme.of(context)
                                     .bodyText1
                                     .override(
@@ -126,7 +130,9 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             8, 0, 0, 2),
                                         child: Text(
-                                          'Начало',
+                                          FFLocalizations.of(context).getText(
+                                            'ij92v7js' /* Начало */,
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1
                                               .override(
@@ -155,8 +161,10 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                             );
                                           }
                                           if (!(datePicked1 == null)) {
-                                            FFAppState().reportStart =
-                                                datePicked1;
+                                            FFAppState().update(() {
+                                              FFAppState().reportStart =
+                                                  datePicked1;
+                                            });
                                           }
                                         },
                                         child: Container(
@@ -181,7 +189,12 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                                     12, 0, 0, 0),
                                             child: Text(
                                               dateTimeFormat(
-                                                  'd/M/y', datePicked1),
+                                                'd/M/y',
+                                                datePicked1,
+                                                locale:
+                                                    FFLocalizations.of(context)
+                                                        .languageCode,
+                                              ),
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
@@ -200,7 +213,9 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             8, 0, 0, 2),
                                         child: Text(
-                                          'Конец',
+                                          FFLocalizations.of(context).getText(
+                                            'pky042h0' /* Конец */,
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1
                                               .override(
@@ -229,8 +244,10 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                             );
                                           }
                                           if (!(datePicked2 == null)) {
-                                            FFAppState().reportEnd =
-                                                datePicked2;
+                                            FFAppState().update(() {
+                                              FFAppState().reportEnd =
+                                                  datePicked2;
+                                            });
                                           }
                                         },
                                         child: Container(
@@ -255,7 +272,12 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                                     12, 0, 0, 0),
                                             child: Text(
                                               dateTimeFormat(
-                                                  'd/M/y', datePicked2),
+                                                'd/M/y',
+                                                datePicked2,
+                                                locale:
+                                                    FFLocalizations.of(context)
+                                                        .languageCode,
+                                              ),
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
@@ -273,7 +295,9 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                               autofocus: true,
                               obscureText: false,
                               decoration: InputDecoration(
-                                hintText: '[Some hint text...]',
+                                hintText: FFLocalizations.of(context).getText(
+                                  'yoorffuv' /* [Some hint text...] */,
+                                ),
                                 hintStyle:
                                     FlutterFlowTheme.of(context).bodyText2,
                                 enabledBorder: UnderlineInputBorder(
@@ -352,16 +376,36 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                   return FFButtonWidget(
                                     onPressed: () async {
                                       if (dateTimeFormat(
-                                                  'd/M/y', datePicked1) !=
+                                                'd/M/y',
+                                                datePicked1,
+                                                locale:
+                                                    FFLocalizations.of(context)
+                                                        .languageCode,
+                                              ) !=
                                               null &&
                                           dateTimeFormat(
-                                                  'd/M/y', datePicked1) !=
+                                                'd/M/y',
+                                                datePicked1,
+                                                locale:
+                                                    FFLocalizations.of(context)
+                                                        .languageCode,
+                                              ) !=
                                               '') {
                                         if (dateTimeFormat(
-                                                    'd/M/y', datePicked2) !=
+                                                  'd/M/y',
+                                                  datePicked2,
+                                                  locale: FFLocalizations.of(
+                                                          context)
+                                                      .languageCode,
+                                                ) !=
                                                 null &&
                                             dateTimeFormat(
-                                                    'd/M/y', datePicked2) !=
+                                                  'd/M/y',
+                                                  datePicked2,
+                                                  locale: FFLocalizations.of(
+                                                          context)
+                                                      .languageCode,
+                                                ) !=
                                                 '') {
                                           final reportsCreateData = {
                                             ...createReportsRecordData(
@@ -421,7 +465,7 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
 
                                       if (buttonPurchaseRecordList
                                               .where((e) =>
-                                                  e.toolName! ==
+                                                  e.toolName ==
                                                   textController!.text)
                                               .toList()
                                               .length ==
@@ -445,7 +489,9 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                         );
                                       }
                                     },
-                                    text: 'Поиск',
+                                    text: FFLocalizations.of(context).getText(
+                                      'joei7gw3' /* Поиск */,
+                                    ),
                                     options: FFButtonOptions(
                                       width: 130,
                                       height: 48,
@@ -492,7 +538,9 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                                 child: Text(
-                                  'Мои отчеты',
+                                  FFLocalizations.of(context).getText(
+                                    'qvfyf8ve' /* Мои отчеты */,
+                                  ),
                                   style: FlutterFlowTheme.of(context)
                                       .bodyText1
                                       .override(
@@ -547,9 +595,13 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                               children: [
                                                 Text(
                                                   dateTimeFormat(
-                                                      'd/M/y',
-                                                      listViewReportsRecord
-                                                          .startDate!),
+                                                    'd/M/y',
+                                                    listViewReportsRecord
+                                                        .startDate!,
+                                                    locale: FFLocalizations.of(
+                                                            context)
+                                                        .languageCode,
+                                                  ),
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyText1
@@ -562,7 +614,10 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                                       ),
                                                 ),
                                                 Text(
-                                                  ' - ',
+                                                  FFLocalizations.of(context)
+                                                      .getText(
+                                                    '86vrdppm' /*  -  */,
+                                                  ),
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyText1
@@ -576,9 +631,13 @@ class _ReportsPageWidgetState extends State<ReportsPageWidget> {
                                                 ),
                                                 Text(
                                                   dateTimeFormat(
-                                                      'd/M/y',
-                                                      listViewReportsRecord
-                                                          .endDate!),
+                                                    'd/M/y',
+                                                    listViewReportsRecord
+                                                        .endDate!,
+                                                    locale: FFLocalizations.of(
+                                                            context)
+                                                        .languageCode,
+                                                  ),
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyText1

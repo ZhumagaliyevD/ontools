@@ -43,7 +43,9 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          FFAppState().SearchList = false;
+          FFAppState().update(() {
+            FFAppState().SearchList = false;
+          });
 
           context.pushNamed('AddNewToolPage');
         },
@@ -59,7 +61,9 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         automaticallyImplyLeading: false,
         title: Text(
-          'Мои инструменты',
+          FFLocalizations.of(context).getText(
+            'nyxk3fwe' /* Мои инструменты */,
+          ),
           style: FlutterFlowTheme.of(context).subtitle1,
         ),
         actions: [],
@@ -100,7 +104,9 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                             obscureText: false,
                             decoration: InputDecoration(
                               isDense: true,
-                              hintText: 'Поиск',
+                              hintText: FFLocalizations.of(context).getText(
+                                'b42ruyf9' /* Поиск */,
+                              ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
@@ -199,12 +205,16 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                               children: [
                                 InkWell(
                                   onTap: () async {
-                                    FFAppState().toolBuyDate =
-                                        searchToolListToolsRecord.buyDate;
-                                    FFAppState().toolimg =
-                                        searchToolListToolsRecord.photo!;
-                                    FFAppState().chequeName =
-                                        searchToolListToolsRecord.chequeName!;
+                                    FFAppState().update(() {
+                                      FFAppState().toolBuyDate =
+                                          searchToolListToolsRecord.buyDate;
+                                      FFAppState().toolimg =
+                                          searchToolListToolsRecord.photo!;
+                                    });
+                                    FFAppState().update(() {
+                                      FFAppState().chequeName =
+                                          searchToolListToolsRecord.chequeName!;
+                                    });
 
                                     context.pushNamed(
                                       'ToolDetailPage',
@@ -294,9 +304,14 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                                                   ),
                                                   Text(
                                                     dateTimeFormat(
-                                                        'd/M/y',
-                                                        searchToolListToolsRecord
-                                                            .buyDate!),
+                                                      'd/M/y',
+                                                      searchToolListToolsRecord
+                                                          .buyDate!,
+                                                      locale:
+                                                          FFLocalizations.of(
+                                                                  context)
+                                                              .languageCode,
+                                                    ),
                                                     textAlign: TextAlign.center,
                                                     style: FlutterFlowTheme.of(
                                                             context)

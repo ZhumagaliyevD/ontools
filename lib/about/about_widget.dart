@@ -47,7 +47,9 @@ class _AboutWidgetState extends State<AboutWidget> {
           },
         ),
         title: Text(
-          'О приложении',
+          FFLocalizations.of(context).getText(
+            'nyjkgyhc' /* О приложении */,
+          ),
           style: FlutterFlowTheme.of(context).subtitle1,
         ),
         actions: [],
@@ -71,7 +73,9 @@ class _AboutWidgetState extends State<AboutWidget> {
                     children: [
                       Expanded(
                         child: Text(
-                          'We made it so you can take good care of your work tools, and in return they’ll take care of you.\nAlways have access to your digital tool box, on any device, in any place.\nSave, manage, track, keep receipts, and notes.\nAs you progress through your apprenticeship, out of pocket tool purchases add up.\nYou need to know what tools you own, how much was spent on them, and where they are, i.e work van, toolbox, shop floor, etc.\nYou want to keep more of your money and event get some back by claiming tool allowance tax deductions.\nIf you carry tool insurance, prove ownership by saving receipts digitally, no more paperwork.\nGet a mobile app that records your tools, storing the data securely on a cloud.\nYour toolbox is digitized, with complete purchase history and copies of receipts.\nSave reports to assist tax and insurance claims.\nCreate and keep notes related to your jobs and tools.\nAccess a tool marketplace shared by fellow tradespeople.\nOnTools uses:\nGoogle Cloud platform to provide security and scalability.\nProgressive web app format for flexibility and online performance on both Android and iOS devices.\nOCR technology for document scanning to avoid manual entry.',
+                          FFLocalizations.of(context).getText(
+                            'xax16wud' /* We made it so you can take goo... */,
+                          ),
                           style: FlutterFlowTheme.of(context).bodyText1,
                         ),
                       ),

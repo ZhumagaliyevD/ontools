@@ -86,7 +86,9 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                               child: Text(
-                                'Войдите в аккаунт',
+                                FFLocalizations.of(context).getText(
+                                  'fyazpbhv' /* Войдите в аккаунт */,
+                                ),
                                 textAlign: TextAlign.start,
                                 style: FlutterFlowTheme.of(context).title1,
                               ),
@@ -106,8 +108,14 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                                       controller: emailLoginController,
                                       obscureText: false,
                                       decoration: InputDecoration(
-                                        labelText: 'Email',
-                                        hintText: 'name@example.com',
+                                        labelText:
+                                            FFLocalizations.of(context).getText(
+                                          '4ekpjqof' /* Email */,
+                                        ),
+                                        hintText:
+                                            FFLocalizations.of(context).getText(
+                                          'o7jcjsy6' /* name@example.com */,
+                                        ),
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .bodyText2,
                                         enabledBorder: OutlineInputBorder(
@@ -162,7 +170,10 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                                         controller: passwordLoginController,
                                         obscureText: !passwordLoginVisibility,
                                         decoration: InputDecoration(
-                                          labelText: 'Введите пароль',
+                                          labelText: FFLocalizations.of(context)
+                                              .getText(
+                                            'u609mfdg' /* Введите пароль */,
+                                          ),
                                           enabledBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                               color:
@@ -250,7 +261,9 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                                           );
                                         },
                                         child: Text(
-                                          'Забыл пароль? ',
+                                          FFLocalizations.of(context).getText(
+                                            'i3z15n6q' /* Забыл пароль?  */,
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1
                                               .override(
@@ -282,7 +295,10 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                                           context.goNamedAuth(
                                               'ProfileHomePage', mounted);
                                         },
-                                        text: 'Войти',
+                                        text:
+                                            FFLocalizations.of(context).getText(
+                                          '1jxfx2lq' /* Войти */,
+                                        ),
                                         options: FFButtonOptions(
                                           width: 130,
                                           height: 48,
@@ -314,7 +330,9 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                                           context.pushNamed('SignUpPage');
                                         },
                                         child: Text(
-                                          'У Вас нет аккаунта? Зарегистрируйтесь',
+                                          FFLocalizations.of(context).getText(
+                                            'tzr2l9ls' /* У Вас нет аккаунта? Зарегистри... */,
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1
                                               .override(
@@ -348,7 +366,10 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                                           ),
                                           Expanded(
                                             child: Text(
-                                              'или',
+                                              FFLocalizations.of(context)
+                                                  .getText(
+                                                'wjath1cn' /* или */,
+                                              ),
                                               textAlign: TextAlign.center,
                                               style: FlutterFlowTheme.of(
                                                       context)
@@ -386,64 +407,103 @@ class _EntryPageWidgetState extends State<EntryPageWidget> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Container(
-                                    width: 56,
-                                    height: 56,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      shape: BoxShape.rectangle,
-                                      border: Border.all(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
+                                  InkWell(
+                                    onTap: () async {
+                                      GoRouter.of(context).prepareAuthEvent();
+                                      final user =
+                                          await signInWithGoogle(context);
+                                      if (user == null) {
+                                        return;
+                                      }
+
+                                      context.goNamedAuth(
+                                          'ProfileHomePage', mounted);
+                                    },
+                                    child: Container(
+                                      width: 56,
+                                      height: 56,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        shape: BoxShape.rectangle,
+                                        border: Border.all(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          width: 1,
+                                        ),
                                       ),
-                                    ),
-                                    alignment: AlignmentDirectional(0, 0),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.google,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryColor,
-                                      size: 24,
+                                      alignment: AlignmentDirectional(0, 0),
+                                      child: FaIcon(
+                                        FontAwesomeIcons.google,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryColor,
+                                        size: 24,
+                                      ),
                                     ),
                                   ),
-                                  Container(
-                                    width: 56,
-                                    height: 56,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      shape: BoxShape.rectangle,
-                                      border: Border.all(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
+                                  InkWell(
+                                    onTap: () async {
+                                      GoRouter.of(context).prepareAuthEvent();
+                                      final user =
+                                          await signInWithApple(context);
+                                      if (user == null) {
+                                        return;
+                                      }
+
+                                      context.goNamedAuth(
+                                          'ProfileHomePage', mounted);
+                                    },
+                                    child: Container(
+                                      width: 56,
+                                      height: 56,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        shape: BoxShape.rectangle,
+                                        border: Border.all(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          width: 1,
+                                        ),
                                       ),
-                                    ),
-                                    alignment: AlignmentDirectional(0, 0),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.apple,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryColor,
-                                      size: 24,
+                                      alignment: AlignmentDirectional(0, 0),
+                                      child: FaIcon(
+                                        FontAwesomeIcons.apple,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryColor,
+                                        size: 24,
+                                      ),
                                     ),
                                   ),
-                                  Container(
-                                    width: 56,
-                                    height: 56,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      shape: BoxShape.rectangle,
-                                      border: Border.all(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
+                                  InkWell(
+                                    onTap: () async {
+                                      GoRouter.of(context).prepareAuthEvent();
+                                      final user =
+                                          await signInWithFacebook(context);
+                                      if (user == null) {
+                                        return;
+                                      }
+
+                                      context.goNamedAuth(
+                                          'ProfileHomePage', mounted);
+                                    },
+                                    child: Container(
+                                      width: 56,
+                                      height: 56,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        shape: BoxShape.rectangle,
+                                        border: Border.all(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          width: 1,
+                                        ),
                                       ),
-                                    ),
-                                    alignment: AlignmentDirectional(0, 0),
-                                    child: Icon(
-                                      FFIcons.kfacebook,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryColor,
-                                      size: 24,
+                                      alignment: AlignmentDirectional(0, 0),
+                                      child: Icon(
+                                        FFIcons.kfacebook,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryColor,
+                                        size: 24,
+                                      ),
                                     ),
                                   ),
                                   InkWell(

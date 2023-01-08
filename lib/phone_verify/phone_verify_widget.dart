@@ -83,7 +83,9 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                               child: Text(
-                                'Введите код из SMS',
+                                FFLocalizations.of(context).getText(
+                                  'pit5diz7' /* Введите код из SMS */,
+                                ),
                                 style: FlutterFlowTheme.of(context).subtitle1,
                               ),
                             ),
@@ -183,7 +185,10 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                           context.goNamedAuth(
                                               'ProfileHomePage', mounted);
                                         },
-                                        text: 'Войти',
+                                        text:
+                                            FFLocalizations.of(context).getText(
+                                          'x7dtoc0g' /* Войти */,
+                                        ),
                                         options: FFButtonOptions(
                                           width: 130,
                                           height: 48,
@@ -215,7 +220,9 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                           context.pushNamed('SignUpPage');
                                         },
                                         child: Text(
-                                          'У Вас нет аккаунта? Зарегистрируйтесь',
+                                          FFLocalizations.of(context).getText(
+                                            'ozvnoawc' /* У Вас нет аккаунта? Зарегистри... */,
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1
                                               .override(
@@ -249,7 +256,10 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                           ),
                                           Expanded(
                                             child: Text(
-                                              'или',
+                                              FFLocalizations.of(context)
+                                                  .getText(
+                                                'gkx5k2w7' /* или */,
+                                              ),
                                               textAlign: TextAlign.center,
                                               style: FlutterFlowTheme.of(
                                                       context)
@@ -281,75 +291,89 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                             ),
                             Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Container(
-                                    width: 56,
-                                    height: 56,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      shape: BoxShape.rectangle,
-                                      border: Border.all(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
+                                  InkWell(
+                                    onTap: () async {
+                                      GoRouter.of(context).prepareAuthEvent();
+                                      final user =
+                                          await signInWithGoogle(context);
+                                      if (user == null) {
+                                        return;
+                                      }
+
+                                      context.goNamedAuth(
+                                          'ProfileHomePage', mounted);
+                                    },
+                                    child: Container(
+                                      width: 56,
+                                      height: 56,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        shape: BoxShape.rectangle,
+                                        border: Border.all(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          width: 1,
+                                        ),
                                       ),
-                                    ),
-                                    alignment: AlignmentDirectional(0, 0),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.google,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryColor,
-                                      size: 24,
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 56,
-                                    height: 56,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      shape: BoxShape.rectangle,
-                                      border: Border.all(
+                                      alignment: AlignmentDirectional(0, 0),
+                                      child: FaIcon(
+                                        FontAwesomeIcons.google,
                                         color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
+                                            .primaryColor,
+                                        size: 24,
                                       ),
-                                    ),
-                                    alignment: AlignmentDirectional(0, 0),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.apple,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryColor,
-                                      size: 24,
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 56,
-                                    height: 56,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      shape: BoxShape.rectangle,
-                                      border: Border.all(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
-                                      ),
-                                    ),
-                                    alignment: AlignmentDirectional(0, 0),
-                                    child: Icon(
-                                      FFIcons.kfacebook,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryColor,
-                                      size: 24,
                                     ),
                                   ),
                                   InkWell(
                                     onTap: () async {
-                                      context.pushNamed('EntryPage');
+                                      GoRouter.of(context).prepareAuthEvent();
+                                      final user =
+                                          await signInWithApple(context);
+                                      if (user == null) {
+                                        return;
+                                      }
+
+                                      context.goNamedAuth(
+                                          'ProfileHomePage', mounted);
+                                    },
+                                    child: Container(
+                                      width: 56,
+                                      height: 56,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        shape: BoxShape.rectangle,
+                                        border: Border.all(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      alignment: AlignmentDirectional(0, 0),
+                                      child: FaIcon(
+                                        FontAwesomeIcons.apple,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryColor,
+                                        size: 24,
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () async {
+                                      GoRouter.of(context).prepareAuthEvent();
+                                      final user =
+                                          await signInWithFacebook(context);
+                                      if (user == null) {
+                                        return;
+                                      }
+
+                                      context.goNamedAuth(
+                                          'ProfileHomePage', mounted);
                                     },
                                     child: Container(
                                       width: 56,
@@ -365,7 +389,7 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                       ),
                                       alignment: AlignmentDirectional(0, 0),
                                       child: Icon(
-                                        Icons.alternate_email,
+                                        FFIcons.kfacebook,
                                         color: FlutterFlowTheme.of(context)
                                             .primaryColor,
                                         size: 24,

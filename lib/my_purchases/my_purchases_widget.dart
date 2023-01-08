@@ -43,7 +43,9 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          FFAppState().SearchList = false;
+          FFAppState().update(() {
+            FFAppState().SearchList = false;
+          });
 
           context.pushNamed('AddPurchase');
         },
@@ -59,7 +61,9 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         automaticallyImplyLeading: false,
         title: Text(
-          'My purchases',
+          FFLocalizations.of(context).getText(
+            'joc92vcd' /* My purchases */,
+          ),
           style: FlutterFlowTheme.of(context).subtitle1,
         ),
         actions: [],
@@ -100,7 +104,9 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                             obscureText: false,
                             decoration: InputDecoration(
                               isDense: true,
-                              hintText: 'Search',
+                              hintText: FFLocalizations.of(context).getText(
+                                'v99oajx4' /* Search */,
+                              ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
@@ -202,14 +208,19 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                                 children: [
                                   InkWell(
                                     onTap: () async {
-                                      FFAppState().toolBuyDate =
-                                          searchToolListPurchaseRecord.buyDate;
-                                      FFAppState().toolimg =
-                                          searchToolListPurchaseRecord
-                                              .chqueImg!;
-                                      FFAppState().chequeName =
-                                          searchToolListPurchaseRecord
-                                              .chequeName!;
+                                      FFAppState().update(() {
+                                        FFAppState().toolBuyDate =
+                                            searchToolListPurchaseRecord
+                                                .buyDate;
+                                        FFAppState().toolimg =
+                                            searchToolListPurchaseRecord
+                                                .chqueImg!;
+                                      });
+                                      FFAppState().update(() {
+                                        FFAppState().chequeName =
+                                            searchToolListPurchaseRecord
+                                                .chequeName!;
+                                      });
 
                                       context.pushNamed(
                                         'PurchaseDetail',
@@ -295,9 +306,14 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                                                       .fromSTEB(0, 5, 0, 0),
                                                   child: Text(
                                                     dateTimeFormat(
-                                                        'd/M/y',
-                                                        searchToolListPurchaseRecord
-                                                            .buyDate!),
+                                                      'd/M/y',
+                                                      searchToolListPurchaseRecord
+                                                          .buyDate!,
+                                                      locale:
+                                                          FFLocalizations.of(
+                                                                  context)
+                                                              .languageCode,
+                                                    ),
                                                     textAlign: TextAlign.center,
                                                     style: FlutterFlowTheme.of(
                                                             context)

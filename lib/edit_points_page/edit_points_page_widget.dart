@@ -102,12 +102,16 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                FFAppState().noteIMG = '';
+                FFAppState().update(() {
+                  FFAppState().noteIMG = '';
+                });
                 context.pop();
               },
             ),
             title: Text(
-              'Edit note',
+              FFLocalizations.of(context).getText(
+                'pzp0tso6' /* Edit note */,
+              ),
               style: FlutterFlowTheme.of(context).subtitle1,
             ),
             actions: [
@@ -161,7 +165,9 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                               controller: noteTitleController,
                               obscureText: false,
                               decoration: InputDecoration(
-                                labelText: 'Note title',
+                                labelText: FFLocalizations.of(context).getText(
+                                  'mfo5wn1k' /* Note title */,
+                                ),
                                 hintStyle:
                                     FlutterFlowTheme.of(context).bodyText2,
                                 enabledBorder: OutlineInputBorder(
@@ -207,7 +213,10 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                 controller: noteDescriptionController,
                                 obscureText: false,
                                 decoration: InputDecoration(
-                                  labelText: 'Note description',
+                                  labelText:
+                                      FFLocalizations.of(context).getText(
+                                    'kxnp2owd' /* Note description */,
+                                  ),
                                   hintStyle:
                                       FlutterFlowTheme.of(context).bodyText2,
                                   enabledBorder: OutlineInputBorder(
@@ -272,11 +281,15 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                       PhotoNotePointRecord.getDocumentFromData(
                                           photoNotePointCreateData,
                                           photoNotePointRecordReference);
-                                  FFAppState().addToPhotoNotePoints(
-                                      createdPoint!.reference);
-                                  FFAppState().comment = '';
-                                  FFAppState().dx = 0.0;
-                                  FFAppState().dy = 0.0;
+                                  FFAppState().update(() {
+                                    FFAppState().addToPhotoNotePoints(
+                                        createdPoint!.reference);
+                                    FFAppState().comment = '';
+                                  });
+                                  FFAppState().update(() {
+                                    FFAppState().dx = 0.0;
+                                    FFAppState().dy = 0.0;
+                                  });
 
                                   setState(() {});
                                 },
@@ -428,7 +441,10 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                     controller: optionController,
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      hintText: 'Начните писать',
+                                      hintText:
+                                          FFLocalizations.of(context).getText(
+                                        'g5gsjxi3' /* Начните писать */,
+                                      ),
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodyText2,
                                       enabledBorder: OutlineInputBorder(
@@ -514,7 +530,9 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                         setState(() {});
                                       },
                                       child: Text(
-                                        '+ Новый пункт',
+                                        FFLocalizations.of(context).getText(
+                                          '3i3z7moh' /* + Новый пункт */,
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1,
                                       ),
@@ -584,6 +602,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                 padding: MediaQuery.of(context).viewInsets,
                                 child: AddNoteSettingsWidget(
                                   object: widget.note!.reference,
+                                  obj: widget.note,
                                 ),
                               );
                             },

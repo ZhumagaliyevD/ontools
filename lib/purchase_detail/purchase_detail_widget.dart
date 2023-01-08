@@ -32,7 +32,9 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      FFAppState().viewPhoto = false;
+      FFAppState().update(() {
+        FFAppState().viewPhoto = false;
+      });
     });
   }
 
@@ -82,10 +84,14 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                 size: 30,
               ),
               onPressed: () async {
-                FFAppState().toolBuyDate =
-                    DateTime.fromMillisecondsSinceEpoch(1665846120000);
-                FFAppState().toolimg = '';
-                FFAppState().chequeName = '';
+                FFAppState().update(() {
+                  FFAppState().toolBuyDate =
+                      DateTime.fromMillisecondsSinceEpoch(1665846120000);
+                  FFAppState().toolimg = '';
+                });
+                FFAppState().update(() {
+                  FFAppState().chequeName = '';
+                });
                 context.pop();
               },
             ),
@@ -146,7 +152,9 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                           readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
-                            labelText: 'Store Name',
+                            labelText: FFLocalizations.of(context).getText(
+                              's9wrgquw' /* Store Name */,
+                            ),
                             hintStyle: FlutterFlowTheme.of(context).bodyText2,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -193,7 +201,9 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                           readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
-                            labelText: 'Store Address',
+                            labelText: FFLocalizations.of(context).getText(
+                              '8yuto2kj' /* Store Address */,
+                            ),
                             hintStyle: FlutterFlowTheme.of(context).bodyText2,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -255,7 +265,9 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                                           0, 10, 0, 10),
                                       child: InkWell(
                                         onTap: () async {
-                                          FFAppState().viewPhoto = true;
+                                          FFAppState().update(() {
+                                            FFAppState().viewPhoto = true;
+                                          });
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
@@ -278,6 +290,15 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                                                     ),
                                               ),
                                             ),
+                                            Text(
+                                              FFLocalizations.of(context)
+                                                  .getText(
+                                                'hfpsnc5m' /* (Tap photo to view) */,
+                                              ),
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText1,
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -296,7 +317,7 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0, 0, 0, 15),
                                         child: Image.network(
-                                          FFAppState().chequeImg,
+                                          widget.toolPurchase!.chqueImg!,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -326,7 +347,9 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           8, 0, 0, 2),
                                       child: Text(
-                                        'Purchase date',
+                                        FFLocalizations.of(context).getText(
+                                          '6785yzx0' /* Purchase date */,
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1
                                             .override(
@@ -353,8 +376,13 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                                             12, 0, 0, 0),
                                         child: Text(
                                           valueOrDefault<String>(
-                                            dateTimeFormat('yMd',
-                                                FFAppState().toolBuyDate),
+                                            dateTimeFormat(
+                                              'yMd',
+                                              FFAppState().toolBuyDate,
+                                              locale:
+                                                  FFLocalizations.of(context)
+                                                      .languageCode,
+                                            ),
                                             '132132131',
                                           ),
                                           style: FlutterFlowTheme.of(context)
@@ -378,7 +406,9 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           8, 0, 0, 2),
                                       child: Text(
-                                        'Price written on cheque',
+                                        FFLocalizations.of(context).getText(
+                                          '0igz02cb' /* Price written on cheque */,
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1
                                             .override(
@@ -454,7 +484,9 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                 if (FFAppState().viewPhoto)
                   InkWell(
                     onTap: () async {
-                      FFAppState().viewPhoto = false;
+                      FFAppState().update(() {
+                        FFAppState().viewPhoto = false;
+                      });
                     },
                     child: Container(
                       width: double.infinity,
@@ -467,7 +499,9 @@ class _PurchaseDetailWidgetState extends State<PurchaseDetailWidget> {
                         alignment: AlignmentDirectional(0, 0),
                         child: InkWell(
                           onTap: () async {
-                            FFAppState().viewPhoto = false;
+                            FFAppState().update(() {
+                              FFAppState().viewPhoto = false;
+                            });
                           },
                           child: Image.network(
                             purchaseDetailPurchaseRecord.chqueImg!,
