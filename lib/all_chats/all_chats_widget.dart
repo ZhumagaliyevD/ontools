@@ -1,12 +1,14 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../flutter_flow/chat/index.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/chat/index.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'all_chats_model.dart';
+export 'all_chats_model.dart';
 
 class AllChatsWidget extends StatefulWidget {
   const AllChatsWidget({Key? key}) : super(key: key);
@@ -16,7 +18,22 @@ class AllChatsWidget extends StatefulWidget {
 }
 
 class _AllChatsWidgetState extends State<AllChatsWidget> {
+  late AllChatsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => AllChatsModel());
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +46,13 @@ class _AllChatsWidgetState extends State<AllChatsWidget> {
         automaticallyImplyLeading: false,
         leading: FlutterFlowIconButton(
           borderColor: Colors.transparent,
-          borderRadius: 30,
-          borderWidth: 1,
-          buttonSize: 60,
+          borderRadius: 30.0,
+          borderWidth: 1.0,
+          buttonSize: 60.0,
           icon: Icon(
             Icons.arrow_back_rounded,
             color: FlutterFlowTheme.of(context).primaryText,
-            size: 30,
+            size: 30.0,
           ),
           onPressed: () async {
             context.pushNamed('Marketplace');
@@ -45,20 +62,20 @@ class _AllChatsWidgetState extends State<AllChatsWidget> {
           FFLocalizations.of(context).getText(
             'q3pbrm0z' /* Все сообщения */,
           ),
-          style: FlutterFlowTheme.of(context).bodyText1.override(
+          style: FlutterFlowTheme.of(context).bodyMedium.override(
                 fontFamily: 'Montserrat',
                 color: Colors.black,
-                fontSize: 18,
+                fontSize: 18.0,
                 fontWeight: FontWeight.bold,
               ),
         ),
         actions: [],
         centerTitle: true,
-        elevation: 4,
+        elevation: 4.0,
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(0, 2, 0, 0),
+          padding: EdgeInsetsDirectional.fromSTEB(0.0, 2.0, 0.0, 0.0),
           child: StreamBuilder<List<ChatsRecord>>(
             stream: queryChatsRecord(
               queryBuilder: (chatsRecord) => chatsRecord
@@ -70,10 +87,10 @@ class _AllChatsWidgetState extends State<AllChatsWidget> {
               if (!snapshot.hasData) {
                 return Center(
                   child: SizedBox(
-                    width: 50,
-                    height: 50,
+                    width: 50.0,
+                    height: 50.0,
                     child: CircularProgressIndicator(
-                      color: FlutterFlowTheme.of(context).secondaryColor,
+                      color: FlutterFlowTheme.of(context).secondary,
                     ),
                   ),
                 );
@@ -125,23 +142,23 @@ class _AllChatsWidgetState extends State<AllChatsWidget> {
                           'Montserrat',
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: 14.0,
                         ),
                         dateTextStyle: GoogleFonts.getFont(
                           'Montserrat',
                           color: Color(0x73000000),
                           fontWeight: FontWeight.normal,
-                          fontSize: 14,
+                          fontSize: 14.0,
                         ),
                         previewTextStyle: GoogleFonts.getFont(
                           'Montserrat',
                           color: Color(0x73000000),
                           fontWeight: FontWeight.normal,
-                          fontSize: 14,
+                          fontSize: 14.0,
                         ),
                         contentPadding:
-                            EdgeInsetsDirectional.fromSTEB(3, 3, 3, 3),
-                        borderRadius: BorderRadius.circular(0),
+                            EdgeInsetsDirectional.fromSTEB(3.0, 3.0, 3.0, 3.0),
+                        borderRadius: BorderRadius.circular(0.0),
                       );
                     },
                   );

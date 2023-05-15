@@ -4,14 +4,13 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 
 Offerings? _offerings;
-PurchaserInfo? _purchaserInfo;
+CustomerInfo? _customerInfo;
 String? _loggedInUid;
 
 Offerings? get offerings => _offerings;
-PurchaserInfo? get purchaserInfo => _purchaserInfo;
+CustomerInfo? get customerInfo => _customerInfo;
 
-set purchaserInfo(PurchaserInfo? purchaserInfo) =>
-    _purchaserInfo = purchaserInfo;
+set customerInfo(CustomerInfo? customerInfo) => _customerInfo = customerInfo;
 
 Future initialize(
   String appStoreKey,
@@ -36,10 +35,10 @@ Future initialize(
     }
 
     if (loadDataAfterLaunch) {
-      loadPurchaserInfo();
+      loadCustomerInfo();
       loadOfferings();
     } else {
-      await loadPurchaserInfo();
+      await loadCustomerInfo();
       await loadOfferings();
     }
   } on Exception catch (e) {
@@ -55,15 +54,15 @@ Future<bool> purchasePackage(String package) async {
     if (revenueCatPackage == null) {
       return false;
     }
-    purchaserInfo = await Purchases.purchasePackage(revenueCatPackage);
+    customerInfo = await Purchases.purchasePackage(revenueCatPackage);
     return true;
   } catch (_) {
     return false;
   }
 }
 
-List<String> get activeEntitlementIds => _purchaserInfo != null
-    ? _purchaserInfo!.entitlements.active.values
+List<String> get activeEntitlementIds => _customerInfo != null
+    ? _customerInfo!.entitlements.active.values
         .map((e) => e.identifier)
         .toList()
     : [];
@@ -76,9 +75,9 @@ Future loadOfferings() async {
   }
 }
 
-Future loadPurchaserInfo() async {
+Future loadCustomerInfo() async {
   try {
-    _purchaserInfo = await Purchases.getPurchaserInfo();
+    _customerInfo = await Purchases.getCustomerInfo();
   } on PlatformException catch (e) {
     print("Error loading purchaser info: $e");
   }
@@ -88,8 +87,8 @@ Future loadPurchaserInfo() async {
 // Return null on errors.
 Future<bool?> isEntitled(String entitlementId) async {
   try {
-    purchaserInfo = await Purchases.getPurchaserInfo();
-    return purchaserInfo!.entitlements.all[entitlementId]?.isActive ?? false;
+    customerInfo = await Purchases.getCustomerInfo();
+    return customerInfo!.entitlements.all[entitlementId]?.isActive ?? false;
   } on Exception catch (e) {
     print("Unable to check RevenueCat entitlements: $e");
     return null;
@@ -98,14 +97,14 @@ Future<bool?> isEntitled(String entitlementId) async {
 
 // https://docs.revenuecat.com/docs/user-ids
 Future login(String? uid) async {
-  if (uid == _loggedInUid) {
+  if (kIsWeb || uid == _loggedInUid) {
     return;
   }
   try {
     if (uid != null) {
-      purchaserInfo = (await Purchases.logIn(uid)).purchaserInfo;
+      customerInfo = (await Purchases.logIn(uid)).customerInfo;
     } else {
-      purchaserInfo = await Purchases.logOut();
+      customerInfo = await Purchases.logOut();
     }
     _loggedInUid = uid;
   } on Exception catch (e) {
@@ -116,7 +115,7 @@ Future login(String? uid) async {
 // https://docs.revenuecat.com/docs/restoring-purchases
 Future restorePurchases() async {
   try {
-    purchaserInfo = await Purchases.restoreTransactions();
+    customerInfo = await Purchases.restorePurchases();
   } on PlatformException catch (e) {
     print("Unable to restore purchases in RevenueCat: $e");
   }

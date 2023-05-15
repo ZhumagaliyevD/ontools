@@ -1,14 +1,16 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../custom_code/widgets/index.dart' as custom_widgets;
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'points_page_model.dart';
+export 'points_page_model.dart';
 
 class PointsPageWidget extends StatefulWidget {
   const PointsPageWidget({
@@ -23,11 +25,21 @@ class PointsPageWidget extends StatefulWidget {
 }
 
 class _PointsPageWidgetState extends State<PointsPageWidget> {
-  final _unfocusNode = FocusNode();
+  late PointsPageModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => PointsPageModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -43,93 +55,95 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 50,
-              height: 50,
+              width: 50.0,
+              height: 50.0,
               child: CircularProgressIndicator(
-                color: FlutterFlowTheme.of(context).secondaryColor,
+                color: FlutterFlowTheme.of(context).secondary,
               ),
             ),
           );
         }
         final pointsPageNotesRecord = snapshot.data!;
-        return Scaffold(
-          key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          appBar: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            automaticallyImplyLeading: false,
-            leading: FlutterFlowIconButton(
-              borderColor: Colors.transparent,
-              borderRadius: 30,
-              borderWidth: 1,
-              buttonSize: 60,
-              icon: Icon(
-                Icons.arrow_back_rounded,
-                color: FlutterFlowTheme.of(context).primaryColor,
-                size: 30,
-              ),
-              onPressed: () async {
-                context.pop();
-              },
-            ),
-            title: Text(
-              widget.notepage!.title!,
-              style: FlutterFlowTheme.of(context).subtitle1,
-            ),
-            actions: [
-              Visibility(
-                visible: widget.notepage!.createdBy == currentUserReference,
-                child: FlutterFlowIconButton(
-                  borderColor: Colors.transparent,
-                  borderRadius: 30,
-                  borderWidth: 1,
-                  buttonSize: 60,
-                  icon: Icon(
-                    Icons.edit,
-                    color: FlutterFlowTheme.of(context).primaryText,
-                    size: 30,
-                  ),
-                  onPressed: () async {
-                    if (Navigator.of(context).canPop()) {
-                      context.pop();
-                    }
-                    context.pushNamed(
-                      'EditPointsPage',
-                      queryParams: {
-                        'note': serializeParam(
-                          widget.notepage,
-                          ParamType.Document,
-                        ),
-                      }.withoutNulls,
-                      extra: <String, dynamic>{
-                        'note': widget.notepage,
-                      },
-                    );
-                  },
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+          child: Scaffold(
+            key: scaffoldKey,
+            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            appBar: AppBar(
+              backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+              automaticallyImplyLeading: false,
+              leading: FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 30.0,
+                borderWidth: 1.0,
+                buttonSize: 60.0,
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color: FlutterFlowTheme.of(context).primary,
+                  size: 30.0,
                 ),
+                onPressed: () async {
+                  context.pop();
+                },
               ),
-            ],
-            centerTitle: true,
-            elevation: 0,
-          ),
-          body: SafeArea(
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+              title: Text(
+                widget.notepage!.title!,
+                style: FlutterFlowTheme.of(context).titleMedium,
+              ),
+              actions: [
+                Visibility(
+                  visible: widget.notepage!.createdBy == currentUserReference,
+                  child: FlutterFlowIconButton(
+                    borderColor: Colors.transparent,
+                    borderRadius: 30.0,
+                    borderWidth: 1.0,
+                    buttonSize: 60.0,
+                    icon: Icon(
+                      Icons.edit,
+                      color: FlutterFlowTheme.of(context).primaryText,
+                      size: 30.0,
+                    ),
+                    onPressed: () async {
+                      if (Navigator.of(context).canPop()) {
+                        context.pop();
+                      }
+                      context.pushNamed(
+                        'EditPointsPage',
+                        queryParams: {
+                          'note': serializeParam(
+                            widget.notepage,
+                            ParamType.Document,
+                          ),
+                        }.withoutNulls,
+                        extra: <String, dynamic>{
+                          'note': widget.notepage,
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+              centerTitle: true,
+              elevation: 0.0,
+            ),
+            body: SafeArea(
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 16),
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 16.0),
                       child: Card(
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         color: FlutterFlowTheme.of(context).secondaryBackground,
-                        elevation: 0,
+                        elevation: 0.0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 12),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 12.0, 0.0, 12.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -137,40 +151,43 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    12, 0, 12, 12),
+                                    12.0, 0.0, 12.0, 12.0),
                                 child: AutoSizeText(
                                   pointsPageNotesRecord.title!,
                                   style: FlutterFlowTheme.of(context)
-                                      .bodyText1
+                                      .bodyMedium
                                       .override(
                                         fontFamily: 'Montserrat',
-                                        fontSize: 20,
+                                        fontSize: 20.0,
                                       ),
                                 ),
                               ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    12, 0, 12, 12),
+                                    12.0, 0.0, 12.0, 12.0),
                                 child: AutoSizeText(
                                   pointsPageNotesRecord.description!,
-                                  style: FlutterFlowTheme.of(context).bodyText1,
+                                  style:
+                                      FlutterFlowTheme.of(context).bodyMedium,
                                 ),
                               ),
                               Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height * 1,
+                                width: MediaQuery.of(context).size.width * 1.0,
+                                height:
+                                    MediaQuery.of(context).size.height * 1.0,
                                 child: custom_widgets.PhotoNoteWidgetPreview(
-                                  width: MediaQuery.of(context).size.width,
+                                  width:
+                                      MediaQuery.of(context).size.width * 1.0,
                                   height:
-                                      MediaQuery.of(context).size.height * 1,
+                                      MediaQuery.of(context).size.height * 1.0,
                                   image: pointsPageNotesRecord.image!,
                                   points: widget.notepage!.notePoints!.toList(),
                                   onCreatePhotoNote: () async {},
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 12.0, 0.0, 0.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
@@ -183,12 +200,12 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                         if (!snapshot.hasData) {
                                           return Center(
                                             child: SizedBox(
-                                              width: 50,
-                                              height: 50,
+                                              width: 50.0,
+                                              height: 50.0,
                                               child: CircularProgressIndicator(
                                                 color:
                                                     FlutterFlowTheme.of(context)
-                                                        .secondaryColor,
+                                                        .secondary,
                                               ),
                                             ),
                                           );
@@ -206,7 +223,8 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                                     columnIndex];
                                             return Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 0, 0, 12),
+                                                  .fromSTEB(
+                                                      0.0, 0.0, 0.0, 12.0),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: [
@@ -216,6 +234,14 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                                               .isDone ==
                                                           false)
                                                         InkWell(
+                                                          splashColor: Colors
+                                                              .transparent,
+                                                          focusColor: Colors
+                                                              .transparent,
+                                                          hoverColor: Colors
+                                                              .transparent,
+                                                          highlightColor: Colors
+                                                              .transparent,
                                                           onTap: () async {
                                                             final bulletsUpdateData =
                                                                 createBulletsRecordData(
@@ -227,14 +253,14 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                                                     bulletsUpdateData);
                                                           },
                                                           child: Container(
-                                                            width: 40,
-                                                            height: 40,
+                                                            width: 40.0,
+                                                            height: 40.0,
                                                             decoration:
                                                                 BoxDecoration(
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          12),
+                                                                          12.0),
                                                               border:
                                                                   Border.all(
                                                                 color: FlutterFlowTheme.of(
@@ -248,6 +274,14 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                                               .isDone ==
                                                           true)
                                                         InkWell(
+                                                          splashColor: Colors
+                                                              .transparent,
+                                                          focusColor: Colors
+                                                              .transparent,
+                                                          hoverColor: Colors
+                                                              .transparent,
+                                                          highlightColor: Colors
+                                                              .transparent,
                                                           onTap: () async {
                                                             final bulletsUpdateData =
                                                                 createBulletsRecordData(
@@ -259,14 +293,14 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                                                     bulletsUpdateData);
                                                           },
                                                           child: Container(
-                                                            width: 40,
-                                                            height: 40,
+                                                            width: 40.0,
+                                                            height: 40.0,
                                                             decoration:
                                                                 BoxDecoration(
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          12),
+                                                                          12.0),
                                                               border:
                                                                   Border.all(
                                                                 color: FlutterFlowTheme.of(
@@ -278,7 +312,7 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                                               Icons.check,
                                                               color:
                                                                   Colors.black,
-                                                              size: 24,
+                                                              size: 24.0,
                                                             ),
                                                           ),
                                                         ),
@@ -287,14 +321,14 @@ class _PointsPageWidgetState extends State<PointsPageWidget> {
                                                   Padding(
                                                     padding:
                                                         EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                12, 0, 0, 0),
+                                                            .fromSTEB(12.0, 0.0,
+                                                                0.0, 0.0),
                                                     child: Text(
                                                       columnBulletsRecord.text!,
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .bodyText1,
+                                                              .bodyMedium,
                                                     ),
                                                   ),
                                                 ],

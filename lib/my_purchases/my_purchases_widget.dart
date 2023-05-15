@@ -1,13 +1,15 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'my_purchases_model.dart';
+export 'my_purchases_model.dart';
 
 class MyPurchasesWidget extends StatefulWidget {
   const MyPurchasesWidget({Key? key}) : super(key: key);
@@ -17,20 +19,24 @@ class MyPurchasesWidget extends StatefulWidget {
 }
 
 class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
-  TextEditingController? toolSearchController;
-  final _unfocusNode = FocusNode();
+  late MyPurchasesModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    toolSearchController = TextEditingController();
+    _model = createModel(context, () => MyPurchasesModel());
+
+    _model.toolSearchController ??= TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    toolSearchController?.dispose();
     super.dispose();
   }
 
@@ -38,66 +44,67 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          FFAppState().update(() {
-            FFAppState().SearchList = false;
-          });
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            FFAppState().update(() {
+              FFAppState().SearchList = false;
+            });
 
-          context.pushNamed('AddPurchase');
-        },
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-        elevation: 8,
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 36,
-        ),
-      ),
-      appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-        automaticallyImplyLeading: false,
-        title: Text(
-          FFLocalizations.of(context).getText(
-            'joc92vcd' /* My purchases */,
+            context.pushNamed('AddPurchase');
+          },
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          elevation: 8.0,
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 36.0,
           ),
-          style: FlutterFlowTheme.of(context).subtitle1,
         ),
-        actions: [],
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+        appBar: AppBar(
+          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          automaticallyImplyLeading: false,
+          title: Text(
+            FFLocalizations.of(context).getText(
+              'joc92vcd' /* My purchases */,
+            ),
+            style: FlutterFlowTheme.of(context).titleMedium,
+          ),
+          actions: [],
+          centerTitle: true,
+          elevation: 0.0,
+        ),
+        body: SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                width: 100,
+                width: 100.0,
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                 ),
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 12),
+                  padding:
+                      EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 12.0),
                   child: Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery.of(context).size.width * 1.0,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).lineColor,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(16.0),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Expanded(
                           child: TextFormField(
-                            controller: toolSearchController,
+                            controller: _model.toolSearchController,
                             onChanged: (_) => EasyDebounce.debounce(
-                              'toolSearchController',
+                              '_model.toolSearchController',
                               Duration(milliseconds: 500),
                               () => setState(() {}),
                             ),
@@ -110,50 +117,52 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
                               filled: true,
                               fillColor: FlutterFlowTheme.of(context).lineColor,
                             ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: FlutterFlowTheme.of(context).bodyMedium,
+                            validator: _model.toolSearchControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                         FlutterFlowIconButton(
                           borderColor: Colors.transparent,
-                          borderRadius: 30,
-                          borderWidth: 1,
-                          buttonSize: 50,
+                          borderRadius: 30.0,
+                          borderWidth: 1.0,
+                          buttonSize: 50.0,
                           icon: Icon(
                             Icons.close,
                             color: FlutterFlowTheme.of(context).primaryText,
-                            size: 20,
+                            size: 20.0,
                           ),
                           onPressed: () async {
                             setState(() {
-                              toolSearchController?.clear();
+                              _model.toolSearchController?.clear();
                             });
                           },
                         ),
@@ -164,7 +173,8 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                  padding:
+                      EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
                   child: StreamBuilder<List<PurchaseRecord>>(
                     stream: queryPurchaseRecord(
                       queryBuilder: (purchaseRecord) => purchaseRecord
@@ -175,11 +185,10 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                       if (!snapshot.hasData) {
                         return Center(
                           child: SizedBox(
-                            width: 50,
-                            height: 50,
+                            width: 50.0,
+                            height: 50.0,
                             child: CircularProgressIndicator(
-                              color:
-                                  FlutterFlowTheme.of(context).secondaryColor,
+                              color: FlutterFlowTheme.of(context).secondary,
                             ),
                           ),
                         );
@@ -198,15 +207,19 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                                   searchToolListIndex];
                           return Visibility(
                             visible: functions.searchRealTime(
-                                toolSearchController!.text,
+                                _model.toolSearchController.text,
                                 searchToolListPurchaseRecord.toolName!),
                             child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  10.0, 0.0, 0.0, 0.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
                                     onTap: () async {
                                       FFAppState().update(() {
                                         FFAppState().toolBuyDate =
@@ -245,15 +258,15 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                                       children: [
                                         ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(16),
+                                              BorderRadius.circular(16.0),
                                           child: Image.network(
                                             valueOrDefault<String>(
                                               searchToolListPurchaseRecord
                                                   .chqueImg,
                                               'https://consequence.net/wp-content/uploads/2021/08/the-weeknd-blinding-lights-record.jpg',
                                             ),
-                                            width: 80,
-                                            height: 106,
+                                            width: 80.0,
+                                            height: 106.0,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -261,7 +274,7 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                                           child: Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    12, 0, 0, 0),
+                                                    12.0, 0.0, 0.0, 0.0),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
                                               mainAxisAlignment:
@@ -274,28 +287,29 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                                                       .toolName!,
                                                   style: FlutterFlowTheme.of(
                                                           context)
-                                                      .bodyText1
+                                                      .bodyMedium
                                                       .override(
                                                         fontFamily:
                                                             'Montserrat',
-                                                        fontSize: 18,
+                                                        fontSize: 18.0,
                                                         fontWeight:
                                                             FontWeight.w600,
                                                       ),
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 5, 0, 0),
+                                                      .fromSTEB(
+                                                          0.0, 5.0, 0.0, 0.0),
                                                   child: Text(
                                                     searchToolListPurchaseRecord
                                                         .chequeName!,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1
+                                                        .bodyMedium
                                                         .override(
                                                           fontFamily:
                                                               'Montserrat',
-                                                          fontSize: 16,
+                                                          fontSize: 16.0,
                                                           fontWeight:
                                                               FontWeight.w500,
                                                         ),
@@ -303,7 +317,8 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 5, 0, 0),
+                                                      .fromSTEB(
+                                                          0.0, 5.0, 0.0, 0.0),
                                                   child: Text(
                                                     dateTimeFormat(
                                                       'd/M/y',
@@ -317,7 +332,7 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                                                     textAlign: TextAlign.center,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                                   ),
                                                 ),
                                               ],
@@ -328,8 +343,8 @@ class _MyPurchasesWidgetState extends State<MyPurchasesWidget> {
                                     ),
                                   ),
                                   Divider(
-                                    height: 25,
-                                    thickness: 1,
+                                    height: 25.0,
+                                    thickness: 1.0,
                                     color:
                                         FlutterFlowTheme.of(context).lineColor,
                                   ),

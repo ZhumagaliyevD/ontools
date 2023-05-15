@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'backend/backend.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'flutter_flow/flutter_flow_util.dart';
-import 'flutter_flow/lat_lng.dart';
 
 class FFAppState extends ChangeNotifier {
   static final FFAppState _instance = FFAppState._internal();
@@ -11,20 +10,14 @@ class FFAppState extends ChangeNotifier {
     return _instance;
   }
 
-  FFAppState._internal() {
-    initializePersistedState();
-  }
+  FFAppState._internal();
 
-  Future initializePersistedState() async {
-    prefs = await SharedPreferences.getInstance();
-  }
+  Future initializePersistedState() async {}
 
   void update(VoidCallback callback) {
     callback();
     notifyListeners();
   }
-
-  late SharedPreferences prefs;
 
   DateTime? _birthday = DateTime.fromMillisecondsSinceEpoch(1665846180000);
   DateTime? get birthday => _birthday;
@@ -81,6 +74,10 @@ class FFAppState extends ChangeNotifier {
 
   void removeFromIsDone(DocumentReference _value) {
     _isDone.remove(_value);
+  }
+
+  void removeAtIndexFromIsDone(int _index) {
+    _isDone.removeAt(_index);
   }
 
   String _chequeName = '';
@@ -151,6 +148,10 @@ class FFAppState extends ChangeNotifier {
 
   void removeFromPhotoNotePoints(DocumentReference _value) {
     _photoNotePoints.remove(_value);
+  }
+
+  void removeAtIndexFromPhotoNotePoints(int _index) {
+    _photoNotePoints.removeAt(_index);
   }
 
   double _dx = 0.0;

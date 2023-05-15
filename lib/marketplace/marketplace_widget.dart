@@ -1,14 +1,16 @@
-import '../backend/backend.dart';
-import '../components/filter_widget.dart';
-import '../components/sort_widget.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
+import '/backend/backend.dart';
+import '/components/filter_widget.dart';
+import '/components/sort_widget.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'marketplace_model.dart';
+export 'marketplace_model.dart';
 
 class MarketplaceWidget extends StatefulWidget {
   const MarketplaceWidget({Key? key}) : super(key: key);
@@ -18,20 +20,24 @@ class MarketplaceWidget extends StatefulWidget {
 }
 
 class _MarketplaceWidgetState extends State<MarketplaceWidget> {
-  TextEditingController? marketSearchController;
-  final _unfocusNode = FocusNode();
+  late MarketplaceModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    marketSearchController = TextEditingController();
+    _model = createModel(context, () => MarketplaceModel());
+
+    _model.marketSearchController ??= TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    marketSearchController?.dispose();
     super.dispose();
   }
 
@@ -39,144 +45,155 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          context.pushNamed('AddNewToolPage');
-
-          FFAppState().update(() {
-            FFAppState().SearchList = false;
-          });
-        },
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-        elevation: 8,
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 36,
-        ),
-      ),
-      appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-        automaticallyImplyLeading: false,
-        leading: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 20,
-          borderWidth: 1,
-          buttonSize: 40,
-          icon: Icon(
-            FFIcons.kfreeIconFontComment3916603,
-            color: FlutterFlowTheme.of(context).primaryText,
-            size: 20,
-          ),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            if (Navigator.of(context).canPop()) {
-              context.pop();
-            }
-            context.pushNamed('AllChats');
+            context.pushNamed('AddNewToolPage');
+
+            FFAppState().update(() {
+              FFAppState().SearchList = false;
+            });
           },
-        ),
-        title: Text(
-          FFLocalizations.of(context).getText(
-            'q7tgaacn' /* Маркетплэйс */,
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          elevation: 8.0,
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 36.0,
           ),
-          style: FlutterFlowTheme.of(context).subtitle1,
         ),
-        actions: [
-          FlutterFlowIconButton(
+        appBar: AppBar(
+          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          automaticallyImplyLeading: false,
+          leading: FlutterFlowIconButton(
             borderColor: Colors.transparent,
-            borderRadius: 20,
-            borderWidth: 1,
-            buttonSize: 40,
+            borderRadius: 20.0,
+            borderWidth: 1.0,
+            buttonSize: 40.0,
             icon: Icon(
-              FFIcons.kfreeIconFontSettingsSliders3917103,
+              FFIcons.kfreeIconFontComment3916603,
               color: FlutterFlowTheme.of(context).primaryText,
-              size: 20,
+              size: 20.0,
             ),
             onPressed: () async {
-              await showModalBottomSheet(
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                context: context,
-                builder: (context) {
-                  return Padding(
-                    padding: MediaQuery.of(context).viewInsets,
-                    child: FilterWidget(),
-                  );
-                },
-              ).then((value) => setState(() {}));
+              if (Navigator.of(context).canPop()) {
+                context.pop();
+              }
+              context.pushNamed('AllChats');
             },
           ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 4, 0),
-            child: FlutterFlowIconButton(
+          title: Text(
+            FFLocalizations.of(context).getText(
+              'q7tgaacn' /* Маркетплэйс */,
+            ),
+            style: FlutterFlowTheme.of(context).titleMedium,
+          ),
+          actions: [
+            FlutterFlowIconButton(
               borderColor: Colors.transparent,
-              borderRadius: 20,
-              borderWidth: 1,
-              buttonSize: 40,
+              borderRadius: 20.0,
+              borderWidth: 1.0,
+              buttonSize: 40.0,
               icon: Icon(
-                FFIcons.ksortAmountUp,
+                FFIcons.kfreeIconFontSettingsSliders3917103,
                 color: FlutterFlowTheme.of(context).primaryText,
-                size: 20,
+                size: 20.0,
               ),
               onPressed: () async {
                 await showModalBottomSheet(
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
+                  barrierColor: Color(0x00000000),
                   context: context,
-                  builder: (context) {
-                    return Padding(
-                      padding: MediaQuery.of(context).viewInsets,
-                      child: SortWidget(),
+                  builder: (bottomSheetContext) {
+                    return GestureDetector(
+                      onTap: () =>
+                          FocusScope.of(context).requestFocus(_unfocusNode),
+                      child: Padding(
+                        padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                        child: FilterWidget(),
+                      ),
                     );
                   },
                 ).then((value) => setState(() {}));
               },
             ),
-          ),
-        ],
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 4.0, 0.0),
+              child: FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 20.0,
+                borderWidth: 1.0,
+                buttonSize: 40.0,
+                icon: Icon(
+                  FFIcons.ksortAmountUp,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  size: 20.0,
+                ),
+                onPressed: () async {
+                  await showModalBottomSheet(
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    barrierColor: Color(0x00000000),
+                    context: context,
+                    builder: (bottomSheetContext) {
+                      return GestureDetector(
+                        onTap: () =>
+                            FocusScope.of(context).requestFocus(_unfocusNode),
+                        child: Padding(
+                          padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                          child: SortWidget(),
+                        ),
+                      );
+                    },
+                  ).then((value) => setState(() {}));
+                },
+              ),
+            ),
+          ],
+          centerTitle: true,
+          elevation: 0.0,
+        ),
+        body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  width: 100,
+                  width: 100.0,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
                           child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 12, 8, 12),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 12.0, 8.0, 12.0),
                             child: Container(
-                              width: MediaQuery.of(context).size.width,
+                              width: MediaQuery.of(context).size.width * 1.0,
                               decoration: BoxDecoration(
                                 color: FlutterFlowTheme.of(context).lineColor,
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Expanded(
                                     child: TextFormField(
-                                      controller: marketSearchController,
+                                      controller: _model.marketSearchController,
                                       onChanged: (_) => EasyDebounce.debounce(
-                                        'marketSearchController',
+                                        '_model.marketSearchController',
                                         Duration(milliseconds: 500),
                                         () => setState(() {}),
                                       ),
@@ -190,57 +207,60 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
-                                            width: 1,
+                                            width: 1.0,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(16),
+                                              BorderRadius.circular(16.0),
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
-                                            width: 1,
+                                            width: 1.0,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(16),
+                                              BorderRadius.circular(16.0),
                                         ),
                                         errorBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
-                                            width: 1,
+                                            width: 1.0,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(16),
+                                              BorderRadius.circular(16.0),
                                         ),
                                         focusedErrorBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
-                                            width: 1,
+                                            width: 1.0,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(16),
+                                              BorderRadius.circular(16.0),
                                         ),
                                         filled: true,
                                         fillColor: FlutterFlowTheme.of(context)
                                             .lineColor,
                                       ),
                                       style: FlutterFlowTheme.of(context)
-                                          .bodyText1,
+                                          .bodyMedium,
+                                      validator: _model
+                                          .marketSearchControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                   FlutterFlowIconButton(
                                     borderColor: Colors.transparent,
-                                    borderRadius: 30,
-                                    borderWidth: 1,
-                                    buttonSize: 50,
+                                    borderRadius: 30.0,
+                                    borderWidth: 1.0,
+                                    buttonSize: 50.0,
                                     icon: Icon(
                                       Icons.close,
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
-                                      size: 20,
+                                      size: 20.0,
                                     ),
                                     onPressed: () async {
                                       setState(() {
-                                        marketSearchController?.clear();
+                                        _model.marketSearchController?.clear();
                                       });
                                       FFAppState().update(() {
                                         FFAppState().MarketplaceSearch = '';
@@ -262,7 +282,8 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                 ),
                 if (FFAppState().sortBy == null || FFAppState().sortBy == '')
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
                     child: StreamBuilder<List<ToolsRecord>>(
                       stream: queryToolsRecord(
                         queryBuilder: (toolsRecord) => toolsRecord
@@ -285,11 +306,10 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                         if (!snapshot.hasData) {
                           return Center(
                             child: SizedBox(
-                              width: 50,
-                              height: 50,
+                              width: 50.0,
+                              height: 50.0,
                               child: CircularProgressIndicator(
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryColor,
+                                color: FlutterFlowTheme.of(context).secondary,
                               ),
                             ),
                           );
@@ -307,12 +327,16 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                 fullListToolsRecordList[fullListIndex];
                             return Visibility(
                               visible: functions.searchRealTime(
-                                  marketSearchController!.text,
+                                  _model.marketSearchController.text,
                                   fullListToolsRecord.toolName!),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
                                     onTap: () async {
                                       FFAppState().update(() {
                                         FFAppState().toolBuyDate =
@@ -343,11 +367,11 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                       children: [
                                         ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(16),
+                                              BorderRadius.circular(16.0),
                                           child: Image.network(
                                             fullListToolsRecord.photo!,
-                                            width: 80,
-                                            height: 116,
+                                            width: 80.0,
+                                            height: 116.0,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -355,7 +379,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                           child: Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    12, 0, 0, 0),
+                                                    12.0, 0.0, 0.0, 0.0),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
                                               crossAxisAlignment:
@@ -365,7 +389,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                   fullListToolsRecord.toolName!,
                                                   style: FlutterFlowTheme.of(
                                                           context)
-                                                      .bodyText1
+                                                      .bodyMedium
                                                       .override(
                                                         fontFamily:
                                                             'Montserrat',
@@ -375,39 +399,53 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 12, 0, 12),
+                                                      .fromSTEB(
+                                                          0.0, 12.0, 0.0, 12.0),
                                                   child: Text(
                                                     fullListToolsRecord
                                                         .description!,
                                                     maxLines: 2,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Montserrat',
+                                                          fontSize: 16.0,
+                                                        ),
                                                   ),
                                                 ),
-                                                Row(
+                                                Column(
                                                   mainAxisSize:
                                                       MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
+                                                    Divider(
+                                                      thickness: 1.0,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .accent4,
+                                                    ),
                                                     Text(
                                                       '${fullListToolsRecord.price?.toString()} тг',
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .bodyText1,
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Montserrat',
+                                                                fontSize: 12.0,
+                                                              ),
                                                     ),
-                                                    Container(
-                                                      width: 1,
-                                                      height: 18,
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                      ),
+                                                    Divider(
+                                                      thickness: 1.0,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .accent4,
                                                     ),
                                                     Text(
                                                       dateTimeFormat(
@@ -424,17 +462,19 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .bodyText1,
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Montserrat',
+                                                                fontSize: 12.0,
+                                                              ),
                                                     ),
-                                                    Container(
-                                                      width: 1,
-                                                      height: 18,
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                      ),
+                                                    Divider(
+                                                      thickness: 1.0,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .accent4,
                                                     ),
                                                     Text(
                                                       fullListToolsRecord
@@ -443,7 +483,19 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .bodyText1,
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Montserrat',
+                                                                fontSize: 12.0,
+                                                              ),
+                                                    ),
+                                                    Divider(
+                                                      thickness: 1.0,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .accent4,
                                                     ),
                                                   ],
                                                 ),
@@ -455,8 +507,8 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                     ),
                                   ),
                                   Divider(
-                                    height: 25,
-                                    thickness: 1,
+                                    height: 25.0,
+                                    thickness: 1.0,
                                     color:
                                         FlutterFlowTheme.of(context).lineColor,
                                   ),
@@ -470,7 +522,8 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                   ),
                 if (FFAppState().sortBy == 'by date')
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
                     child: StreamBuilder<List<ToolsRecord>>(
                       stream: queryToolsRecord(
                         queryBuilder: (toolsRecord) => toolsRecord
@@ -482,11 +535,10 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                         if (!snapshot.hasData) {
                           return Center(
                             child: SizedBox(
-                              width: 50,
-                              height: 50,
+                              width: 50.0,
+                              height: 50.0,
                               child: CircularProgressIndicator(
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryColor,
+                                color: FlutterFlowTheme.of(context).secondary,
                               ),
                             ),
                           );
@@ -506,6 +558,10 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
                                   onTap: () async {
                                     FFAppState().update(() {
                                       FFAppState().toolBuyDate =
@@ -535,11 +591,12 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       ClipRRect(
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                         child: Image.network(
                                           byDateToolsRecord.photo!,
-                                          width: 80,
-                                          height: 116,
+                                          width: 80.0,
+                                          height: 116.0,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -547,7 +604,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                         child: Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 0, 0, 0),
+                                                  12.0, 0.0, 0.0, 0.0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             crossAxisAlignment:
@@ -557,7 +614,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                 byDateToolsRecord.toolName!,
                                                 style:
                                                     FlutterFlowTheme.of(context)
-                                                        .bodyText1
+                                                        .bodyMedium
                                                         .override(
                                                           fontFamily:
                                                               'Montserrat',
@@ -567,14 +624,15 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                               ),
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 12, 0, 12),
+                                                    .fromSTEB(
+                                                        0.0, 12.0, 0.0, 12.0),
                                                 child: Text(
                                                   byDateToolsRecord
                                                       .description!,
                                                   maxLines: 2,
                                                   style: FlutterFlowTheme.of(
                                                           context)
-                                                      .bodyText1,
+                                                      .bodyMedium,
                                                 ),
                                               ),
                                               Row(
@@ -587,11 +645,11 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                     '${byDateToolsRecord.price?.toString()} \$',
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                                   ),
                                                   Container(
-                                                    width: 1,
-                                                    height: 18,
+                                                    width: 1.0,
+                                                    height: 18.0,
                                                     decoration: BoxDecoration(
                                                       color:
                                                           FlutterFlowTheme.of(
@@ -612,11 +670,11 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                     textAlign: TextAlign.center,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                                   ),
                                                   Container(
-                                                    width: 1,
-                                                    height: 18,
+                                                    width: 1.0,
+                                                    height: 18.0,
                                                     decoration: BoxDecoration(
                                                       color:
                                                           FlutterFlowTheme.of(
@@ -629,7 +687,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                     textAlign: TextAlign.end,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                                   ),
                                                 ],
                                               ),
@@ -641,8 +699,8 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                   ),
                                 ),
                                 Divider(
-                                  height: 25,
-                                  thickness: 1,
+                                  height: 25.0,
+                                  thickness: 1.0,
                                   color: FlutterFlowTheme.of(context).lineColor,
                                 ),
                               ],
@@ -654,7 +712,8 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                   ),
                 if (FFAppState().sortBy == 'by price')
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
                     child: StreamBuilder<List<ToolsRecord>>(
                       stream: queryToolsRecord(
                         queryBuilder: (toolsRecord) => toolsRecord
@@ -666,11 +725,10 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                         if (!snapshot.hasData) {
                           return Center(
                             child: SizedBox(
-                              width: 50,
-                              height: 50,
+                              width: 50.0,
+                              height: 50.0,
                               child: CircularProgressIndicator(
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryColor,
+                                color: FlutterFlowTheme.of(context).secondary,
                               ),
                             ),
                           );
@@ -690,6 +748,10 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
                                   onTap: () async {
                                     FFAppState().update(() {
                                       FFAppState().toolBuyDate =
@@ -719,11 +781,12 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       ClipRRect(
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                         child: Image.network(
                                           byPriceToolsRecord.photo!,
-                                          width: 80,
-                                          height: 116,
+                                          width: 80.0,
+                                          height: 116.0,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -731,7 +794,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                         child: Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 0, 0, 0),
+                                                  12.0, 0.0, 0.0, 0.0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             crossAxisAlignment:
@@ -741,7 +804,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                 byPriceToolsRecord.toolName!,
                                                 style:
                                                     FlutterFlowTheme.of(context)
-                                                        .bodyText1
+                                                        .bodyMedium
                                                         .override(
                                                           fontFamily:
                                                               'Montserrat',
@@ -751,14 +814,15 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                               ),
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 12, 0, 12),
+                                                    .fromSTEB(
+                                                        0.0, 12.0, 0.0, 12.0),
                                                 child: Text(
                                                   byPriceToolsRecord
                                                       .description!,
                                                   maxLines: 2,
                                                   style: FlutterFlowTheme.of(
                                                           context)
-                                                      .bodyText1,
+                                                      .bodyMedium,
                                                 ),
                                               ),
                                               Row(
@@ -771,11 +835,11 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                     '${byPriceToolsRecord.price?.toString()} \$',
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                                   ),
                                                   Container(
-                                                    width: 1,
-                                                    height: 18,
+                                                    width: 1.0,
+                                                    height: 18.0,
                                                     decoration: BoxDecoration(
                                                       color:
                                                           FlutterFlowTheme.of(
@@ -796,11 +860,11 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                     textAlign: TextAlign.center,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                                   ),
                                                   Container(
-                                                    width: 1,
-                                                    height: 18,
+                                                    width: 1.0,
+                                                    height: 18.0,
                                                     decoration: BoxDecoration(
                                                       color:
                                                           FlutterFlowTheme.of(
@@ -814,7 +878,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                     textAlign: TextAlign.end,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                                   ),
                                                 ],
                                               ),
@@ -826,8 +890,8 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                   ),
                                 ),
                                 Divider(
-                                  height: 25,
-                                  thickness: 1,
+                                  height: 25.0,
+                                  thickness: 1.0,
                                   color: FlutterFlowTheme.of(context).lineColor,
                                 ),
                               ],
@@ -839,7 +903,8 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                   ),
                 if (FFAppState().sortBy == 'by newest')
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
                     child: StreamBuilder<List<ToolsRecord>>(
                       stream: queryToolsRecord(
                         queryBuilder: (toolsRecord) => toolsRecord
@@ -851,11 +916,10 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                         if (!snapshot.hasData) {
                           return Center(
                             child: SizedBox(
-                              width: 50,
-                              height: 50,
+                              width: 50.0,
+                              height: 50.0,
                               child: CircularProgressIndicator(
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryColor,
+                                color: FlutterFlowTheme.of(context).secondary,
                               ),
                             ),
                           );
@@ -875,6 +939,10 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
                                   onTap: () async {
                                     FFAppState().update(() {
                                       FFAppState().toolBuyDate =
@@ -904,11 +972,12 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       ClipRRect(
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                         child: Image.network(
                                           byNewestToolsRecord.photo!,
-                                          width: 80,
-                                          height: 116,
+                                          width: 80.0,
+                                          height: 116.0,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -916,7 +985,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                         child: Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 0, 0, 0),
+                                                  12.0, 0.0, 0.0, 0.0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             crossAxisAlignment:
@@ -926,7 +995,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                 byNewestToolsRecord.toolName!,
                                                 style:
                                                     FlutterFlowTheme.of(context)
-                                                        .bodyText1
+                                                        .bodyMedium
                                                         .override(
                                                           fontFamily:
                                                               'Montserrat',
@@ -936,14 +1005,15 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                               ),
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 12, 0, 12),
+                                                    .fromSTEB(
+                                                        0.0, 12.0, 0.0, 12.0),
                                                 child: Text(
                                                   byNewestToolsRecord
                                                       .description!,
                                                   maxLines: 2,
                                                   style: FlutterFlowTheme.of(
                                                           context)
-                                                      .bodyText1,
+                                                      .bodyMedium,
                                                 ),
                                               ),
                                               Row(
@@ -956,11 +1026,11 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                     '${byNewestToolsRecord.price?.toString()} \$',
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                                   ),
                                                   Container(
-                                                    width: 1,
-                                                    height: 18,
+                                                    width: 1.0,
+                                                    height: 18.0,
                                                     decoration: BoxDecoration(
                                                       color:
                                                           FlutterFlowTheme.of(
@@ -981,11 +1051,11 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                     textAlign: TextAlign.center,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                                   ),
                                                   Container(
-                                                    width: 1,
-                                                    height: 18,
+                                                    width: 1.0,
+                                                    height: 18.0,
                                                     decoration: BoxDecoration(
                                                       color:
                                                           FlutterFlowTheme.of(
@@ -999,7 +1069,7 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                                     textAlign: TextAlign.end,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                                   ),
                                                 ],
                                               ),
@@ -1011,8 +1081,8 @@ class _MarketplaceWidgetState extends State<MarketplaceWidget> {
                                   ),
                                 ),
                                 Divider(
-                                  height: 25,
-                                  thickness: 1,
+                                  height: 25.0,
+                                  thickness: 1.0,
                                   color: FlutterFlowTheme.of(context).lineColor,
                                 ),
                               ],

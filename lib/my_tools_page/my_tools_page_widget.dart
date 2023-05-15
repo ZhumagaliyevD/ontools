@@ -1,13 +1,16 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'my_tools_page_model.dart';
+export 'my_tools_page_model.dart';
 
 class MyToolsPageWidget extends StatefulWidget {
   const MyToolsPageWidget({Key? key}) : super(key: key);
@@ -17,20 +20,24 @@ class MyToolsPageWidget extends StatefulWidget {
 }
 
 class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
-  TextEditingController? toolSearchController;
-  final _unfocusNode = FocusNode();
+  late MyToolsPageModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    toolSearchController = TextEditingController();
+    _model = createModel(context, () => MyToolsPageModel());
+
+    _model.toolSearchController ??= TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    toolSearchController?.dispose();
     super.dispose();
   }
 
@@ -38,66 +45,67 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          FFAppState().update(() {
-            FFAppState().SearchList = false;
-          });
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            FFAppState().update(() {
+              FFAppState().SearchList = false;
+            });
 
-          context.pushNamed('AddNewToolPage');
-        },
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-        elevation: 8,
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 36,
-        ),
-      ),
-      appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-        automaticallyImplyLeading: false,
-        title: Text(
-          FFLocalizations.of(context).getText(
-            'nyxk3fwe' /* Мои инструменты */,
+            context.pushNamed('AddNewToolPage');
+          },
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          elevation: 8.0,
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 36.0,
           ),
-          style: FlutterFlowTheme.of(context).subtitle1,
         ),
-        actions: [],
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+        appBar: AppBar(
+          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          automaticallyImplyLeading: false,
+          title: Text(
+            FFLocalizations.of(context).getText(
+              'nyxk3fwe' /* Мои инструменты */,
+            ),
+            style: FlutterFlowTheme.of(context).titleMedium,
+          ),
+          actions: [],
+          centerTitle: true,
+          elevation: 0.0,
+        ),
+        body: SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                width: 100,
+                width: 100.0,
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                 ),
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 12),
+                  padding:
+                      EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 12.0),
                   child: Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery.of(context).size.width * 1.0,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).lineColor,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(16.0),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Expanded(
                           child: TextFormField(
-                            controller: toolSearchController,
+                            controller: _model.toolSearchController,
                             onChanged: (_) => EasyDebounce.debounce(
-                              'toolSearchController',
+                              '_model.toolSearchController',
                               Duration(milliseconds: 500),
                               () => setState(() {}),
                             ),
@@ -110,50 +118,52 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
                               filled: true,
                               fillColor: FlutterFlowTheme.of(context).lineColor,
                             ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: FlutterFlowTheme.of(context).bodyMedium,
+                            validator: _model.toolSearchControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                         FlutterFlowIconButton(
                           borderColor: Colors.transparent,
-                          borderRadius: 30,
-                          borderWidth: 1,
-                          buttonSize: 50,
+                          borderRadius: 30.0,
+                          borderWidth: 1.0,
+                          buttonSize: 50.0,
                           icon: Icon(
                             Icons.close,
                             color: FlutterFlowTheme.of(context).primaryText,
-                            size: 20,
+                            size: 20.0,
                           ),
                           onPressed: () async {
                             setState(() {
-                              toolSearchController?.clear();
+                              _model.toolSearchController?.clear();
                             });
                           },
                         ),
@@ -164,7 +174,8 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                  padding:
+                      EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
                   child: StreamBuilder<List<ToolsRecord>>(
                     stream: queryToolsRecord(
                       queryBuilder: (toolsRecord) => toolsRecord
@@ -175,11 +186,10 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                       if (!snapshot.hasData) {
                         return Center(
                           child: SizedBox(
-                            width: 50,
-                            height: 50,
+                            width: 50.0,
+                            height: 50.0,
                             child: CircularProgressIndicator(
-                              color:
-                                  FlutterFlowTheme.of(context).secondaryColor,
+                              color: FlutterFlowTheme.of(context).secondary,
                             ),
                           ),
                         );
@@ -198,12 +208,16 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                                   searchToolListIndex];
                           return Visibility(
                             visible: functions.searchRealTime(
-                                toolSearchController!.text,
+                                _model.toolSearchController.text,
                                 searchToolListToolsRecord.toolName!),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
                                   onTap: () async {
                                     FFAppState().update(() {
                                       FFAppState().toolBuyDate =
@@ -237,11 +251,12 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       ClipRRect(
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                         child: Image.network(
                                           searchToolListToolsRecord.photo!,
-                                          width: 80,
-                                          height: 116,
+                                          width: 80.0,
+                                          height: 116.0,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -249,7 +264,7 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                                         child: Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 0, 0, 0),
+                                                  12.0, 0.0, 0.0, 0.0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             crossAxisAlignment:
@@ -260,7 +275,7 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                                                     .toolName!,
                                                 style:
                                                     FlutterFlowTheme.of(context)
-                                                        .bodyText1
+                                                        .bodyMedium
                                                         .override(
                                                           fontFamily:
                                                               'Montserrat',
@@ -270,37 +285,43 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                                               ),
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 12, 0, 12),
+                                                    .fromSTEB(
+                                                        0.0, 12.0, 0.0, 12.0),
                                                 child: Text(
                                                   searchToolListToolsRecord
                                                       .description!,
                                                   maxLines: 2,
                                                   style: FlutterFlowTheme.of(
                                                           context)
-                                                      .bodyText1,
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Montserrat',
+                                                        fontSize: 16.0,
+                                                      ),
                                                 ),
                                               ),
-                                              Row(
+                                              Column(
                                                 mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     '${searchToolListToolsRecord.price?.toString()} тг',
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Montserrat',
+                                                          fontSize: 12.0,
+                                                        ),
                                                   ),
-                                                  Container(
-                                                    width: 1,
-                                                    height: 18,
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                    ),
+                                                  Divider(
+                                                    thickness: 1.0,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .accent4,
                                                   ),
                                                   Text(
                                                     dateTimeFormat(
@@ -315,17 +336,18 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                                                     textAlign: TextAlign.center,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Montserrat',
+                                                          fontSize: 12.0,
+                                                        ),
                                                   ),
-                                                  Container(
-                                                    width: 1,
-                                                    height: 18,
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                    ),
+                                                  Divider(
+                                                    thickness: 1.0,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .accent4,
                                                   ),
                                                   Text(
                                                     searchToolListToolsRecord
@@ -333,7 +355,12 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                                                     textAlign: TextAlign.end,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText1,
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Montserrat',
+                                                          fontSize: 12.0,
+                                                        ),
                                                   ),
                                                 ],
                                               ),
@@ -345,8 +372,8 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                                   ),
                                 ),
                                 Divider(
-                                  height: 25,
-                                  thickness: 1,
+                                  height: 25.0,
+                                  thickness: 1.0,
                                   color: FlutterFlowTheme.of(context).lineColor,
                                 ),
                               ],
@@ -356,6 +383,35 @@ class _MyToolsPageWidgetState extends State<MyToolsPageWidget> {
                       );
                     },
                   ),
+                ),
+              ),
+              FFButtonWidget(
+                onPressed: () async {
+                  GoRouter.of(context).prepareAuthEvent();
+                  await authManager.signOut();
+                  GoRouter.of(context).clearRedirectLocation();
+
+                  context.goNamedAuth('AuthPage', mounted);
+                },
+                text: FFLocalizations.of(context).getText(
+                  'p6q8htvv' /* Button */,
+                ),
+                options: FFButtonOptions(
+                  width: 130.0,
+                  height: 40.0,
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                  iconPadding:
+                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                  color: FlutterFlowTheme.of(context).primary,
+                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                        fontFamily: 'Montserrat',
+                        color: Colors.white,
+                      ),
+                  borderSide: BorderSide(
+                    color: Colors.transparent,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
             ],

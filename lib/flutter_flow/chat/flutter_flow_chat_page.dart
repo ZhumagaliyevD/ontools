@@ -158,25 +158,29 @@ class _FFChatPageState extends State<FFChatPage> {
                 .toList(),
             onSend: (message) =>
                 sendMessage(text: message.text, imageUrl: message.image),
-            uploadMediaAction: () async {
-              final selectedMedia = await selectMediaWithSourceBottomSheet(
-                context: context,
-                allowPhoto: true,
-              ).then((m) => m != null && m.isNotEmpty ? m.first : null);
-              if (selectedMedia == null ||
-                  !validateFileFormat(selectedMedia.storagePath, context)) {
-                return;
-              }
-              showUploadMessage(
-                context,
-                'Sending photo',
-                showLoading: true,
-              );
-              final downloadUrl = await uploadData(
-                  selectedMedia.storagePath, selectedMedia.bytes);
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              await sendMessage(imageUrl: downloadUrl);
-            },
+            uploadMediaAction: widget.allowImages
+                ? () async {
+                    final selectedMedia =
+                        await selectMediaWithSourceBottomSheet(
+                      context: context,
+                      allowPhoto: true,
+                    ).then((m) => m != null && m.isNotEmpty ? m.first : null);
+                    if (selectedMedia == null ||
+                        !validateFileFormat(
+                            selectedMedia.storagePath, context)) {
+                      return;
+                    }
+                    showUploadMessage(
+                      context,
+                      'Sending photo',
+                      showLoading: true,
+                    );
+                    final downloadUrl = await uploadData(
+                        selectedMedia.storagePath, selectedMedia.bytes);
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    await sendMessage(imageUrl: downloadUrl);
+                  }
+                : null,
             backgroundColor: widget.backgroundColor,
             timeDisplaySetting: widget.timeDisplaySetting,
             currentUserBoxDecoration: widget.currentUserBoxDecoration,

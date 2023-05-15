@@ -51,12 +51,13 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
     try {
       final initialPageName = message.data['initialPageName'] as String;
       final initialParameterData = getInitialParameterData(message.data);
-      final pageBuilder = pageBuilderMap[initialPageName];
-      if (pageBuilder != null) {
-        final page = await pageBuilder(initialParameterData);
-        await Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => page),
+      final parametersBuilder = parametersBuilderMap[initialPageName];
+      if (parametersBuilder != null) {
+        final parameterData = await parametersBuilder(initialParameterData);
+        context.pushNamed(
+          initialPageName,
+          params: parameterData.params,
+          extra: parameterData.extra,
         );
       }
     } catch (e) {
@@ -86,59 +87,96 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
       : widget.child;
 }
 
-final pageBuilderMap = <String, Future<Widget> Function(Map<String, dynamic>)>{
-  'EntryPage': (data) async => EntryPageWidget(),
-  'PhoneEntryPage': (data) async => PhoneEntryPageWidget(),
-  'ChatPage': (data) async => ChatPageWidget(
-        chatUser:
-            await getDocumentParameter(data, 'chatUser', UserRecord.serializer),
-        chatRef: getParameter(data, 'chatRef'),
-      ),
-  'PhoneVerify': (data) async => PhoneVerifyWidget(),
-  'SignUpPage': (data) async => SignUpPageWidget(),
-  'ContinueSignupPage': (data) async => ContinueSignupPageWidget(),
-  'ReportsPage': (data) async => NavBarPage(initialPage: 'ReportsPage'),
-  'MyToolsPage': (data) async => NavBarPage(initialPage: 'MyToolsPage'),
-  'AddNewToolPage': (data) async => AddNewToolPageWidget(),
-  'EditToolPage': (data) async => EditToolPageWidget(
-        tool: await getDocumentParameter(data, 'tool', ToolsRecord.serializer),
-      ),
-  'ProfileEditPage': (data) async => ProfileEditPageWidget(),
-  'Notes': (data) async => NavBarPage(initialPage: 'Notes'),
-  'PointsPage': (data) async => PointsPageWidget(
-        notepage: await getDocumentParameter(
-            data, 'notepage', NotesRecord.serializer),
-      ),
-  'AuthPage': (data) async => AuthPageWidget(),
-  'AllChats': (data) async => AllChatsWidget(),
-  'createPointsPage': (data) async => CreatePointsPageWidget(),
-  'Marketplace': (data) async => NavBarPage(initialPage: 'Marketplace'),
-  'EditPointsPage': (data) async => EditPointsPageWidget(
-        note: await getDocumentParameter(data, 'note', NotesRecord.serializer),
-      ),
-  'Paywall': (data) async => PaywallWidget(),
-  'PainterPage': (data) async => PainterPageWidget(
-        noteIMG:
-            await getDocumentParameter(data, 'noteIMG', NotesRecord.serializer),
-      ),
-  'ToolDetailPage': (data) async => ToolDetailPageWidget(
-        tool: await getDocumentParameter(data, 'tool', ToolsRecord.serializer),
-      ),
-  'MyPurchases': (data) async => NavBarPage(initialPage: 'MyPurchases'),
-  'AddPurchase': (data) async => AddPurchaseWidget(),
-  'EditPurchase': (data) async => EditPurchaseWidget(
-        toolPurchase: await getDocumentParameter(
-            data, 'toolPurchase', PurchaseRecord.serializer),
-      ),
-  'PurchaseDetail': (data) async => PurchaseDetailWidget(
-        toolPurchase: await getDocumentParameter(
-            data, 'toolPurchase', PurchaseRecord.serializer),
-      ),
-  'About': (data) async => AboutWidget(),
-};
+class ParameterData {
+  const ParameterData(
+      {this.requiredParams = const {}, this.allParams = const {}});
+  final Map<String, String?> requiredParams;
+  final Map<String, dynamic> allParams;
 
-bool hasMatchingParameters(Map<String, dynamic> data, Set<String> params) =>
-    params.any((param) => getParameter(data, param) != null);
+  Map<String, String> get params => Map.fromEntries(
+        requiredParams.entries
+            .where((e) => e.value != null)
+            .map((e) => MapEntry(e.key, e.value!)),
+      );
+  Map<String, dynamic> get extra => Map.fromEntries(
+        allParams.entries.where((e) => e.value != null),
+      );
+
+  static Future<ParameterData> Function(Map<String, dynamic>) none() =>
+      (data) async => ParameterData();
+}
+
+final parametersBuilderMap =
+    <String, Future<ParameterData> Function(Map<String, dynamic>)>{
+  'EntryPage': ParameterData.none(),
+  'PhoneEntryPage': ParameterData.none(),
+  'ChatPage': (data) async => ParameterData(
+        allParams: {
+          'chatUser': await getDocumentParameter<UserRecord>(
+              data, 'chatUser', UserRecord.serializer),
+          'chatRef': getParameter<DocumentReference>(data, 'chatRef'),
+        },
+      ),
+  'PhoneVerify': ParameterData.none(),
+  'SignUpPage': ParameterData.none(),
+  'ContinueSignupPage': ParameterData.none(),
+  'ReportsPage': ParameterData.none(),
+  'ProfileHomePage': ParameterData.none(),
+  'MyToolsPage': ParameterData.none(),
+  'AddNewToolPage': ParameterData.none(),
+  'EditToolPage': (data) async => ParameterData(
+        allParams: {
+          'tool': await getDocumentParameter<ToolsRecord>(
+              data, 'tool', ToolsRecord.serializer),
+        },
+      ),
+  'ProfileEditPage': ParameterData.none(),
+  'Notes': ParameterData.none(),
+  'PointsPage': (data) async => ParameterData(
+        allParams: {
+          'notepage': await getDocumentParameter<NotesRecord>(
+              data, 'notepage', NotesRecord.serializer),
+        },
+      ),
+  'AuthPage': ParameterData.none(),
+  'AllChats': ParameterData.none(),
+  'createPointsPage': ParameterData.none(),
+  'Marketplace': ParameterData.none(),
+  'EditPointsPage': (data) async => ParameterData(
+        allParams: {
+          'note': await getDocumentParameter<NotesRecord>(
+              data, 'note', NotesRecord.serializer),
+        },
+      ),
+  'Paywall': ParameterData.none(),
+  'PainterPage': (data) async => ParameterData(
+        allParams: {
+          'noteIMG': await getDocumentParameter<NotesRecord>(
+              data, 'noteIMG', NotesRecord.serializer),
+        },
+      ),
+  'ToolDetailPage': (data) async => ParameterData(
+        allParams: {
+          'tool': await getDocumentParameter<ToolsRecord>(
+              data, 'tool', ToolsRecord.serializer),
+        },
+      ),
+  'MyPurchases': ParameterData.none(),
+  'AddPurchase': ParameterData.none(),
+  'EditPurchase': (data) async => ParameterData(
+        allParams: {
+          'toolPurchase': await getDocumentParameter<PurchaseRecord>(
+              data, 'toolPurchase', PurchaseRecord.serializer),
+        },
+      ),
+  'PurchaseDetail': (data) async => ParameterData(
+        allParams: {
+          'toolPurchase': await getDocumentParameter<PurchaseRecord>(
+              data, 'toolPurchase', PurchaseRecord.serializer),
+        },
+      ),
+  'About': ParameterData.none(),
+};
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {
   try {

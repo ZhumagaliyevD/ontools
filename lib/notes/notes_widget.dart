@@ -1,14 +1,16 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'notes_model.dart';
+export 'notes_model.dart';
 
 class NotesWidget extends StatefulWidget {
   const NotesWidget({Key? key}) : super(key: key);
@@ -18,21 +20,24 @@ class NotesWidget extends StatefulWidget {
 }
 
 class _NotesWidgetState extends State<NotesWidget> {
-  NotesRecord? notes;
-  final _unfocusNode = FocusNode();
+  late NotesModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  TextEditingController? searchController;
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    searchController = TextEditingController();
+    _model = createModel(context, () => NotesModel());
+
+    _model.searchController ??= TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    searchController?.dispose();
     super.dispose();
   }
 
@@ -40,56 +45,56 @@ class _NotesWidgetState extends State<NotesWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('FloatingActionButton pressed ...');
-        },
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-        elevation: 8,
-        child: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30,
-          borderWidth: 1,
-          buttonSize: 60,
-          icon: Icon(
-            FFIcons.kplus,
-            color: Color(0xFFF1F2F5),
-            size: 24,
-          ),
-          onPressed: () async {
-            FFAppState().update(() {
-              FFAppState().isCheckbox = false;
-            });
-
-            final notesCreateData = createNotesRecordData();
-            var notesRecordReference = NotesRecord.collection.doc();
-            await notesRecordReference.set(notesCreateData);
-            notes = NotesRecord.getDocumentFromData(
-                notesCreateData, notesRecordReference);
-
-            setState(() {});
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            print('FloatingActionButton pressed ...');
           },
-        ),
-      ),
-      appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-        automaticallyImplyLeading: false,
-        title: Text(
-          FFLocalizations.of(context).getText(
-            'at3oyld2' /* Заметки */,
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          elevation: 8.0,
+          child: FlutterFlowIconButton(
+            borderColor: Colors.transparent,
+            borderRadius: 30.0,
+            borderWidth: 1.0,
+            buttonSize: 60.0,
+            icon: Icon(
+              FFIcons.kplus,
+              color: Color(0xFFF1F2F5),
+              size: 24.0,
+            ),
+            onPressed: () async {
+              FFAppState().update(() {
+                FFAppState().isCheckbox = false;
+              });
+
+              final notesCreateData = createNotesRecordData();
+              var notesRecordReference = NotesRecord.collection.doc();
+              await notesRecordReference.set(notesCreateData);
+              _model.notes = NotesRecord.getDocumentFromData(
+                  notesCreateData, notesRecordReference);
+
+              setState(() {});
+            },
           ),
-          style: FlutterFlowTheme.of(context).subtitle1,
         ),
-        actions: [],
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+        appBar: AppBar(
+          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          automaticallyImplyLeading: false,
+          title: Text(
+            FFLocalizations.of(context).getText(
+              'at3oyld2' /* Заметки */,
+            ),
+            style: FlutterFlowTheme.of(context).titleMedium,
+          ),
+          actions: [],
+          centerTitle: true,
+          elevation: 0.0,
+        ),
+        body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -97,26 +102,27 @@ class _NotesWidgetState extends State<NotesWidget> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  width: 100,
+                  width: 100.0,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 12),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 12.0),
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery.of(context).size.width * 1.0,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).lineColor,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(16.0),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Expanded(
                             child: TextFormField(
-                              controller: searchController,
+                              controller: _model.searchController,
                               onChanged: (_) => EasyDebounce.debounce(
-                                'searchController',
+                                '_model.searchController',
                                 Duration(milliseconds: 500),
                                 () => setState(() {}),
                               ),
@@ -129,51 +135,53 @@ class _NotesWidgetState extends State<NotesWidget> {
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
-                                    width: 1,
+                                    width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
-                                    width: 1,
+                                    width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                                 errorBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
-                                    width: 1,
+                                    width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                                 focusedErrorBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
-                                    width: 1,
+                                    width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                                 filled: true,
                                 fillColor:
                                     FlutterFlowTheme.of(context).lineColor,
                               ),
-                              style: FlutterFlowTheme.of(context).bodyText1,
+                              style: FlutterFlowTheme.of(context).bodyMedium,
+                              validator: _model.searchControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                           FlutterFlowIconButton(
                             borderColor: Colors.transparent,
-                            borderRadius: 30,
-                            borderWidth: 1,
-                            buttonSize: 50,
+                            borderRadius: 30.0,
+                            borderWidth: 1.0,
+                            buttonSize: 50.0,
                             icon: Icon(
                               Icons.close,
                               color: FlutterFlowTheme.of(context).primaryText,
-                              size: 20,
+                              size: 20.0,
                             ),
                             onPressed: () async {
                               setState(() {
-                                searchController?.clear();
+                                _model.searchController?.clear();
                               });
                             },
                           ),
@@ -183,7 +191,8 @@ class _NotesWidgetState extends State<NotesWidget> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                  padding:
+                      EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
                   child: StreamBuilder<List<NotesRecord>>(
                     stream: queryNotesRecord(
                       queryBuilder: (notesRecord) => notesRecord
@@ -195,11 +204,10 @@ class _NotesWidgetState extends State<NotesWidget> {
                       if (!snapshot.hasData) {
                         return Center(
                           child: SizedBox(
-                            width: 50,
-                            height: 50,
+                            width: 50.0,
+                            height: 50.0,
                             child: CircularProgressIndicator(
-                              color:
-                                  FlutterFlowTheme.of(context).secondaryColor,
+                              color: FlutterFlowTheme.of(context).secondary,
                             ),
                           ),
                         );
@@ -216,12 +224,18 @@ class _NotesWidgetState extends State<NotesWidget> {
                                   searchNoteListIndex];
                           return Visibility(
                             visible: functions.searchRealTime(
-                                searchController!.text,
-                                searchNoteListNotesRecord.title!),
+                                    _model.searchController.text,
+                                    searchNoteListNotesRecord.title!) &&
+                                (searchNoteListNotesRecord.image != null &&
+                                    searchNoteListNotesRecord.image != ''),
                             child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 16.0),
                               child: InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
                                 onTap: () async {
                                   context.pushNamed(
                                     'PointsPage',
@@ -240,13 +254,13 @@ class _NotesWidgetState extends State<NotesWidget> {
                                   clipBehavior: Clip.antiAliasWithSaveLayer,
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
-                                  elevation: 0,
+                                  elevation: 0.0,
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(12.0),
                                   ),
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        12, 12, 12, 12),
+                                        12.0, 12.0, 12.0, 12.0),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment:
@@ -257,31 +271,31 @@ class _NotesWidgetState extends State<NotesWidget> {
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0, 1, 0, 12),
+                                                  0.0, 1.0, 0.0, 12.0),
                                           child: Text(
                                             valueOrDefault<String>(
                                               searchNoteListNotesRecord.title,
                                               'Title',
                                             ),
                                             style: FlutterFlowTheme.of(context)
-                                                .bodyText1
+                                                .bodyMedium
                                                 .override(
                                                   fontFamily: 'Montserrat',
-                                                  fontSize: 20,
+                                                  fontSize: 20.0,
                                                 ),
                                           ),
                                         ),
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 0, 12),
+                                                  0.0, 0.0, 0.0, 12.0),
                                           child: Image.network(
                                             valueOrDefault<String>(
                                               searchNoteListNotesRecord.image,
                                               'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/dmoyfrptzjz3/onToolsLogo.png',
                                             ),
                                             width: double.infinity,
-                                            height: 200,
+                                            height: 200.0,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -296,7 +310,7 @@ class _NotesWidgetState extends State<NotesWidget> {
                                           ),
                                           maxLines: 10,
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
+                                              .bodyMedium,
                                         ),
                                         if (searchNoteListNotesRecord != null)
                                           Column(
@@ -304,7 +318,8 @@ class _NotesWidgetState extends State<NotesWidget> {
                                             children: [
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 12, 0, 0),
+                                                    .fromSTEB(
+                                                        0.0, 12.0, 0.0, 0.0),
                                                 child: StreamBuilder<
                                                     List<BulletsRecord>>(
                                                   stream: queryBulletsRecord(
@@ -317,13 +332,13 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                     if (!snapshot.hasData) {
                                                       return Center(
                                                         child: SizedBox(
-                                                          width: 50,
-                                                          height: 50,
+                                                          width: 50.0,
+                                                          height: 50.0,
                                                           child:
                                                               CircularProgressIndicator(
                                                             color: FlutterFlowTheme
                                                                     .of(context)
-                                                                .secondaryColor,
+                                                                .secondary,
                                                           ),
                                                         ),
                                                       );
@@ -344,8 +359,11 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                         return Padding(
                                                           padding:
                                                               EdgeInsetsDirectional
-                                                                  .fromSTEB(0,
-                                                                      0, 0, 12),
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      12.0),
                                                           child: Row(
                                                             mainAxisSize:
                                                                 MainAxisSize
@@ -357,6 +375,18 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                                           .isDone ==
                                                                       false)
                                                                     InkWell(
+                                                                      splashColor:
+                                                                          Colors
+                                                                              .transparent,
+                                                                      focusColor:
+                                                                          Colors
+                                                                              .transparent,
+                                                                      hoverColor:
+                                                                          Colors
+                                                                              .transparent,
+                                                                      highlightColor:
+                                                                          Colors
+                                                                              .transparent,
                                                                       onTap:
                                                                           () async {
                                                                         final bulletsUpdateData =
@@ -371,13 +401,13 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                                       child:
                                                                           Container(
                                                                         width:
-                                                                            40,
+                                                                            40.0,
                                                                         height:
-                                                                            40,
+                                                                            40.0,
                                                                         decoration:
                                                                             BoxDecoration(
                                                                           borderRadius:
-                                                                              BorderRadius.circular(12),
+                                                                              BorderRadius.circular(12.0),
                                                                           border:
                                                                               Border.all(
                                                                             color:
@@ -390,6 +420,18 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                                           .isDone ==
                                                                       true)
                                                                     InkWell(
+                                                                      splashColor:
+                                                                          Colors
+                                                                              .transparent,
+                                                                      focusColor:
+                                                                          Colors
+                                                                              .transparent,
+                                                                      hoverColor:
+                                                                          Colors
+                                                                              .transparent,
+                                                                      highlightColor:
+                                                                          Colors
+                                                                              .transparent,
                                                                       onTap:
                                                                           () async {
                                                                         final bulletsUpdateData =
@@ -404,13 +446,13 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                                       child:
                                                                           Container(
                                                                         width:
-                                                                            40,
+                                                                            40.0,
                                                                         height:
-                                                                            40,
+                                                                            40.0,
                                                                         decoration:
                                                                             BoxDecoration(
                                                                           borderRadius:
-                                                                              BorderRadius.circular(12),
+                                                                              BorderRadius.circular(12.0),
                                                                           border:
                                                                               Border.all(
                                                                             color:
@@ -424,7 +466,7 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                                           color:
                                                                               Colors.black,
                                                                           size:
-                                                                              24,
+                                                                              24.0,
                                                                         ),
                                                                       ),
                                                                     ),
@@ -434,10 +476,10 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                                 padding:
                                                                     EdgeInsetsDirectional
                                                                         .fromSTEB(
-                                                                            12,
-                                                                            0,
-                                                                            0,
-                                                                            0),
+                                                                            12.0,
+                                                                            0.0,
+                                                                            0.0,
+                                                                            0.0),
                                                                 child: Text(
                                                                   valueOrDefault<
                                                                       String>(
@@ -447,7 +489,7 @@ class _NotesWidgetState extends State<NotesWidget> {
                                                                   ),
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
-                                                                      .bodyText1,
+                                                                      .bodyMedium,
                                                                 ),
                                                               ),
                                                             ],
@@ -477,7 +519,7 @@ class _NotesWidgetState extends State<NotesWidget> {
                                               textAlign: TextAlign.start,
                                               style:
                                                   FlutterFlowTheme.of(context)
-                                                      .bodyText2,
+                                                      .bodySmall,
                                             ),
                                           ],
                                         ),

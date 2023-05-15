@@ -25,6 +25,10 @@ class FFLocalizations {
   }
 
   String get languageCode => locale.toString();
+  String? get languageShortCode =>
+      _languagesWithShortCode.contains(locale.toString())
+          ? '${locale.toString()}_short'
+          : null;
   int get languageIndex => languages().contains(languageCode)
       ? languages().indexOf(languageCode)
       : 0;
@@ -37,6 +41,39 @@ class FFLocalizations {
     String? ruText = '',
   }) =>
       [enText, ruText][languageIndex] ?? '';
+
+  static const Set<String> _languagesWithShortCode = {
+    'ar',
+    'az',
+    'ca',
+    'cs',
+    'da',
+    'de',
+    'dv',
+    'en',
+    'es',
+    'et',
+    'fi',
+    'fr',
+    'gr',
+    'he',
+    'hi',
+    'hu',
+    'it',
+    'km',
+    'ku',
+    'mn',
+    'ms',
+    'no',
+    'pt',
+    'ro',
+    'ru',
+    'rw',
+    'sv',
+    'th',
+    'uk',
+    'vi',
+  };
 }
 
 class FFLocalizationsDelegate extends LocalizationsDelegate<FFLocalizations> {
@@ -333,43 +370,43 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'en': ' - ',
       'ru': '',
     },
-    '73b4coes': {
+    'yq1hunc3': {
       'en': 'Настройки',
       'ru': '',
     },
-    'pcjsyzjc': {
+    'pbp6cp3m': {
       'en': 'Общие настройки',
       'ru': '',
     },
-    '0lw50ux3': {
+    'j9ocp4ko': {
       'en': 'Уведомления',
       'ru': '',
     },
-    'wnn4cltx': {
+    'dplkhctz': {
       'en': 'Политика конфиденциальности данных',
       'ru': '',
     },
-    'avj87nhf': {
+    '8la6fgbu': {
       'en': 'О приложении',
       'ru': '',
     },
-    'zr3ei8fz': {
+    'yiqlelxe': {
       'en': 'Отменить подписку',
       'ru': '',
     },
-    'tbf3qxuc': {
+    'czqxe7r9': {
       'en': 'Текущая подписка',
       'ru': '',
     },
-    'pj7mqiyc': {
+    '7lysnqce': {
       'en': 'Пробный доступ',
       'ru': '',
     },
-    '1h1pa61i': {
+    '62ocl5je': {
       'en': 'Бесплатно 30 дней',
       'ru': '',
     },
-    'nyk699iv': {
+    '06vu7j7f': {
       'en': 'Отмена подписки',
       'ru': '',
     },
@@ -386,6 +423,10 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
     },
     'b42ruyf9': {
       'en': 'Поиск',
+      'ru': '',
+    },
+    'p6q8htvv': {
+      'en': 'Button',
       'ru': '',
     },
     '1yq0zf1u': {
@@ -1264,6 +1305,10 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'ru': '',
     },
     'ug60cao1': {
+      'en': '',
+      'ru': '',
+    },
+    'dz3pp0z2': {
       'en': '',
       'ru': '',
     },

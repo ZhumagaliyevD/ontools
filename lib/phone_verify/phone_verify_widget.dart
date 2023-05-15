@@ -1,12 +1,14 @@
-import '../auth/auth_util.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'phone_verify_model.dart';
+export 'phone_verify_model.dart';
 
 class PhoneVerifyWidget extends StatefulWidget {
   const PhoneVerifyWidget({Key? key}) : super(key: key);
@@ -16,21 +18,22 @@ class PhoneVerifyWidget extends StatefulWidget {
 }
 
 class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
-  TextEditingController? pinCodeController;
-  final _unfocusNode = FocusNode();
+  late PhoneVerifyModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    pinCodeController = TextEditingController();
+    _model = createModel(context, () => PhoneVerifyModel());
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    pinCodeController?.dispose();
     super.dispose();
   }
 
@@ -38,20 +41,20 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 1,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        body: Container(
+          width: MediaQuery.of(context).size.width * 1.0,
+          height: MediaQuery.of(context).size.height * 1.0,
           child: Stack(
             children: [
               Image.asset(
                 'assets/images/X_-_3.png',
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 1,
+                width: MediaQuery.of(context).size.width * 1.0,
+                height: MediaQuery.of(context).size.height * 1.0,
                 fit: BoxFit.cover,
               ),
               Column(
@@ -60,19 +63,20 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Container(
-                    width: 100,
+                    width: 100.0,
                     height: MediaQuery.of(context).size.height * 0.6,
                     decoration: BoxDecoration(
                       color: Color(0xDFFFFFFF),
                       borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(0),
-                        bottomRight: Radius.circular(0),
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
+                        bottomLeft: Radius.circular(0.0),
+                        bottomRight: Radius.circular(0.0),
+                        topLeft: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0),
                       ),
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                       child: SingleChildScrollView(
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
@@ -80,21 +84,21 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 16.0, 0.0, 0.0),
                               child: Text(
                                 FFLocalizations.of(context).getText(
                                   'pit5diz7' /* Введите код из SMS */,
                                 ),
-                                style: FlutterFlowTheme.of(context).subtitle1,
+                                style: FlutterFlowTheme.of(context).titleMedium,
                               ),
                             ),
                             Form(
-                              key: formKey,
+                              key: _model.formKey,
                               autovalidateMode: AutovalidateMode.disabled,
                               child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 12.0, 0.0, 0.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   crossAxisAlignment:
@@ -102,12 +106,13 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                   children: [
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 12, 0, 0),
+                                          0.0, 12.0, 0.0, 0.0),
                                       child: PinCodeTextField(
+                                        autoDisposeControllers: false,
                                         appContext: context,
                                         length: 6,
                                         textStyle: FlutterFlowTheme.of(context)
-                                            .subtitle2
+                                            .titleSmall
                                             .override(
                                               fontFamily: 'Montserrat',
                                               color:
@@ -118,17 +123,19 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                             MainAxisAlignment.spaceBetween,
                                         enableActiveFill: true,
                                         autoFocus: true,
+                                        enablePinAutofill: true,
+                                        errorTextSpace: 16.0,
                                         showCursor: false,
                                         cursorColor:
                                             FlutterFlowTheme.of(context)
-                                                .primaryColor,
+                                                .primary,
                                         obscureText: false,
                                         pinTheme: PinTheme(
-                                          fieldHeight: 60,
-                                          fieldWidth: 50,
-                                          borderWidth: 2,
+                                          fieldHeight: 60.0,
+                                          fieldWidth: 50.0,
+                                          borderWidth: 2.0,
                                           borderRadius:
-                                              BorderRadius.circular(12),
+                                              BorderRadius.circular(12.0),
                                           shape: PinCodeFieldShape.box,
                                           activeColor:
                                               FlutterFlowTheme.of(context)
@@ -138,7 +145,7 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                                   .secondaryText,
                                           selectedColor:
                                               FlutterFlowTheme.of(context)
-                                                  .secondaryColor,
+                                                  .secondary,
                                           activeFillColor:
                                               FlutterFlowTheme.of(context)
                                                   .secondaryText,
@@ -147,21 +154,26 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                                   .secondaryText,
                                           selectedFillColor:
                                               FlutterFlowTheme.of(context)
-                                                  .secondaryColor,
+                                                  .secondary,
                                         ),
-                                        controller: pinCodeController,
-                                        onChanged: (_) => {},
+                                        controller: _model.pinCodeController,
+                                        onChanged: (_) {},
+                                        autovalidateMode:
+                                            AutovalidateMode.disabled,
+                                        validator: _model
+                                            .pinCodeControllerValidator
+                                            .asValidator(context),
                                       ),
                                     ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 16, 0, 0),
+                                          0.0, 16.0, 0.0, 0.0),
                                       child: FFButtonWidget(
                                         onPressed: () async {
                                           GoRouter.of(context)
                                               .prepareAuthEvent();
                                           final smsCodeVal =
-                                              pinCodeController!.text;
+                                              _model.pinCodeController!.text;
                                           if (smsCodeVal == null ||
                                               smsCodeVal.isEmpty) {
                                             ScaffoldMessenger.of(context)
@@ -174,7 +186,7 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                             return;
                                           }
                                           final phoneVerifiedUser =
-                                              await verifySmsCode(
+                                              await authManager.verifySmsCode(
                                             context: context,
                                             smsCode: smsCodeVal,
                                           );
@@ -190,32 +202,43 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                           'x7dtoc0g' /* Войти */,
                                         ),
                                         options: FFButtonOptions(
-                                          width: 130,
-                                          height: 48,
+                                          width: 130.0,
+                                          height: 48.0,
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 0.0, 0.0, 0.0),
+                                          iconPadding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 0.0, 0.0, 0.0),
                                           color: FlutterFlowTheme.of(context)
-                                              .primaryColor,
+                                              .primary,
                                           textStyle:
                                               FlutterFlowTheme.of(context)
-                                                  .subtitle2
+                                                  .titleSmall
                                                   .override(
                                                     fontFamily: 'Montserrat',
                                                     color: Colors.white,
                                                     fontWeight:
                                                         FontWeight.normal,
                                                   ),
+                                          elevation: 2.0,
                                           borderSide: BorderSide(
                                             color: Color(0xFF242424),
-                                            width: 1,
+                                            width: 1.0,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(8),
+                                              BorderRadius.circular(8.0),
                                         ),
                                       ),
                                     ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 16, 0, 0),
+                                          0.0, 16.0, 0.0, 0.0),
                                       child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
                                         onTap: () async {
                                           context.pushNamed('SignUpPage');
                                         },
@@ -224,7 +247,7 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                             'ozvnoawc' /* У Вас нет аккаунта? Зарегистри... */,
                                           ),
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyText1
+                                              .bodyMedium
                                               .override(
                                                 fontFamily: 'Montserrat',
                                                 fontWeight: FontWeight.normal,
@@ -236,7 +259,7 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                     ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 24, 0, 24),
+                                          0.0, 24.0, 0.0, 24.0),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
                                         mainAxisAlignment:
@@ -245,8 +268,8 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                           Expanded(
                                             flex: 2,
                                             child: Container(
-                                              width: 100,
-                                              height: 1,
+                                              width: 100.0,
+                                              height: 1.0,
                                               decoration: BoxDecoration(
                                                 color:
                                                     FlutterFlowTheme.of(context)
@@ -263,7 +286,7 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                               textAlign: TextAlign.center,
                                               style: FlutterFlowTheme.of(
                                                       context)
-                                                  .bodyText1
+                                                  .bodyMedium
                                                   .override(
                                                     fontFamily: 'Montserrat',
                                                     fontWeight: FontWeight.w500,
@@ -273,8 +296,8 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                           Expanded(
                                             flex: 2,
                                             child: Container(
-                                              width: 100,
-                                              height: 1,
+                                              width: 100.0,
+                                              height: 1.0,
                                               decoration: BoxDecoration(
                                                 color:
                                                     FlutterFlowTheme.of(context)
@@ -290,18 +313,22 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                               ),
                             ),
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 30.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
                                     onTap: () async {
                                       GoRouter.of(context).prepareAuthEvent();
-                                      final user =
-                                          await signInWithGoogle(context);
+                                      final user = await authManager
+                                          .signInWithGoogle(context);
                                       if (user == null) {
                                         return;
                                       }
@@ -310,31 +337,36 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                           'ProfileHomePage', mounted);
                                     },
                                     child: Container(
-                                      width: 56,
-                                      height: 56,
+                                      width: 56.0,
+                                      height: 56.0,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                         shape: BoxShape.rectangle,
                                         border: Border.all(
                                           color: FlutterFlowTheme.of(context)
                                               .secondaryText,
-                                          width: 1,
+                                          width: 1.0,
                                         ),
                                       ),
-                                      alignment: AlignmentDirectional(0, 0),
+                                      alignment: AlignmentDirectional(0.0, 0.0),
                                       child: FaIcon(
                                         FontAwesomeIcons.google,
                                         color: FlutterFlowTheme.of(context)
-                                            .primaryColor,
-                                        size: 24,
+                                            .primary,
+                                        size: 24.0,
                                       ),
                                     ),
                                   ),
                                   InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
                                     onTap: () async {
                                       GoRouter.of(context).prepareAuthEvent();
-                                      final user =
-                                          await signInWithApple(context);
+                                      final user = await authManager
+                                          .signInWithApple(context);
                                       if (user == null) {
                                         return;
                                       }
@@ -343,57 +375,45 @@ class _PhoneVerifyWidgetState extends State<PhoneVerifyWidget> {
                                           'ProfileHomePage', mounted);
                                     },
                                     child: Container(
-                                      width: 56,
-                                      height: 56,
+                                      width: 56.0,
+                                      height: 56.0,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                         shape: BoxShape.rectangle,
                                         border: Border.all(
                                           color: FlutterFlowTheme.of(context)
                                               .secondaryText,
-                                          width: 1,
+                                          width: 1.0,
                                         ),
                                       ),
-                                      alignment: AlignmentDirectional(0, 0),
+                                      alignment: AlignmentDirectional(0.0, 0.0),
                                       child: FaIcon(
                                         FontAwesomeIcons.apple,
                                         color: FlutterFlowTheme.of(context)
-                                            .primaryColor,
-                                        size: 24,
+                                            .primary,
+                                        size: 24.0,
                                       ),
                                     ),
                                   ),
-                                  InkWell(
-                                    onTap: () async {
-                                      GoRouter.of(context).prepareAuthEvent();
-                                      final user =
-                                          await signInWithFacebook(context);
-                                      if (user == null) {
-                                        return;
-                                      }
-
-                                      context.goNamedAuth(
-                                          'ProfileHomePage', mounted);
-                                    },
-                                    child: Container(
-                                      width: 56,
-                                      height: 56,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(16),
-                                        shape: BoxShape.rectangle,
-                                        border: Border.all(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryText,
-                                          width: 1,
-                                        ),
-                                      ),
-                                      alignment: AlignmentDirectional(0, 0),
-                                      child: Icon(
-                                        FFIcons.kfacebook,
+                                  Container(
+                                    width: 56.0,
+                                    height: 56.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16.0),
+                                      shape: BoxShape.rectangle,
+                                      border: Border.all(
                                         color: FlutterFlowTheme.of(context)
-                                            .primaryColor,
-                                        size: 24,
+                                            .secondaryText,
+                                        width: 1.0,
                                       ),
+                                    ),
+                                    alignment: AlignmentDirectional(0.0, 0.0),
+                                    child: Icon(
+                                      FFIcons.kfacebook,
+                                      color:
+                                          FlutterFlowTheme.of(context).primary,
+                                      size: 24.0,
                                     ),
                                   ),
                                 ],

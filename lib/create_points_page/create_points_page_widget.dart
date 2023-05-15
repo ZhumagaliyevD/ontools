@@ -1,17 +1,20 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../backend/firebase_storage/storage.dart';
-import '../flutter_flow/flutter_flow_choice_chips.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/upload_media.dart';
-import '../custom_code/widgets/index.dart' as custom_widgets;
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/backend/firebase_storage/storage.dart';
+import '/flutter_flow/flutter_flow_choice_chips.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/form_field_controller.dart';
+import '/flutter_flow/upload_data.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'create_points_page_model.dart';
+export 'create_points_page_model.dart';
 
 class CreatePointsPageWidget extends StatefulWidget {
   const CreatePointsPageWidget({Key? key}) : super(key: key);
@@ -21,33 +24,26 @@ class CreatePointsPageWidget extends StatefulWidget {
 }
 
 class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
-  bool isMediaUploading = false;
-  String uploadedFileUrl = '';
+  late CreatePointsPageModel _model;
 
-  BulletsRecord? bullet;
-  TextEditingController? optionController;
-  TextEditingController? noteDescriptionController;
-  TextEditingController? noteTitleController;
-  String? choiceChipsValue;
-  PhotoNotePointRecord? createdPoint;
-  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    noteDescriptionController = TextEditingController();
-    noteTitleController = TextEditingController();
-    optionController = TextEditingController();
+    _model = createModel(context, () => CreatePointsPageModel());
+
+    _model.noteTitleController ??= TextEditingController();
+    _model.noteDescriptionController ??= TextEditingController();
+    _model.optionController ??= TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    noteDescriptionController?.dispose();
-    noteTitleController?.dispose();
-    optionController?.dispose();
     super.dispose();
   }
 
@@ -64,10 +60,10 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 50,
-              height: 50,
+              width: 50.0,
+              height: 50.0,
               child: CircularProgressIndicator(
-                color: FlutterFlowTheme.of(context).secondaryColor,
+                color: FlutterFlowTheme.of(context).secondary,
               ),
             ),
           );
@@ -81,104 +77,105 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
             createPointsPageNotesRecordList.isNotEmpty
                 ? createPointsPageNotesRecordList.first
                 : null;
-        return Scaffold(
-          key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          appBar: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            automaticallyImplyLeading: false,
-            leading: FlutterFlowIconButton(
-              borderColor: Colors.transparent,
-              borderRadius: 30,
-              borderWidth: 1,
-              buttonSize: 60,
-              icon: Icon(
-                Icons.arrow_back_rounded,
-                color: FlutterFlowTheme.of(context).primaryColor,
-                size: 30,
-              ),
-              onPressed: () async {
-                FFAppState().update(() {
-                  FFAppState().noteIMG = '';
-                });
-                context.pop();
-              },
-            ),
-            title: Text(
-              FFLocalizations.of(context).getText(
-                'yre4l98x' /* Создать заметку */,
-              ),
-              style: FlutterFlowTheme.of(context).subtitle1,
-            ),
-            actions: [
-              FlutterFlowIconButton(
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+          child: Scaffold(
+            key: scaffoldKey,
+            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            appBar: AppBar(
+              backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+              automaticallyImplyLeading: false,
+              leading: FlutterFlowIconButton(
                 borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: FaIcon(
-                  FontAwesomeIcons.save,
-                  color: FlutterFlowTheme.of(context).primaryText,
-                  size: 30,
+                borderRadius: 30.0,
+                borderWidth: 1.0,
+                buttonSize: 60.0,
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color: FlutterFlowTheme.of(context).primary,
+                  size: 30.0,
                 ),
                 onPressed: () async {
-                  if (uploadedFileUrl != null && uploadedFileUrl != '') {
-                    final notesCreateData = {
-                      ...createNotesRecordData(
-                        title: noteTitleController!.text,
-                        description: noteDescriptionController!.text,
-                        isCheckbox: false,
-                        image: uploadedFileUrl,
-                        createdBy: currentUserReference,
-                        createdAt: getCurrentTimestamp,
-                      ),
-                      'note_points': FFAppState().photoNotePoints,
-                    };
-                    await NotesRecord.collection.doc().set(notesCreateData);
-                    FFAppState().update(() {
-                      FFAppState().photoNotePoints = [];
-                    });
-                  } else {
-                    await showDialog(
-                      context: context,
-                      builder: (alertDialogContext) {
-                        return AlertDialog(
-                          title: Text('Ошибка создания'),
-                          content: Text('Изображение отсутствует'),
-                          actions: [
-                            TextButton(
-                              onPressed: () =>
-                                  Navigator.pop(alertDialogContext),
-                              child: Text('Ok'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                    return;
-                  }
-
                   FFAppState().update(() {
                     FFAppState().noteIMG = '';
-                    FFAppState().photoNotePoints = [];
                   });
-
-                  context.pushNamed('Notes');
+                  context.pop();
                 },
               ),
-            ],
-            centerTitle: true,
-            elevation: 0,
-          ),
-          body: GestureDetector(
-            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-            child: Column(
+              title: Text(
+                FFLocalizations.of(context).getText(
+                  'yre4l98x' /* Создать заметку */,
+                ),
+                style: FlutterFlowTheme.of(context).titleMedium,
+              ),
+              actions: [
+                FlutterFlowIconButton(
+                  borderColor: Colors.transparent,
+                  borderRadius: 30.0,
+                  borderWidth: 1.0,
+                  buttonSize: 60.0,
+                  icon: FaIcon(
+                    FontAwesomeIcons.save,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 30.0,
+                  ),
+                  onPressed: () async {
+                    if (_model.uploadedFileUrl != null &&
+                        _model.uploadedFileUrl != '') {
+                      final notesCreateData = {
+                        ...createNotesRecordData(
+                          title: _model.noteTitleController.text,
+                          description: _model.noteDescriptionController.text,
+                          isCheckbox: false,
+                          image: _model.uploadedFileUrl,
+                          createdBy: currentUserReference,
+                          createdAt: getCurrentTimestamp,
+                        ),
+                        'note_points': FFAppState().photoNotePoints,
+                      };
+                      await NotesRecord.collection.doc().set(notesCreateData);
+                      FFAppState().update(() {
+                        FFAppState().photoNotePoints = [];
+                      });
+                    } else {
+                      await showDialog(
+                        context: context,
+                        builder: (alertDialogContext) {
+                          return AlertDialog(
+                            title: Text('Ошибка создания'),
+                            content: Text('Изображение отсутствует'),
+                            actions: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(alertDialogContext),
+                                child: Text('Ok'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      return;
+                    }
+
+                    FFAppState().update(() {
+                      FFAppState().noteIMG = '';
+                      FFAppState().photoNotePoints = [];
+                    });
+
+                    context.pushNamed('Notes');
+                  },
+                ),
+              ],
+              centerTitle: true,
+              elevation: 0.0,
+            ),
+            body: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Form(
-                    key: formKey,
+                    key: _model.formKey,
                     autovalidateMode: AutovalidateMode.disabled,
                     child: SingleChildScrollView(
                       child: Column(
@@ -186,67 +183,60 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                12.0, 12.0, 12.0, 0.0),
                             child: TextFormField(
-                              controller: noteTitleController,
+                              controller: _model.noteTitleController,
                               obscureText: false,
                               decoration: InputDecoration(
                                 labelText: FFLocalizations.of(context).getText(
                                   'r9rfk6rh' /* Название заметки */,
                                 ),
                                 hintStyle:
-                                    FlutterFlowTheme.of(context).bodyText2,
+                                    FlutterFlowTheme.of(context).bodySmall,
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
-                                    width: 1,
+                                    width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
-                                    width: 1,
+                                    width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                                 errorBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
-                                    width: 1,
+                                    width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                                 focusedErrorBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
-                                    width: 1,
+                                    width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                                 filled: true,
                                 fillColor: FlutterFlowTheme.of(context)
                                     .secondaryBackground,
                               ),
-                              style: FlutterFlowTheme.of(context).bodyText2,
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return FFLocalizations.of(context).getText(
-                                    '0j7vnj1w' /* Обязательно к заполнению */,
-                                  );
-                                }
-
-                                return null;
-                              },
+                              style: FlutterFlowTheme.of(context).bodySmall,
+                              validator: _model.noteTitleControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                           if (FFAppState().isCheckbox == false)
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 12.0, 12.0, 0.0),
                               child: TextFormField(
-                                controller: noteDescriptionController,
+                                controller: _model.noteDescriptionController,
                                 obscureText: false,
                                 decoration: InputDecoration(
                                   labelText:
@@ -254,46 +244,49 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                     'opxmprue' /* Начните писать */,
                                   ),
                                   hintStyle:
-                                      FlutterFlowTheme.of(context).bodyText2,
+                                      FlutterFlowTheme.of(context).bodySmall,
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1,
+                                      width: 1.0,
                                     ),
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(16.0),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1,
+                                      width: 1.0,
                                     ),
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(16.0),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1,
+                                      width: 1.0,
                                     ),
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(16.0),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1,
+                                      width: 1.0,
                                     ),
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(16.0),
                                   ),
                                   filled: true,
                                   fillColor: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
                                 ),
-                                style: FlutterFlowTheme.of(context).bodyText2,
+                                style: FlutterFlowTheme.of(context).bodySmall,
+                                validator: _model
+                                    .noteDescriptionControllerValidator
+                                    .asValidator(context),
                               ),
                             ),
                           if (FFAppState().isCheckbox == true)
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 12.0, 12.0, 0.0),
                               child: StreamBuilder<List<BulletsRecord>>(
                                 stream: queryBulletsRecord(
                                   parent:
@@ -304,11 +297,11 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                   if (!snapshot.hasData) {
                                     return Center(
                                       child: SizedBox(
-                                        width: 50,
-                                        height: 50,
+                                        width: 50.0,
+                                        height: 50.0,
                                         child: CircularProgressIndicator(
                                           color: FlutterFlowTheme.of(context)
-                                              .secondaryColor,
+                                              .secondary,
                                         ),
                                       ),
                                     );
@@ -324,7 +317,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                           columnBulletsRecordList[columnIndex];
                                       return Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 0, 12),
+                                            0.0, 0.0, 0.0, 12.0),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
@@ -334,6 +327,14 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                                         .isDone ==
                                                     false)
                                                   InkWell(
+                                                    splashColor:
+                                                        Colors.transparent,
+                                                    focusColor:
+                                                        Colors.transparent,
+                                                    hoverColor:
+                                                        Colors.transparent,
+                                                    highlightColor:
+                                                        Colors.transparent,
                                                     onTap: () async {
                                                       final bulletsUpdateData =
                                                           createBulletsRecordData(
@@ -345,15 +346,15 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                                               bulletsUpdateData);
                                                     },
                                                     child: Container(
-                                                      width: 40,
-                                                      height: 40,
+                                                      width: 40.0,
+                                                      height: 40.0,
                                                       decoration: BoxDecoration(
                                                         color: FlutterFlowTheme
                                                                 .of(context)
                                                             .secondaryBackground,
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(8),
+                                                                .circular(8.0),
                                                         border: Border.all(
                                                           color: FlutterFlowTheme
                                                                   .of(context)
@@ -363,7 +364,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                                       child: Icon(
                                                         Icons.check,
                                                         color: Colors.black,
-                                                        size: 24,
+                                                        size: 24.0,
                                                       ),
                                                     ),
                                                   ),
@@ -371,6 +372,14 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                                         .isDone ==
                                                     true)
                                                   InkWell(
+                                                    splashColor:
+                                                        Colors.transparent,
+                                                    focusColor:
+                                                        Colors.transparent,
+                                                    hoverColor:
+                                                        Colors.transparent,
+                                                    highlightColor:
+                                                        Colors.transparent,
                                                     onTap: () async {
                                                       final bulletsUpdateData =
                                                           createBulletsRecordData(
@@ -382,26 +391,26 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                                               bulletsUpdateData);
                                                     },
                                                     child: Container(
-                                                      width: 40,
-                                                      height: 40,
+                                                      width: 40.0,
+                                                      height: 40.0,
                                                       decoration: BoxDecoration(
                                                         color: FlutterFlowTheme
                                                                 .of(context)
                                                             .secondaryBackground,
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(8),
+                                                                .circular(8.0),
                                                         border: Border.all(
                                                           color: FlutterFlowTheme
                                                                   .of(context)
                                                               .lineColor,
-                                                          width: 1,
+                                                          width: 1.0,
                                                         ),
                                                       ),
                                                       child: Icon(
                                                         Icons.check,
                                                         color: Colors.black,
-                                                        size: 24,
+                                                        size: 24.0,
                                                       ),
                                                     ),
                                                   ),
@@ -409,12 +418,13 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                             ),
                                             Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(12, 0, 0, 0),
+                                                  .fromSTEB(
+                                                      12.0, 0.0, 0.0, 0.0),
                                               child: Text(
                                                 columnBulletsRecord.text!,
                                                 style:
                                                     FlutterFlowTheme.of(context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                               ),
                                             ),
                                           ],
@@ -427,14 +437,14 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                             ),
                           if (FFAppState().isCheckbox == true)
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 12.0, 12.0, 0.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   TextFormField(
-                                    controller: optionController,
+                                    controller: _model.optionController,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       hintText:
@@ -442,49 +452,61 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                         'ua78911f' /* Начните писать */,
                                       ),
                                       hintStyle: FlutterFlowTheme.of(context)
-                                          .bodyText2,
+                                          .bodySmall,
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0x00000000),
-                                          width: 1,
+                                          width: 1.0,
                                         ),
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0x00000000),
-                                          width: 1,
+                                          width: 1.0,
                                         ),
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                       ),
                                       errorBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0x00000000),
-                                          width: 1,
+                                          width: 1.0,
                                         ),
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                       ),
                                       focusedErrorBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0x00000000),
-                                          width: 1,
+                                          width: 1.0,
                                         ),
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                       ),
                                       filled: true,
                                       fillColor: FlutterFlowTheme.of(context)
                                           .secondaryBackground,
                                     ),
                                     style:
-                                        FlutterFlowTheme.of(context).bodyText1,
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    validator: _model.optionControllerValidator
+                                        .asValidator(context),
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 8, 0, 0),
+                                        0.0, 8.0, 0.0, 0.0),
                                     child: InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
                                       onTap: () async {
-                                        if (optionController!.text == null ||
-                                            optionController!.text == '') {
+                                        if (_model.optionController.text ==
+                                                null ||
+                                            _model.optionController.text ==
+                                                '') {
                                           await showDialog(
                                             context: context,
                                             builder: (alertDialogContext) {
@@ -505,7 +527,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                           final bulletsCreateData =
                                               createBulletsRecordData(
                                             isDone: false,
-                                            text: optionController!.text,
+                                            text: _model.optionController.text,
                                           );
                                           var bulletsRecordReference =
                                               BulletsRecord.createDoc(
@@ -513,14 +535,14 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                                       .reference);
                                           await bulletsRecordReference
                                               .set(bulletsCreateData);
-                                          bullet =
+                                          _model.bullet =
                                               BulletsRecord.getDocumentFromData(
                                                   bulletsCreateData,
                                                   bulletsRecordReference);
                                         }
 
                                         setState(() {
-                                          optionController?.clear();
+                                          _model.optionController?.clear();
                                         });
 
                                         setState(() {});
@@ -530,20 +552,16 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                           'zsp9mljc' /* + Новый пункт */,
                                         ),
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText1,
+                                            .bodyMedium,
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          if (uploadedFileUrl != null && uploadedFileUrl != '')
+                          if (_model.uploadedFileUrl != null &&
+                              _model.uploadedFileUrl != '')
                             FlutterFlowChoiceChips(
-                              initiallySelected: [
-                                FFLocalizations.of(context).getText(
-                                  'w5yq23iy' /* Comment */,
-                                )
-                              ],
                               options: [
                                 ChipData(
                                     FFLocalizations.of(context).getText(
@@ -556,44 +574,52 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                     ),
                                     Icons.add_comment)
                               ],
-                              onChanged: (val) =>
-                                  setState(() => choiceChipsValue = val?.first),
+                              onChanged: (val) => setState(
+                                  () => _model.choiceChipsValue = val?.first),
                               selectedChipStyle: ChipStyle(
                                 backgroundColor: Color(0xFF323B45),
                                 textStyle: FlutterFlowTheme.of(context)
-                                    .bodyText1
+                                    .bodyMedium
                                     .override(
                                       fontFamily: 'Montserrat',
                                       color: Colors.white,
                                     ),
                                 iconColor: Colors.white,
-                                iconSize: 18,
-                                elevation: 4,
+                                iconSize: 18.0,
+                                elevation: 4.0,
                               ),
                               unselectedChipStyle: ChipStyle(
                                 backgroundColor: Colors.white,
                                 textStyle: FlutterFlowTheme.of(context)
-                                    .bodyText2
+                                    .bodySmall
                                     .override(
                                       fontFamily: 'Montserrat',
                                       color: Color(0xFF323B45),
                                     ),
                                 iconColor: Color(0xFF323B45),
-                                iconSize: 18,
-                                elevation: 4,
+                                iconSize: 18.0,
+                                elevation: 4.0,
                               ),
-                              chipSpacing: 20,
+                              chipSpacing: 20.0,
                               multiselect: false,
-                              initialized: choiceChipsValue != null,
+                              initialized: _model.choiceChipsValue != null,
                               alignment: WrapAlignment.start,
+                              controller: _model.choiceChipsValueController ??=
+                                  FormFieldController<List<String>>(
+                                [
+                                  FFLocalizations.of(context).getText(
+                                    'w5yq23iy' /* Comment */,
+                                  )
+                                ],
+                              ),
                             ),
                           if ((createPointsPageNotesRecord != null) &&
-                              (uploadedFileUrl != null &&
-                                  uploadedFileUrl != '') &&
-                              (choiceChipsValue == 'Comment'))
+                              (_model.uploadedFileUrl != null &&
+                                  _model.uploadedFileUrl != '') &&
+                              (_model.choiceChipsValue == 'Comment'))
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 18, 0, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 18.0, 0.0, 0.0),
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.9,
                                 height:
@@ -603,7 +629,7 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                       MediaQuery.of(context).size.width * 0.9,
                                   height:
                                       MediaQuery.of(context).size.height * 0.1,
-                                  image: uploadedFileUrl,
+                                  image: _model.uploadedFileUrl,
                                   points: createPointsPageNotesRecord!
                                       .notePoints!
                                       .toList(),
@@ -621,13 +647,13 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                         PhotoNotePointRecord.collection.doc();
                                     await photoNotePointRecordReference
                                         .set(photoNotePointCreateData);
-                                    createdPoint = PhotoNotePointRecord
+                                    _model.createdPoint = PhotoNotePointRecord
                                         .getDocumentFromData(
                                             photoNotePointCreateData,
                                             photoNotePointRecordReference);
                                     FFAppState().update(() {
                                       FFAppState().addToPhotoNotePoints(
-                                          createdPoint!.reference);
+                                          _model.createdPoint!.reference);
                                       FFAppState().comment = '';
                                     });
                                     FFAppState().update(() {
@@ -641,18 +667,19 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                               ),
                             ),
                           if ((createPointsPageNotesRecord != null) &&
-                              (uploadedFileUrl != null &&
-                                  uploadedFileUrl != '') &&
-                              (choiceChipsValue != 'Comment'))
+                              (_model.uploadedFileUrl != null &&
+                                  _model.uploadedFileUrl != '') &&
+                              (_model.choiceChipsValue != 'Comment'))
                             Container(
-                              width: 100,
-                              height: 100,
+                              width: 100.0,
+                              height: 100.0,
                               decoration: BoxDecoration(
                                 color: FlutterFlowTheme.of(context)
                                     .secondaryBackground,
                               ),
                             ),
-                          if (uploadedFileUrl == null || uploadedFileUrl == '')
+                          if (_model.uploadedFileUrl == null ||
+                              _model.uploadedFileUrl == '')
                             Text(
                               FFLocalizations.of(context).getText(
                                 '0w2weuw5' /* Пожалуйста добавьте фото,
@@ -661,10 +688,10 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                               ),
                               textAlign: TextAlign.center,
                               style: FlutterFlowTheme.of(context)
-                                  .bodyText1
+                                  .bodyMedium
                                   .override(
                                     fontFamily: 'Montserrat',
-                                    fontSize: 27,
+                                    fontSize: 27.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -674,8 +701,8 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                   ),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 60,
+                  width: MediaQuery.of(context).size.width * 1.0,
+                  height: 60.0,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
@@ -685,13 +712,13 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                     children: [
                       FlutterFlowIconButton(
                         borderColor: Colors.transparent,
-                        borderRadius: 30,
-                        borderWidth: 1,
-                        buttonSize: 60,
+                        borderRadius: 30.0,
+                        borderWidth: 1.0,
+                        buttonSize: 60.0,
                         icon: Icon(
                           Icons.add_circle_outline,
                           color: FlutterFlowTheme.of(context).primaryText,
-                          size: 45,
+                          size: 45.0,
                         ),
                         onPressed: () async {
                           final selectedMedia =
@@ -702,7 +729,8 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                           if (selectedMedia != null &&
                               selectedMedia.every((m) =>
                                   validateFileFormat(m.storagePath, context))) {
-                            setState(() => isMediaUploading = true);
+                            setState(() => _model.isDataUploading = true);
+                            var selectedUploadedFiles = <FFUploadedFile>[];
                             var downloadUrls = <String>[];
                             try {
                               showUploadMessage(
@@ -710,6 +738,16 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                                 'Uploading file...',
                                 showLoading: true,
                               );
+                              selectedUploadedFiles = selectedMedia
+                                  .map((m) => FFUploadedFile(
+                                        name: m.storagePath.split('/').last,
+                                        bytes: m.bytes,
+                                        height: m.dimensions?.height,
+                                        width: m.dimensions?.width,
+                                        blurHash: m.blurHash,
+                                      ))
+                                  .toList();
+
                               downloadUrls = (await Future.wait(
                                 selectedMedia.map(
                                   (m) async =>
@@ -722,16 +760,21 @@ class _CreatePointsPageWidgetState extends State<CreatePointsPageWidget> {
                             } finally {
                               ScaffoldMessenger.of(context)
                                   .hideCurrentSnackBar();
-                              isMediaUploading = false;
+                              _model.isDataUploading = false;
                             }
-                            if (downloadUrls.length == selectedMedia.length) {
-                              setState(
-                                  () => uploadedFileUrl = downloadUrls.first);
+                            if (selectedUploadedFiles.length ==
+                                    selectedMedia.length &&
+                                downloadUrls.length == selectedMedia.length) {
+                              setState(() {
+                                _model.uploadedLocalFile =
+                                    selectedUploadedFiles.first;
+                                _model.uploadedFileUrl = downloadUrls.first;
+                              });
                               showUploadMessage(context, 'Success!');
                             } else {
                               setState(() {});
                               showUploadMessage(
-                                  context, 'Failed to upload media');
+                                  context, 'Failed to upload data');
                               return;
                             }
                           }

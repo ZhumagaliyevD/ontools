@@ -1,3 +1,5 @@
+import 'form_field_controller.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -12,13 +14,14 @@ class ChipData {
 }
 
 class ChipStyle {
-  const ChipStyle(
-      {required this.backgroundColor,
-      required this.textStyle,
-      required this.iconColor,
-      required this.iconSize,
-      this.labelPadding,
-      required this.elevation});
+  const ChipStyle({
+    required this.backgroundColor,
+    required this.textStyle,
+    required this.iconColor,
+    required this.iconSize,
+    this.labelPadding,
+    required this.elevation,
+  });
   final Color backgroundColor;
   final TextStyle textStyle;
   final Color iconColor;
@@ -29,9 +32,9 @@ class ChipStyle {
 
 class FlutterFlowChoiceChips extends StatefulWidget {
   const FlutterFlowChoiceChips({
-    this.initiallySelected,
     required this.options,
     required this.onChanged,
+    required this.controller,
     required this.selectedChipStyle,
     required this.unselectedChipStyle,
     required this.chipSpacing,
@@ -39,12 +42,11 @@ class FlutterFlowChoiceChips extends StatefulWidget {
     required this.multiselect,
     this.initialized = true,
     this.alignment = WrapAlignment.start,
-    this.selectedValuesVariable,
   });
 
-  final List<String>? initiallySelected;
   final List<ChipData> options;
   final void Function(List<String>?)? onChanged;
+  final FormFieldController<List<String>> controller;
   final ChipStyle selectedChipStyle;
   final ChipStyle unselectedChipStyle;
   final double chipSpacing;
@@ -52,7 +54,6 @@ class FlutterFlowChoiceChips extends StatefulWidget {
   final bool multiselect;
   final bool initialized;
   final WrapAlignment alignment;
-  final ValueNotifier<List<String>?>? selectedValuesVariable;
 
   @override
   State<FlutterFlowChoiceChips> createState() => _FlutterFlowChoiceChipsState();
@@ -60,14 +61,13 @@ class FlutterFlowChoiceChips extends StatefulWidget {
 
 class _FlutterFlowChoiceChipsState extends State<FlutterFlowChoiceChips> {
   late List<String> choiceChipValues;
-  ValueListenable<List<String>?>? get changeSelectedValues =>
-      widget.selectedValuesVariable;
-  List<String>? get selectedValues => widget.selectedValuesVariable?.value;
+  ValueListenable<List<String>?> get changeSelectedValues => widget.controller;
+  List<String> get selectedValues => widget.controller.value ?? [];
 
   @override
   void initState() {
     super.initState();
-    choiceChipValues = widget.initiallySelected ?? [];
+    choiceChipValues = List.from(widget.controller.initialValue ?? []);
     if (!widget.initialized && choiceChipValues.isNotEmpty) {
       SchedulerBinding.instance.addPostFrameCallback(
         (_) {
@@ -77,18 +77,19 @@ class _FlutterFlowChoiceChipsState extends State<FlutterFlowChoiceChips> {
         },
       );
     }
-    changeSelectedValues?.addListener(() {
-      if (widget.selectedValuesVariable != null &&
-          selectedValues != null &&
-          choiceChipValues != selectedValues) {
-        setState(() => choiceChipValues = List.from(selectedValues!));
+    changeSelectedValues.addListener(() {
+      if (!listEquals(choiceChipValues, selectedValues)) {
+        setState(() => choiceChipValues = List.from(selectedValues));
+      }
+      if (widget.onChanged != null) {
+        widget.onChanged!(selectedValues);
       }
     });
   }
 
   @override
   void dispose() {
-    changeSelectedValues?.removeListener(() {});
+    changeSelectedValues.removeListener(() {});
     super.dispose();
   }
 
@@ -114,12 +115,14 @@ class _FlutterFlowChoiceChipsState extends State<FlutterFlowChoiceChips> {
                             widget.multiselect
                                 ? choiceChipValues.add(option.label)
                                 : choiceChipValues = [option.label];
-                            widget.onChanged!(choiceChipValues);
+                            widget.controller.value =
+                                List.from(choiceChipValues);
                             setState(() {});
                           } else {
                             if (widget.multiselect) {
                               choiceChipValues.remove(option.label);
-                              widget.onChanged!(choiceChipValues);
+                              widget.controller.value =
+                                  List.from(choiceChipValues);
                               setState(() {});
                             }
                           }

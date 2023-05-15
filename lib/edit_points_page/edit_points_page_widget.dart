@@ -1,16 +1,18 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../components/add_note_elements_widget.dart';
-import '../components/add_note_settings_widget.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../custom_code/widgets/index.dart' as custom_widgets;
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/add_note_elements_widget.dart';
+import '/components/add_note_settings_widget.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'edit_points_page_model.dart';
+export 'edit_points_page_model.dart';
 
 class EditPointsPageWidget extends StatefulWidget {
   const EditPointsPageWidget({
@@ -25,30 +27,28 @@ class EditPointsPageWidget extends StatefulWidget {
 }
 
 class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
-  BulletsRecord? bullet;
-  TextEditingController? optionController;
-  PhotoNotePointRecord? createdPoint;
-  TextEditingController? noteDescriptionController;
-  TextEditingController? noteTitleController;
-  final _unfocusNode = FocusNode();
+  late EditPointsPageModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    noteDescriptionController =
+    _model = createModel(context, () => EditPointsPageModel());
+
+    _model.noteTitleController ??=
+        TextEditingController(text: widget.note!.title);
+    _model.noteDescriptionController ??=
         TextEditingController(text: widget.note!.description);
-    noteTitleController = TextEditingController(text: widget.note!.title);
-    optionController = TextEditingController();
+    _model.optionController ??= TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    noteDescriptionController?.dispose();
-    noteTitleController?.dispose();
-    optionController?.dispose();
     super.dispose();
   }
 
@@ -68,10 +68,10 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 50,
-              height: 50,
+              width: 50.0,
+              height: 50.0,
               child: CircularProgressIndicator(
-                color: FlutterFlowTheme.of(context).secondaryColor,
+                color: FlutterFlowTheme.of(context).secondary,
               ),
             ),
           );
@@ -85,73 +85,73 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
             editPointsPageNotesRecordList.isNotEmpty
                 ? editPointsPageNotesRecordList.first
                 : null;
-        return Scaffold(
-          key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          appBar: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            automaticallyImplyLeading: false,
-            leading: FlutterFlowIconButton(
-              borderColor: Colors.transparent,
-              borderRadius: 30,
-              borderWidth: 1,
-              buttonSize: 60,
-              icon: Icon(
-                Icons.arrow_back_rounded,
-                color: FlutterFlowTheme.of(context).primaryColor,
-                size: 30,
-              ),
-              onPressed: () async {
-                FFAppState().update(() {
-                  FFAppState().noteIMG = '';
-                });
-                context.pop();
-              },
-            ),
-            title: Text(
-              FFLocalizations.of(context).getText(
-                'pzp0tso6' /* Edit note */,
-              ),
-              style: FlutterFlowTheme.of(context).subtitle1,
-            ),
-            actions: [
-              FlutterFlowIconButton(
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+          child: Scaffold(
+            key: scaffoldKey,
+            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            appBar: AppBar(
+              backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+              automaticallyImplyLeading: false,
+              leading: FlutterFlowIconButton(
                 borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: FaIcon(
-                  FontAwesomeIcons.save,
-                  color: FlutterFlowTheme.of(context).primaryText,
-                  size: 30,
+                borderRadius: 30.0,
+                borderWidth: 1.0,
+                buttonSize: 60.0,
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color: FlutterFlowTheme.of(context).primary,
+                  size: 30.0,
                 ),
                 onPressed: () async {
-                  final notesUpdateData = createNotesRecordData(
-                    title: noteTitleController!.text,
-                    description: noteDescriptionController!.text,
-                    createdBy: currentUserReference,
-                    createdAt: getCurrentTimestamp,
-                    image: widget.note!.image,
-                  );
-                  await editPointsPageNotesRecord!.reference
-                      .update(notesUpdateData);
-
-                  context.pushNamed('Notes');
+                  FFAppState().update(() {
+                    FFAppState().noteIMG = '';
+                  });
+                  context.pop();
                 },
               ),
-            ],
-            centerTitle: true,
-            elevation: 0,
-          ),
-          body: GestureDetector(
-            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-            child: Column(
+              title: Text(
+                FFLocalizations.of(context).getText(
+                  'pzp0tso6' /* Edit note */,
+                ),
+                style: FlutterFlowTheme.of(context).titleMedium,
+              ),
+              actions: [
+                FlutterFlowIconButton(
+                  borderColor: Colors.transparent,
+                  borderRadius: 30.0,
+                  borderWidth: 1.0,
+                  buttonSize: 60.0,
+                  icon: FaIcon(
+                    FontAwesomeIcons.save,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 30.0,
+                  ),
+                  onPressed: () async {
+                    final notesUpdateData = createNotesRecordData(
+                      title: _model.noteTitleController.text,
+                      description: _model.noteDescriptionController.text,
+                      createdBy: currentUserReference,
+                      createdAt: getCurrentTimestamp,
+                      image: widget.note!.image,
+                    );
+                    await editPointsPageNotesRecord!.reference
+                        .update(notesUpdateData);
+
+                    context.pushNamed('Notes');
+                  },
+                ),
+              ],
+              centerTitle: true,
+              elevation: 0.0,
+            ),
+            body: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Form(
-                    key: formKey,
+                    key: _model.formKey,
                     autovalidateMode: AutovalidateMode.disabled,
                     child: SingleChildScrollView(
                       child: Column(
@@ -159,58 +159,60 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                12.0, 12.0, 12.0, 0.0),
                             child: TextFormField(
-                              controller: noteTitleController,
+                              controller: _model.noteTitleController,
                               obscureText: false,
                               decoration: InputDecoration(
                                 labelText: FFLocalizations.of(context).getText(
                                   'mfo5wn1k' /* Note title */,
                                 ),
                                 hintStyle:
-                                    FlutterFlowTheme.of(context).bodyText2,
+                                    FlutterFlowTheme.of(context).bodySmall,
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
-                                    width: 1,
+                                    width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
-                                    width: 1,
+                                    width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                                 errorBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
-                                    width: 1,
+                                    width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                                 focusedErrorBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
-                                    width: 1,
+                                    width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                                 filled: true,
                                 fillColor: FlutterFlowTheme.of(context)
                                     .secondaryBackground,
                               ),
-                              style: FlutterFlowTheme.of(context).bodyText2,
+                              style: FlutterFlowTheme.of(context).bodySmall,
+                              validator: _model.noteTitleControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                           if (FFAppState().isCheckbox == false)
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 12.0, 12.0, 0.0),
                               child: TextFormField(
-                                controller: noteDescriptionController,
+                                controller: _model.noteDescriptionController,
                                 obscureText: false,
                                 decoration: InputDecoration(
                                   labelText:
@@ -218,49 +220,53 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                     'kxnp2owd' /* Note description */,
                                   ),
                                   hintStyle:
-                                      FlutterFlowTheme.of(context).bodyText2,
+                                      FlutterFlowTheme.of(context).bodySmall,
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1,
+                                      width: 1.0,
                                     ),
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(16.0),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1,
+                                      width: 1.0,
                                     ),
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(16.0),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1,
+                                      width: 1.0,
                                     ),
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(16.0),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1,
+                                      width: 1.0,
                                     ),
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(16.0),
                                   ),
                                   filled: true,
                                   fillColor: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
                                 ),
-                                style: FlutterFlowTheme.of(context).bodyText2,
+                                style: FlutterFlowTheme.of(context).bodySmall,
+                                validator: _model
+                                    .noteDescriptionControllerValidator
+                                    .asValidator(context),
                               ),
                             ),
                           if (editPointsPageNotesRecord != null)
                             Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 1,
+                              width: MediaQuery.of(context).size.width * 1.0,
+                              height: MediaQuery.of(context).size.height * 1.0,
                               child: custom_widgets.PhotoNoteWidget(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height * 1,
+                                width: MediaQuery.of(context).size.width * 1.0,
+                                height:
+                                    MediaQuery.of(context).size.height * 1.0,
                                 image: widget.note!.image!,
                                 points: widget.note!.notePoints!.toList(),
                                 onCreatePhotoNote: () async {
@@ -277,13 +283,13 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                       PhotoNotePointRecord.collection.doc();
                                   await photoNotePointRecordReference
                                       .set(photoNotePointCreateData);
-                                  createdPoint =
+                                  _model.createdPoint =
                                       PhotoNotePointRecord.getDocumentFromData(
                                           photoNotePointCreateData,
                                           photoNotePointRecordReference);
                                   FFAppState().update(() {
                                     FFAppState().addToPhotoNotePoints(
-                                        createdPoint!.reference);
+                                        _model.createdPoint!.reference);
                                     FFAppState().comment = '';
                                   });
                                   FFAppState().update(() {
@@ -297,8 +303,8 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                             ),
                           if (FFAppState().isCheckbox == true)
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 12.0, 12.0, 0.0),
                               child: StreamBuilder<List<BulletsRecord>>(
                                 stream: queryBulletsRecord(
                                   parent: editPointsPageNotesRecord!.reference,
@@ -308,11 +314,11 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                   if (!snapshot.hasData) {
                                     return Center(
                                       child: SizedBox(
-                                        width: 50,
-                                        height: 50,
+                                        width: 50.0,
+                                        height: 50.0,
                                         child: CircularProgressIndicator(
                                           color: FlutterFlowTheme.of(context)
-                                              .secondaryColor,
+                                              .secondary,
                                         ),
                                       ),
                                     );
@@ -328,7 +334,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                           columnBulletsRecordList[columnIndex];
                                       return Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 0, 12),
+                                            0.0, 0.0, 0.0, 12.0),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
@@ -338,6 +344,14 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                                         .isDone ==
                                                     false)
                                                   InkWell(
+                                                    splashColor:
+                                                        Colors.transparent,
+                                                    focusColor:
+                                                        Colors.transparent,
+                                                    hoverColor:
+                                                        Colors.transparent,
+                                                    highlightColor:
+                                                        Colors.transparent,
                                                     onTap: () async {
                                                       final bulletsUpdateData =
                                                           createBulletsRecordData(
@@ -349,15 +363,15 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                                               bulletsUpdateData);
                                                     },
                                                     child: Container(
-                                                      width: 40,
-                                                      height: 40,
+                                                      width: 40.0,
+                                                      height: 40.0,
                                                       decoration: BoxDecoration(
                                                         color: FlutterFlowTheme
                                                                 .of(context)
                                                             .secondaryBackground,
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(8),
+                                                                .circular(8.0),
                                                         border: Border.all(
                                                           color: FlutterFlowTheme
                                                                   .of(context)
@@ -367,7 +381,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                                       child: Icon(
                                                         Icons.check,
                                                         color: Colors.black,
-                                                        size: 24,
+                                                        size: 24.0,
                                                       ),
                                                     ),
                                                   ),
@@ -375,6 +389,14 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                                         .isDone ==
                                                     true)
                                                   InkWell(
+                                                    splashColor:
+                                                        Colors.transparent,
+                                                    focusColor:
+                                                        Colors.transparent,
+                                                    hoverColor:
+                                                        Colors.transparent,
+                                                    highlightColor:
+                                                        Colors.transparent,
                                                     onTap: () async {
                                                       final bulletsUpdateData =
                                                           createBulletsRecordData(
@@ -386,26 +408,26 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                                               bulletsUpdateData);
                                                     },
                                                     child: Container(
-                                                      width: 40,
-                                                      height: 40,
+                                                      width: 40.0,
+                                                      height: 40.0,
                                                       decoration: BoxDecoration(
                                                         color: FlutterFlowTheme
                                                                 .of(context)
                                                             .secondaryBackground,
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(8),
+                                                                .circular(8.0),
                                                         border: Border.all(
                                                           color: FlutterFlowTheme
                                                                   .of(context)
                                                               .lineColor,
-                                                          width: 1,
+                                                          width: 1.0,
                                                         ),
                                                       ),
                                                       child: Icon(
                                                         Icons.check,
                                                         color: Colors.black,
-                                                        size: 24,
+                                                        size: 24.0,
                                                       ),
                                                     ),
                                                   ),
@@ -413,12 +435,13 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                             ),
                                             Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(12, 0, 0, 0),
+                                                  .fromSTEB(
+                                                      12.0, 0.0, 0.0, 0.0),
                                               child: Text(
                                                 columnBulletsRecord.text!,
                                                 style:
                                                     FlutterFlowTheme.of(context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                               ),
                                             ),
                                           ],
@@ -431,14 +454,14 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                             ),
                           if (FFAppState().isCheckbox == true)
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 12.0, 12.0, 0.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   TextFormField(
-                                    controller: optionController,
+                                    controller: _model.optionController,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       hintText:
@@ -446,49 +469,61 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                         'g5gsjxi3' /* Начните писать */,
                                       ),
                                       hintStyle: FlutterFlowTheme.of(context)
-                                          .bodyText2,
+                                          .bodySmall,
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0x00000000),
-                                          width: 1,
+                                          width: 1.0,
                                         ),
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0x00000000),
-                                          width: 1,
+                                          width: 1.0,
                                         ),
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                       ),
                                       errorBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0x00000000),
-                                          width: 1,
+                                          width: 1.0,
                                         ),
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                       ),
                                       focusedErrorBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0x00000000),
-                                          width: 1,
+                                          width: 1.0,
                                         ),
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                       ),
                                       filled: true,
                                       fillColor: FlutterFlowTheme.of(context)
                                           .secondaryBackground,
                                     ),
                                     style:
-                                        FlutterFlowTheme.of(context).bodyText1,
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    validator: _model.optionControllerValidator
+                                        .asValidator(context),
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 8, 0, 0),
+                                        0.0, 8.0, 0.0, 0.0),
                                     child: InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
                                       onTap: () async {
-                                        if (optionController!.text == null ||
-                                            optionController!.text == '') {
+                                        if (_model.optionController.text ==
+                                                null ||
+                                            _model.optionController.text ==
+                                                '') {
                                           await showDialog(
                                             context: context,
                                             builder: (alertDialogContext) {
@@ -509,7 +544,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                           final bulletsCreateData =
                                               createBulletsRecordData(
                                             isDone: false,
-                                            text: optionController!.text,
+                                            text: _model.optionController.text,
                                           );
                                           var bulletsRecordReference =
                                               BulletsRecord.createDoc(
@@ -517,14 +552,14 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                                       .reference);
                                           await bulletsRecordReference
                                               .set(bulletsCreateData);
-                                          bullet =
+                                          _model.bullet =
                                               BulletsRecord.getDocumentFromData(
                                                   bulletsCreateData,
                                                   bulletsRecordReference);
                                         }
 
                                         setState(() {
-                                          optionController?.clear();
+                                          _model.optionController?.clear();
                                         });
 
                                         setState(() {});
@@ -534,7 +569,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                                           '3i3z7moh' /* + Новый пункт */,
                                         ),
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText1,
+                                            .bodyMedium,
                                       ),
                                     ),
                                   ),
@@ -547,7 +582,7 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                   ),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.of(context).size.width * 1.0,
                   height: MediaQuery.of(context).size.height * 0.09,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -558,24 +593,30 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                     children: [
                       FlutterFlowIconButton(
                         borderColor: Colors.transparent,
-                        borderRadius: 30,
-                        borderWidth: 1,
-                        buttonSize: 60,
+                        borderRadius: 30.0,
+                        borderWidth: 1.0,
+                        buttonSize: 60.0,
                         icon: Icon(
                           Icons.add_circle_outline,
                           color: FlutterFlowTheme.of(context).primaryText,
-                          size: 30,
+                          size: 30.0,
                         ),
                         onPressed: () async {
                           await showModalBottomSheet(
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
+                            barrierColor: Color(0x00000000),
                             context: context,
-                            builder: (context) {
-                              return Padding(
-                                padding: MediaQuery.of(context).viewInsets,
-                                child: AddNoteElementsWidget(
-                                  uploadImage: () async {},
+                            builder: (bottomSheetContext) {
+                              return GestureDetector(
+                                onTap: () => FocusScope.of(context)
+                                    .requestFocus(_unfocusNode),
+                                child: Padding(
+                                  padding: MediaQuery.of(bottomSheetContext)
+                                      .viewInsets,
+                                  child: AddNoteElementsWidget(
+                                    uploadImage: () async {},
+                                  ),
                                 ),
                               );
                             },
@@ -584,25 +625,31 @@ class _EditPointsPageWidgetState extends State<EditPointsPageWidget> {
                       ),
                       FlutterFlowIconButton(
                         borderColor: Colors.transparent,
-                        borderRadius: 30,
-                        borderWidth: 1,
-                        buttonSize: 60,
+                        borderRadius: 30.0,
+                        borderWidth: 1.0,
+                        buttonSize: 60.0,
                         icon: Icon(
                           FFIcons.kmenuDots,
                           color: FlutterFlowTheme.of(context).primaryText,
-                          size: 30,
+                          size: 30.0,
                         ),
                         onPressed: () async {
                           await showModalBottomSheet(
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
+                            barrierColor: Color(0x00000000),
                             context: context,
-                            builder: (context) {
-                              return Padding(
-                                padding: MediaQuery.of(context).viewInsets,
-                                child: AddNoteSettingsWidget(
-                                  object: widget.note!.reference,
-                                  obj: widget.note,
+                            builder: (bottomSheetContext) {
+                              return GestureDetector(
+                                onTap: () => FocusScope.of(context)
+                                    .requestFocus(_unfocusNode),
+                                child: Padding(
+                                  padding: MediaQuery.of(bottomSheetContext)
+                                      .viewInsets,
+                                  child: AddNoteSettingsWidget(
+                                    object: widget.note!.reference,
+                                    obj: widget.note,
+                                  ),
                                 ),
                               );
                             },

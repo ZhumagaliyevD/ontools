@@ -1,16 +1,18 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../backend/firebase_storage/storage.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
-import '../flutter_flow/upload_media.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/backend/firebase_storage/storage.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/upload_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'tool_detail_page_model.dart';
+export 'tool_detail_page_model.dart';
 
 class ToolDetailPageWidget extends StatefulWidget {
   const ToolDetailPageWidget({
@@ -25,19 +27,16 @@ class ToolDetailPageWidget extends StatefulWidget {
 }
 
 class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
-  bool isMediaUploading = false;
-  String uploadedFileUrl = '';
+  late ToolDetailPageModel _model;
 
-  TextEditingController? descriptionController;
-  TextEditingController? toolNameController;
-  TextEditingController? shopNameController;
-  TextEditingController? priceController;
-  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => ToolDetailPageModel());
+
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       FFAppState().update(() {
@@ -45,21 +44,21 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
       });
     });
 
-    descriptionController =
+    _model.toolNameController ??=
+        TextEditingController(text: widget.tool!.toolName);
+    _model.descriptionController ??=
         TextEditingController(text: widget.tool!.description);
-    toolNameController = TextEditingController(text: widget.tool!.toolName);
-    shopNameController = TextEditingController(text: widget.tool!.shopName);
-    priceController =
+    _model.shopNameController ??=
+        TextEditingController(text: widget.tool!.shopName);
+    _model.priceController ??=
         TextEditingController(text: widget.tool!.price?.toString());
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    descriptionController?.dispose();
-    toolNameController?.dispose();
-    shopNameController?.dispose();
-    priceController?.dispose();
     super.dispose();
   }
 
@@ -74,84 +73,84 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 50,
-              height: 50,
+              width: 50.0,
+              height: 50.0,
               child: CircularProgressIndicator(
-                color: FlutterFlowTheme.of(context).secondaryColor,
+                color: FlutterFlowTheme.of(context).secondary,
               ),
             ),
           );
         }
         final toolDetailPageToolsRecord = snapshot.data!;
-        return Scaffold(
-          key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          appBar: AppBar(
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+          child: Scaffold(
+            key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-            automaticallyImplyLeading: false,
-            leading: FlutterFlowIconButton(
-              borderColor: Colors.transparent,
-              borderRadius: 30,
-              borderWidth: 1,
-              buttonSize: 60,
-              icon: Icon(
-                Icons.arrow_back_rounded,
-                color: FlutterFlowTheme.of(context).primaryColor,
-                size: 30,
-              ),
-              onPressed: () async {
-                FFAppState().update(() {
-                  FFAppState().toolBuyDate =
-                      DateTime.fromMillisecondsSinceEpoch(1665846120000);
-                  FFAppState().toolimg = '';
-                });
-                FFAppState().update(() {
-                  FFAppState().chequeName = '';
-                });
-                context.pop();
-              },
-            ),
-            title: Text(
-              widget.tool!.toolName!,
-              style: FlutterFlowTheme.of(context).subtitle1,
-            ),
-            actions: [
-              Visibility(
-                visible:
-                    toolDetailPageToolsRecord.createdBy == currentUserReference,
-                child: FlutterFlowIconButton(
-                  borderColor: Colors.transparent,
-                  borderRadius: 30,
-                  borderWidth: 1,
-                  buttonSize: 60,
-                  icon: Icon(
-                    Icons.edit,
-                    color: FlutterFlowTheme.of(context).primaryText,
-                    size: 30,
-                  ),
-                  onPressed: () async {
-                    context.pushNamed(
-                      'EditToolPage',
-                      queryParams: {
-                        'tool': serializeParam(
-                          toolDetailPageToolsRecord,
-                          ParamType.Document,
-                        ),
-                      }.withoutNulls,
-                      extra: <String, dynamic>{
-                        'tool': toolDetailPageToolsRecord,
-                      },
-                    );
-                  },
+            appBar: AppBar(
+              backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+              automaticallyImplyLeading: false,
+              leading: FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 30.0,
+                borderWidth: 1.0,
+                buttonSize: 60.0,
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color: FlutterFlowTheme.of(context).primary,
+                  size: 30.0,
                 ),
+                onPressed: () async {
+                  FFAppState().update(() {
+                    FFAppState().toolBuyDate =
+                        DateTime.fromMillisecondsSinceEpoch(1665846120000);
+                    FFAppState().toolimg = '';
+                  });
+                  FFAppState().update(() {
+                    FFAppState().chequeName = '';
+                  });
+                  context.pop();
+                },
               ),
-            ],
-            centerTitle: true,
-            elevation: 0,
-          ),
-          body: GestureDetector(
-            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-            child: Stack(
+              title: Text(
+                widget.tool!.toolName!,
+                style: FlutterFlowTheme.of(context).titleMedium,
+              ),
+              actions: [
+                Visibility(
+                  visible: toolDetailPageToolsRecord.createdBy ==
+                      currentUserReference,
+                  child: FlutterFlowIconButton(
+                    borderColor: Colors.transparent,
+                    borderRadius: 30.0,
+                    borderWidth: 1.0,
+                    buttonSize: 60.0,
+                    icon: Icon(
+                      Icons.edit,
+                      color: FlutterFlowTheme.of(context).primaryText,
+                      size: 30.0,
+                    ),
+                    onPressed: () async {
+                      context.pushNamed(
+                        'EditToolPage',
+                        queryParams: {
+                          'tool': serializeParam(
+                            toolDetailPageToolsRecord,
+                            ParamType.Document,
+                          ),
+                        }.withoutNulls,
+                        extra: <String, dynamic>{
+                          'tool': toolDetailPageToolsRecord,
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+              centerTitle: true,
+              elevation: 0.0,
+            ),
+            body: Stack(
               children: [
                 SingleChildScrollView(
                   child: Column(
@@ -159,10 +158,11 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 12.0, 0.0),
                         child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 200,
+                          width: MediaQuery.of(context).size.width * 1.0,
+                          height: 200.0,
                           decoration: BoxDecoration(
                             color: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
@@ -172,64 +172,68 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                 widget.tool!.photo!,
                               ).image,
                             ),
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.0),
                             border: Border.all(
                               color: FlutterFlowTheme.of(context).lineColor,
-                              width: 1,
+                              width: 1.0,
                             ),
                           ),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 12.0, 0.0),
                         child: TextFormField(
-                          controller: toolNameController,
+                          controller: _model.toolNameController,
                           readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
                             labelText: FFLocalizations.of(context).getText(
                               '6g79p2q3' /* Наименование инстумента */,
                             ),
-                            hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                            hintStyle: FlutterFlowTheme.of(context).bodySmall,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context).lineColor,
-                                width: 1,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).lineColor,
-                                width: 1,
+                                color: Color(0x00000000),
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             errorBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0x00000000),
-                                width: 1,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             focusedErrorBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0x00000000),
-                                width: 1,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             filled: true,
                             fillColor: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
                           ),
-                          style: FlutterFlowTheme.of(context).bodyText1,
+                          style: FlutterFlowTheme.of(context).bodyMedium,
+                          validator: _model.toolNameControllerValidator
+                              .asValidator(context),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 12.0, 0.0),
                         child: TextFormField(
-                          controller: descriptionController,
+                          controller: _model.descriptionController,
                           readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
@@ -239,107 +243,113 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                             hintText: FFLocalizations.of(context).getText(
                               'o6t0s707' /* Введите описание инструмента */,
                             ),
-                            hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                            hintStyle: FlutterFlowTheme.of(context).bodySmall,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context).lineColor,
-                                width: 1,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).lineColor,
-                                width: 1,
+                                color: Color(0x00000000),
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             errorBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0x00000000),
-                                width: 1,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             focusedErrorBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0x00000000),
-                                width: 1,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             filled: true,
                             fillColor: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
                           ),
-                          style: FlutterFlowTheme.of(context).bodyText1,
+                          style: FlutterFlowTheme.of(context).bodyMedium,
                           maxLines: 8,
+                          validator: _model.descriptionControllerValidator
+                              .asValidator(context),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 12.0, 0.0),
                         child: TextFormField(
-                          controller: shopNameController,
+                          controller: _model.shopNameController,
                           readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
                             labelText: FFLocalizations.of(context).getText(
                               'w9h2pmjn' /* Наименование магазина */,
                             ),
-                            hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                            hintStyle: FlutterFlowTheme.of(context).bodySmall,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context).lineColor,
-                                width: 1,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).lineColor,
-                                width: 1,
+                                color: Color(0x00000000),
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             errorBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0x00000000),
-                                width: 1,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             focusedErrorBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0x00000000),
-                                width: 1,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             filled: true,
                             fillColor: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
                           ),
-                          style: FlutterFlowTheme.of(context).bodyText1,
+                          style: FlutterFlowTheme.of(context).bodyMedium,
+                          validator: _model.shopNameControllerValidator
+                              .asValidator(context),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 12.0, 0.0),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(8, 0, 0, 2),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  8.0, 0.0, 0.0, 2.0),
                               child: Text(
                                 FFLocalizations.of(context).getText(
                                   '3s8ldint' /* Добавить чек */,
                                 ),
                                 style: FlutterFlowTheme.of(context)
-                                    .bodyText1
+                                    .bodyMedium
                                     .override(
                                       fontFamily: 'Montserrat',
-                                      fontSize: 12,
+                                      fontSize: 12.0,
                                     ),
                               ),
                             ),
@@ -347,12 +357,16 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                               decoration: BoxDecoration(
                                 color: FlutterFlowTheme.of(context)
                                     .secondaryBackground,
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    0, 10, 0, 10),
+                                    0.0, 10.0, 0.0, 10.0),
                                 child: InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
                                   onTap: () async {
                                     FFAppState().update(() {
                                       FFAppState().viewPhoto = true;
@@ -365,7 +379,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                         child: Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 0, 0, 0),
+                                                  12.0, 0.0, 0.0, 0.0),
                                           child: Text(
                                             valueOrDefault<String>(
                                               toolDetailPageToolsRecord
@@ -373,12 +387,12 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                               'cheque',
                                             ),
                                             style: FlutterFlowTheme.of(context)
-                                                .bodyText1
+                                                .bodyMedium
                                                 .override(
                                                   fontFamily: 'Montserrat',
                                                   color: FlutterFlowTheme.of(
                                                           context)
-                                                      .secondaryColor,
+                                                      .secondary,
                                                   decoration:
                                                       TextDecoration.underline,
                                                 ),
@@ -389,15 +403,15 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                           widget.tool!.chequeName == '')
                                         FlutterFlowIconButton(
                                           borderColor: Colors.transparent,
-                                          borderRadius: 30,
-                                          borderWidth: 1,
-                                          buttonSize: 50,
+                                          borderRadius: 30.0,
+                                          borderWidth: 1.0,
+                                          buttonSize: 50.0,
                                           icon: Icon(
                                             FFIcons
                                                 .kfreeIconFontDownload3917330,
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryText,
-                                            size: 20,
+                                            size: 20.0,
                                           ),
                                           onPressed: () async {
                                             final selectedMedia =
@@ -410,8 +424,10 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                                     validateFileFormat(
                                                         m.storagePath,
                                                         context))) {
-                                              setState(() =>
-                                                  isMediaUploading = true);
+                                              setState(() => _model
+                                                  .isDataUploading = true);
+                                              var selectedUploadedFiles =
+                                                  <FFUploadedFile>[];
                                               var downloadUrls = <String>[];
                                               try {
                                                 showUploadMessage(
@@ -419,6 +435,26 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                                   'Uploading file...',
                                                   showLoading: true,
                                                 );
+                                                selectedUploadedFiles =
+                                                    selectedMedia
+                                                        .map((m) =>
+                                                            FFUploadedFile(
+                                                              name: m
+                                                                  .storagePath
+                                                                  .split('/')
+                                                                  .last,
+                                                              bytes: m.bytes,
+                                                              height: m
+                                                                  .dimensions
+                                                                  ?.height,
+                                                              width: m
+                                                                  .dimensions
+                                                                  ?.width,
+                                                              blurHash:
+                                                                  m.blurHash,
+                                                            ))
+                                                        .toList();
+
                                                 downloadUrls =
                                                     (await Future.wait(
                                                   selectedMedia.map(
@@ -434,18 +470,26 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                               } finally {
                                                 ScaffoldMessenger.of(context)
                                                     .hideCurrentSnackBar();
-                                                isMediaUploading = false;
+                                                _model.isDataUploading = false;
                                               }
-                                              if (downloadUrls.length ==
-                                                  selectedMedia.length) {
-                                                setState(() => uploadedFileUrl =
-                                                    downloadUrls.first);
+                                              if (selectedUploadedFiles
+                                                          .length ==
+                                                      selectedMedia.length &&
+                                                  downloadUrls.length ==
+                                                      selectedMedia.length) {
+                                                setState(() {
+                                                  _model.uploadedLocalFile =
+                                                      selectedUploadedFiles
+                                                          .first;
+                                                  _model.uploadedFileUrl =
+                                                      downloadUrls.first;
+                                                });
                                                 showUploadMessage(
                                                     context, 'Success!');
                                               } else {
                                                 setState(() {});
                                                 showUploadMessage(context,
-                                                    'Failed to upload media');
+                                                    'Failed to upload data');
                                                 return;
                                               }
                                             }
@@ -463,7 +507,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
 
                                             final toolsUpdateData =
                                                 createToolsRecordData(
-                                              chequeIMG: uploadedFileUrl,
+                                              chequeIMG: _model.uploadedFileUrl,
                                               chequeName: 'Чек ${dateTimeFormat(
                                                 'd/M H:mm',
                                                 getCurrentTimestamp,
@@ -485,50 +529,53 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 30),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 12.0, 30.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
                               child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 6.0, 0.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          8, 0, 0, 2),
+                                          8.0, 0.0, 0.0, 2.0),
                                       child: Text(
                                         FFLocalizations.of(context).getText(
                                           '8njgpx48' /* Дата покупки */,
                                         ),
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText1
+                                            .bodyMedium
                                             .override(
                                               fontFamily: 'Montserrat',
-                                              fontSize: 12,
+                                              fontSize: 12.0,
                                             ),
                                       ),
                                     ),
                                     Container(
                                       width: double.infinity,
-                                      height: 50,
+                                      height: 50.0,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
-                                        borderRadius: BorderRadius.circular(12),
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
                                         border: Border.all(
                                           color: FlutterFlowTheme.of(context)
                                               .lineColor,
                                         ),
                                       ),
-                                      alignment: AlignmentDirectional(-1, 0),
+                                      alignment:
+                                          AlignmentDirectional(-1.0, 0.0),
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            12, 0, 0, 0),
+                                            12.0, 0.0, 0.0, 0.0),
                                         child: Text(
                                           dateTimeFormat(
                                             'd/M/y',
@@ -537,7 +584,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                                 .languageCode,
                                           ),
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
+                                              .bodyMedium,
                                         ),
                                       ),
                                     ),
@@ -547,75 +594,76 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                             ),
                             Expanded(
                               child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(6, 0, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    6.0, 0.0, 0.0, 0.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          8, 0, 0, 2),
+                                          8.0, 0.0, 0.0, 2.0),
                                       child: Text(
                                         FFLocalizations.of(context).getText(
                                           'keqb5fko' /* Цена, тенге */,
                                         ),
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText1
+                                            .bodyMedium
                                             .override(
                                               fontFamily: 'Montserrat',
-                                              fontSize: 12,
+                                              fontSize: 12.0,
                                             ),
                                       ),
                                     ),
                                     TextFormField(
-                                      controller: priceController,
+                                      controller: _model.priceController,
                                       readOnly: true,
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         hintStyle: FlutterFlowTheme.of(context)
-                                            .bodyText2,
+                                            .bodySmall,
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: FlutterFlowTheme.of(context)
                                                 .lineColor,
-                                            width: 1,
+                                            width: 1.0,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(16),
+                                              BorderRadius.circular(16.0),
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .lineColor,
-                                            width: 1,
+                                            color: Color(0x00000000),
+                                            width: 1.0,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(16),
+                                              BorderRadius.circular(16.0),
                                         ),
                                         errorBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
-                                            width: 1,
+                                            width: 1.0,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(16),
+                                              BorderRadius.circular(16.0),
                                         ),
                                         focusedErrorBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
-                                            width: 1,
+                                            width: 1.0,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(16),
+                                              BorderRadius.circular(16.0),
                                         ),
                                         filled: true,
                                         fillColor: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
                                       ),
                                       style: FlutterFlowTheme.of(context)
-                                          .bodyText1,
+                                          .bodyMedium,
                                       keyboardType: TextInputType.number,
+                                      validator: _model.priceControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ],
                                 ),
@@ -625,7 +673,8 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 0.0, 16.0, 16.0),
                         child: StreamBuilder<UserRecord>(
                           stream:
                               UserRecord.getDocument(widget.tool!.createdBy!),
@@ -634,11 +683,11 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                             if (!snapshot.hasData) {
                               return Center(
                                 child: SizedBox(
-                                  width: 50,
-                                  height: 50,
+                                  width: 50.0,
+                                  height: 50.0,
                                   child: CircularProgressIndicator(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryColor,
+                                    color:
+                                        FlutterFlowTheme.of(context).secondary,
                                   ),
                                 ),
                               );
@@ -648,21 +697,21 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 ClipRRect(
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                   child: Image.network(
                                     valueOrDefault<String>(
                                       rowUserRecord.photoUrl,
                                       'https://media.istockphoto.com/vectors/user-icon-flat-isolated-on-white-background-user-symbol-vector-vector-id1300845620?k=20&m=1300845620&s=612x612&w=0&h=f4XTZDAv7NPuZbG0habSpU0sNgECM0X7nbKzTUta3n8=',
                                     ),
-                                    width: 60,
-                                    height: 60,
+                                    width: 60.0,
+                                    height: 60.0,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                                 Expanded(
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        16, 20, 0, 20),
+                                        16.0, 20.0, 0.0, 20.0),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
@@ -673,7 +722,7 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                         Text(
                                           rowUserRecord.displayName!,
                                           style: FlutterFlowTheme.of(context)
-                                              .subtitle1
+                                              .titleMedium
                                               .override(
                                                 fontFamily: 'Montserrat',
                                                 fontWeight: FontWeight.w600,
@@ -682,13 +731,13 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0, 8, 0, 0),
+                                                  0.0, 8.0, 0.0, 0.0),
                                           child: Text(
                                             FFLocalizations.of(context).getText(
                                               '5q7sslpa' /* Продавца */,
                                             ),
                                             style: FlutterFlowTheme.of(context)
-                                                .bodyText1,
+                                                .bodyMedium,
                                           ),
                                         ),
                                       ],
@@ -703,8 +752,8 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                       if (toolDetailPageToolsRecord.createdBy !=
                           currentUserReference)
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(12, 0, 12, 24),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              12.0, 0.0, 12.0, 24.0),
                           child: StreamBuilder<UserRecord>(
                             stream:
                                 UserRecord.getDocument(widget.tool!.createdBy!),
@@ -713,11 +762,11 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                               if (!snapshot.hasData) {
                                 return Center(
                                   child: SizedBox(
-                                    width: 50,
-                                    height: 50,
+                                    width: 50.0,
+                                    height: 50.0,
                                     child: CircularProgressIndicator(
                                       color: FlutterFlowTheme.of(context)
-                                          .secondaryColor,
+                                          .secondary,
                                     ),
                                   ),
                                 );
@@ -745,22 +794,26 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                                   '4kajw6ay' /* Связаться */,
                                 ),
                                 options: FFButtonOptions(
-                                  width: 130,
-                                  height: 48,
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryColor,
+                                  width: 130.0,
+                                  height: 48.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: FlutterFlowTheme.of(context).secondary,
                                   textStyle: FlutterFlowTheme.of(context)
-                                      .subtitle2
+                                      .titleSmall
                                       .override(
                                         fontFamily: 'Montserrat',
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
                                       ),
+                                  elevation: 2.0,
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
-                                    width: 1,
+                                    width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                               );
                             },
@@ -770,8 +823,8 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                           (toolDetailPageToolsRecord.createdBy ==
                               currentUserReference))
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              12.0, 0.0, 12.0, 30.0),
                           child: FFButtonWidget(
                             onPressed: () async {
                               final toolsUpdateData = createToolsRecordData(
@@ -785,23 +838,27 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                               'znm3rki1' /* Выставить на продажу */,
                             ),
                             options: FFButtonOptions(
-                              width: 130,
-                              height: 48,
+                              width: 130.0,
+                              height: 48.0,
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
                               color: FlutterFlowTheme.of(context)
                                   .primaryBackground,
                               textStyle: FlutterFlowTheme.of(context)
-                                  .subtitle2
+                                  .titleSmall
                                   .override(
                                     fontFamily: 'Montserrat',
                                     color: FlutterFlowTheme.of(context)
                                         .primaryText,
                                   ),
+                              elevation: 2.0,
                               borderSide: BorderSide(
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryColor,
-                                width: 1,
+                                color: FlutterFlowTheme.of(context).secondary,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
                           ),
                         ),
@@ -809,8 +866,8 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                           (toolDetailPageToolsRecord.createdBy ==
                               currentUserReference))
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(12, 0, 12, 30),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              12.0, 0.0, 12.0, 30.0),
                           child: FFButtonWidget(
                             onPressed: () async {
                               final toolsUpdateData = createToolsRecordData(
@@ -824,23 +881,27 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                               'tzvubz9k' /* Снять с продаж */,
                             ),
                             options: FFButtonOptions(
-                              width: 130,
-                              height: 48,
+                              width: 130.0,
+                              height: 48.0,
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
                               color: FlutterFlowTheme.of(context)
                                   .primaryBackground,
                               textStyle: FlutterFlowTheme.of(context)
-                                  .subtitle2
+                                  .titleSmall
                                   .override(
                                     fontFamily: 'Montserrat',
                                     color: FlutterFlowTheme.of(context)
                                         .primaryText,
                                   ),
+                              elevation: 2.0,
                               borderSide: BorderSide(
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryColor,
-                                width: 1,
+                                color: FlutterFlowTheme.of(context).secondary,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
                           ),
                         ),
@@ -849,6 +910,10 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                 ),
                 if (FFAppState().viewPhoto)
                   InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
                     onTap: () async {
                       FFAppState().update(() {
                         FFAppState().viewPhoto = false;
@@ -859,11 +924,15 @@ class _ToolDetailPageWidgetState extends State<ToolDetailPageWidget> {
                       height: double.infinity,
                       decoration: BoxDecoration(
                         color: Color(0x84000000),
-                        borderRadius: BorderRadius.circular(0),
+                        borderRadius: BorderRadius.circular(0.0),
                       ),
                       child: Align(
-                        alignment: AlignmentDirectional(0, 0),
+                        alignment: AlignmentDirectional(0.0, 0.0),
                         child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
                           onTap: () async {
                             FFAppState().update(() {
                               FFAppState().viewPhoto = false;

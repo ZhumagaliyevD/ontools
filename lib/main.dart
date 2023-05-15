@@ -1,10 +1,12 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'auth/firebase_user_provider.dart';
-import 'auth/auth_util.dart';
+import 'auth/firebase_auth/firebase_user_provider.dart';
+import 'auth/firebase_auth/auth_util.dart';
+
 import 'backend/push_notifications/push_notifications_util.dart';
 import 'backend/firebase/firebase_config.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
@@ -23,6 +25,8 @@ void main() async {
   await FFLocalizations.initialize();
 
   final appState = FFAppState(); // Initialize FFAppState
+  await appState.initializePersistedState();
+
   await revenue_cat.initialize(
     "appl_JjjGUOgUAUmNChluvNjbdpcivbw",
     "",
@@ -49,7 +53,7 @@ class _MyAppState extends State<MyApp> {
   Locale? _locale = FFLocalizations.getStoredLocale();
   ThemeMode _themeMode = ThemeMode.system;
 
-  late Stream<OnToolsFirebaseUser> userStream;
+  late Stream<BaseAuthUser> userStream;
 
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
@@ -154,7 +158,7 @@ class _NavBarPageState extends State<NavBarPage> {
           _currentPageName = tabs.keys.toList()[i];
         }),
         backgroundColor: Colors.white,
-        selectedItemColor: FlutterFlowTheme.of(context).primaryColor,
+        selectedItemColor: FlutterFlowTheme.of(context).primary,
         unselectedItemColor: Color(0x8A000000),
         showSelectedLabels: true,
         showUnselectedLabels: true,
@@ -163,7 +167,7 @@ class _NavBarPageState extends State<NavBarPage> {
           BottomNavigationBarItem(
             icon: Icon(
               FFIcons.kdocumentSigned,
-              size: 24,
+              size: 24.0,
             ),
             label: FFLocalizations.of(context).getText(
               'vevbov21' /* Заметки */,
@@ -173,11 +177,11 @@ class _NavBarPageState extends State<NavBarPage> {
           BottomNavigationBarItem(
             icon: FaIcon(
               FontAwesomeIcons.file,
-              size: 24,
+              size: 24.0,
             ),
             activeIcon: FaIcon(
               FontAwesomeIcons.solidFile,
-              size: 24,
+              size: 24.0,
             ),
             label: FFLocalizations.of(context).getText(
               '9bh1f4hy' /* Отчеты */,
@@ -187,7 +191,7 @@ class _NavBarPageState extends State<NavBarPage> {
           BottomNavigationBarItem(
             icon: Icon(
               FFIcons.kbox,
-              size: 24,
+              size: 24.0,
             ),
             label: FFLocalizations.of(context).getText(
               '1yq0zf1u' /* Инструменты */,
@@ -197,7 +201,7 @@ class _NavBarPageState extends State<NavBarPage> {
           BottomNavigationBarItem(
             icon: Icon(
               FFIcons.kballot,
-              size: 24,
+              size: 24.0,
             ),
             label: FFLocalizations.of(context).getText(
               '4fn6w8za' /* Purchase */,
@@ -207,11 +211,11 @@ class _NavBarPageState extends State<NavBarPage> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.shopping_cart_outlined,
-              size: 24,
+              size: 24.0,
             ),
             activeIcon: Icon(
               Icons.shopping_cart_rounded,
-              size: 24,
+              size: 24.0,
             ),
             label: FFLocalizations.of(context).getText(
               'sqgzos07' /* Маркетплейс */,
@@ -221,11 +225,11 @@ class _NavBarPageState extends State<NavBarPage> {
           BottomNavigationBarItem(
             icon: Icon(
               FFIcons.kfreeIconFontHome3917033,
-              size: 24,
+              size: 24.0,
             ),
             activeIcon: Icon(
               FFIcons.kfreeIconFontHome3917032,
-              size: 24,
+              size: 24.0,
             ),
             label: FFLocalizations.of(context).getText(
               'wwam51wy' /* Профиль */,

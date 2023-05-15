@@ -1,17 +1,19 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../components/report_del_widget.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
-import '../flutter_flow/revenue_cat_util.dart' as revenue_cat;
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/report_del_widget.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
+import '/flutter_flow/revenue_cat_util.dart' as revenue_cat;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'profile_home_page_model.dart';
+export 'profile_home_page_model.dart';
 
 class ProfileHomePageWidget extends StatefulWidget {
   const ProfileHomePageWidget({Key? key}) : super(key: key);
@@ -21,13 +23,16 @@ class ProfileHomePageWidget extends StatefulWidget {
 }
 
 class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
-  bool? switchListTileValue;
-  final _unfocusNode = FocusNode();
+  late ProfileHomePageModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => ProfileHomePageModel());
+
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       if (!((functions.daysBetween(
@@ -44,13 +49,11 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
 
         if (isEntitled) {
           context.pushNamed('ProfileHomePage');
-
-          return;
         } else {
           context.pushNamed('Paywall');
-
-          return;
         }
+
+        return;
       } else {
         return;
       }
@@ -59,6 +62,8 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -67,592 +72,621 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return StreamBuilder<List<UserRecord>>(
-      stream: queryUserRecord(
-        singleRecord: true,
-      ),
+    return StreamBuilder<UserRecord>(
+      stream: UserRecord.getDocument(currentUserReference!),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 50,
-              height: 50,
+              width: 50.0,
+              height: 50.0,
               child: CircularProgressIndicator(
-                color: FlutterFlowTheme.of(context).secondaryColor,
+                color: FlutterFlowTheme.of(context).secondary,
               ),
             ),
           );
         }
-        List<UserRecord> profileHomePageUserRecordList = snapshot.data!;
-        // Return an empty Container when the item does not exist.
-        if (snapshot.data!.isEmpty) {
-          return Container();
-        }
-        final profileHomePageUserRecord =
-            profileHomePageUserRecordList.isNotEmpty
-                ? profileHomePageUserRecordList.first
-                : null;
-        return Scaffold(
-          key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          drawer: Container(
-            width: double.infinity,
-            child: Drawer(
-              elevation: 16,
-              child: Align(
-                alignment: AlignmentDirectional(0, -0.8),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30,
-                            borderWidth: 1,
-                            buttonSize: 50,
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 25,
+        final profileHomePageUserRecord = snapshot.data!;
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+          child: Scaffold(
+            key: scaffoldKey,
+            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            drawer: Container(
+              width: double.infinity,
+              child: Drawer(
+                elevation: 16.0,
+                child: Align(
+                  alignment: AlignmentDirectional(0.0, -0.8),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 12.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            FlutterFlowIconButton(
+                              borderColor: Colors.transparent,
+                              borderRadius: 30.0,
+                              borderWidth: 1.0,
+                              buttonSize: 50.0,
+                              icon: Icon(
+                                Icons.arrow_back,
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                size: 25.0,
+                              ),
+                              onPressed: () async {
+                                if (scaffoldKey.currentState!.isDrawerOpen ||
+                                    scaffoldKey.currentState!.isEndDrawerOpen) {
+                                  Navigator.pop(context);
+                                }
+                              },
                             ),
-                            onPressed: () async {
-                              if (scaffoldKey.currentState!.isDrawerOpen ||
-                                  scaffoldKey.currentState!.isEndDrawerOpen) {
-                                Navigator.pop(context);
-                              }
-                            },
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 50.0, 0.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      FFLocalizations.of(context).getText(
+                                        'yq1hunc3' /* Настройки */,
+                                      ),
+                                      textAlign: TextAlign.start,
+                                      style: FlutterFlowTheme.of(context)
+                                          .titleMedium,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
+                        child: Text(
+                          FFLocalizations.of(context).getText(
+                            'pbp6cp3m' /* Общие настройки */,
                           ),
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 50, 0),
-                              child: Row(
+                          style: FlutterFlowTheme.of(context).headlineSmall,
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+                        child: SwitchListTile(
+                          value: _model.switchListTileValue ??= true,
+                          onChanged: (newValue) async {
+                            setState(
+                                () => _model.switchListTileValue = newValue!);
+                          },
+                          title: Text(
+                            FFLocalizations.of(context).getText(
+                              'j9ocp4ko' /* Уведомления */,
+                            ),
+                            style: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  fontFamily: 'Montserrat',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                ),
+                          ),
+                          tileColor:
+                              FlutterFlowTheme.of(context).primaryBackground,
+                          dense: false,
+                          controlAffinity: ListTileControlAffinity.trailing,
+                        ),
+                      ),
+                      InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          await launchURL(
+                              'https://docs.google.com/document/d/1c_O6H8qCjNQmTIKaWTwYpCmhJ569835QFmgOIu8mkAs/edit');
+                        },
+                        child: ListTile(
+                          title: Text(
+                            FFLocalizations.of(context).getText(
+                              'dplkhctz' /* Политика конфиденциальности да... */,
+                            ),
+                            style: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  fontFamily: 'Montserrat',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: FlutterFlowTheme.of(context).primary,
+                            size: 20.0,
+                          ),
+                          tileColor: Color(0xFFF5F5F5),
+                          dense: false,
+                        ),
+                      ),
+                      InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          context.goNamed('About');
+                        },
+                        child: ListTile(
+                          title: Text(
+                            FFLocalizations.of(context).getText(
+                              '8la6fgbu' /* О приложении */,
+                            ),
+                            style: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  fontFamily: 'Montserrat',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Color(0xFF303030),
+                            size: 20.0,
+                          ),
+                          tileColor: Color(0xFFF5F5F5),
+                          dense: false,
+                        ),
+                      ),
+                      InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          await revenue_cat.restorePurchases();
+                        },
+                        child: ListTile(
+                          title: Text(
+                            FFLocalizations.of(context).getText(
+                              'yiqlelxe' /* Отменить подписку */,
+                            ),
+                            style: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  fontFamily: 'Montserrat',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Color(0xFF303030),
+                            size: 20.0,
+                          ),
+                          tileColor: Color(0xFFF5F5F5),
+                          dense: false,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 24.0, 16.0, 0.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  FFLocalizations.of(context).getText(
+                                    'czqxe7r9' /* Текущая подписка */,
+                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .titleMedium
+                                      .override(
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 12.0, 0.0, 0.0),
+                              child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    FFLocalizations.of(context).getText(
-                                      '73b4coes' /* Настройки */,
+                                  Container(
+                                    height: 100.0,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      border: Border.all(
+                                        color: Color(0xFF242424),
+                                        width: 1.0,
+                                      ),
                                     ),
-                                    textAlign: TextAlign.start,
-                                    style:
-                                        FlutterFlowTheme.of(context).subtitle1,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
-                      child: Text(
-                        FFLocalizations.of(context).getText(
-                          'pcjsyzjc' /* Общие настройки */,
-                        ),
-                        style: FlutterFlowTheme.of(context).title3,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                      child: SwitchListTile(
-                        value: switchListTileValue ??= true,
-                        onChanged: (newValue) async {
-                          setState(() => switchListTileValue = newValue!);
-                        },
-                        title: Text(
-                          FFLocalizations.of(context).getText(
-                            '0lw50ux3' /* Уведомления */,
-                          ),
-                          style: FlutterFlowTheme.of(context)
-                              .subtitle2
-                              .override(
-                                fontFamily: 'Montserrat',
-                                color: FlutterFlowTheme.of(context).primaryText,
-                              ),
-                        ),
-                        tileColor:
-                            FlutterFlowTheme.of(context).primaryBackground,
-                        dense: false,
-                        controlAffinity: ListTileControlAffinity.trailing,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        await launchURL(
-                            'https://docs.google.com/document/d/1c_O6H8qCjNQmTIKaWTwYpCmhJ569835QFmgOIu8mkAs/edit');
-                      },
-                      child: ListTile(
-                        title: Text(
-                          FFLocalizations.of(context).getText(
-                            'wnn4cltx' /* Политика конфиденциальности да... */,
-                          ),
-                          style: FlutterFlowTheme.of(context)
-                              .subtitle2
-                              .override(
-                                fontFamily: 'Montserrat',
-                                color: FlutterFlowTheme.of(context).primaryText,
-                              ),
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: FlutterFlowTheme.of(context).primaryColor,
-                          size: 20,
-                        ),
-                        tileColor: Color(0xFFF5F5F5),
-                        dense: false,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        context.goNamed('About');
-                      },
-                      child: ListTile(
-                        title: Text(
-                          FFLocalizations.of(context).getText(
-                            'avj87nhf' /* О приложении */,
-                          ),
-                          style: FlutterFlowTheme.of(context)
-                              .subtitle2
-                              .override(
-                                fontFamily: 'Montserrat',
-                                color: FlutterFlowTheme.of(context).primaryText,
-                              ),
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Color(0xFF303030),
-                          size: 20,
-                        ),
-                        tileColor: Color(0xFFF5F5F5),
-                        dense: false,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        await revenue_cat.restorePurchases();
-                      },
-                      child: ListTile(
-                        title: Text(
-                          FFLocalizations.of(context).getText(
-                            'zr3ei8fz' /* Отменить подписку */,
-                          ),
-                          style: FlutterFlowTheme.of(context)
-                              .subtitle2
-                              .override(
-                                fontFamily: 'Montserrat',
-                                color: FlutterFlowTheme.of(context).primaryText,
-                              ),
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Color(0xFF303030),
-                          size: 20,
-                        ),
-                        tileColor: Color(0xFFF5F5F5),
-                        dense: false,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 24, 16, 0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                FFLocalizations.of(context).getText(
-                                  'tbf3qxuc' /* Текущая подписка */,
-                                ),
-                                style: FlutterFlowTheme.of(context)
-                                    .subtitle1
-                                    .override(
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: Color(0xFF242424),
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        24, 0, 24, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            FlutterFlowIconButton(
-                                              borderColor: Colors.transparent,
-                                              borderRadius: 30,
-                                              borderWidth: 1,
-                                              buttonSize: 60,
-                                              fillColor: Color(0xFFE9CE12),
-                                              icon: FaIcon(
-                                                FontAwesomeIcons.crown,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                                size: 25,
-                                              ),
-                                              onPressed: () {
-                                                print('IconButton pressed ...');
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        Expanded(
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    24, 0, 0, 0),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  revenue_cat
-                                                      .offerings!
-                                                      .current!
-                                                      .annual!
-                                                      .product
-                                                      .title,
-                                                  style: FlutterFlowTheme.of(
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          24.0, 0.0, 24.0, 0.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              FlutterFlowIconButton(
+                                                borderColor: Colors.transparent,
+                                                borderRadius: 30.0,
+                                                borderWidth: 1.0,
+                                                buttonSize: 60.0,
+                                                fillColor: Color(0xFFE9CE12),
+                                                icon: FaIcon(
+                                                  FontAwesomeIcons.crown,
+                                                  color: FlutterFlowTheme.of(
                                                           context)
-                                                      .title3
-                                                      .override(
-                                                        fontFamily:
-                                                            'Montserrat',
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
+                                                      .secondaryBackground,
+                                                  size: 25.0,
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 4, 0, 0),
-                                                  child: Text(
+                                                onPressed: () {
+                                                  print(
+                                                      'IconButton pressed ...');
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      24.0, 0.0, 0.0, 0.0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
                                                     revenue_cat
                                                         .offerings!
                                                         .current!
                                                         .annual!
-                                                        .product
-                                                        .priceString,
+                                                        .storeProduct
+                                                        .title,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .subtitle1,
+                                                        .headlineSmall
+                                                        .override(
+                                                          fontFamily:
+                                                              'Montserrat',
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
                                                   ),
-                                                ),
-                                              ],
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 4.0,
+                                                                0.0, 0.0),
+                                                    child: Text(
+                                                      revenue_cat
+                                                          .offerings!
+                                                          .current!
+                                                          .annual!
+                                                          .storeProduct
+                                                          .priceString,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .titleMedium,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Container(
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: Color(0xFF242424),
-                                      width: 1,
+                                  Container(
+                                    height: 100.0,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      border: Border.all(
+                                        color: Color(0xFF242424),
+                                        width: 1.0,
+                                      ),
                                     ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        24, 0, 24, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            FlutterFlowIconButton(
-                                              borderColor: Colors.transparent,
-                                              borderRadius: 30,
-                                              borderWidth: 1,
-                                              buttonSize: 60,
-                                              fillColor: Color(0xFFF3E36A),
-                                              icon: FaIcon(
-                                                FontAwesomeIcons.crown,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                                size: 25,
-                                              ),
-                                              onPressed: () {
-                                                print('IconButton pressed ...');
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        Expanded(
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    24, 0, 0, 0),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  revenue_cat
-                                                      .offerings!
-                                                      .current!
-                                                      .monthly!
-                                                      .product
-                                                      .title,
-                                                  style: FlutterFlowTheme.of(
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          24.0, 0.0, 24.0, 0.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              FlutterFlowIconButton(
+                                                borderColor: Colors.transparent,
+                                                borderRadius: 30.0,
+                                                borderWidth: 1.0,
+                                                buttonSize: 60.0,
+                                                fillColor: Color(0xFFF3E36A),
+                                                icon: FaIcon(
+                                                  FontAwesomeIcons.crown,
+                                                  color: FlutterFlowTheme.of(
                                                           context)
-                                                      .title3
-                                                      .override(
-                                                        fontFamily:
-                                                            'Montserrat',
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
+                                                      .secondaryBackground,
+                                                  size: 25.0,
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 4, 0, 0),
-                                                  child: Text(
+                                                onPressed: () {
+                                                  print(
+                                                      'IconButton pressed ...');
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      24.0, 0.0, 0.0, 0.0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
                                                     revenue_cat
                                                         .offerings!
                                                         .current!
                                                         .monthly!
-                                                        .product
-                                                        .priceString,
+                                                        .storeProduct
+                                                        .title,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .subtitle1,
+                                                        .headlineSmall
+                                                        .override(
+                                                          fontFamily:
+                                                              'Montserrat',
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
                                                   ),
-                                                ),
-                                              ],
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 4.0,
+                                                                0.0, 0.0),
+                                                    child: Text(
+                                                      revenue_cat
+                                                          .offerings!
+                                                          .current!
+                                                          .monthly!
+                                                          .storeProduct
+                                                          .priceString,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .titleMedium,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Container(
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: Color(0xFF242424),
-                                      width: 1,
+                                  Container(
+                                    height: 100.0,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      border: Border.all(
+                                        color: Color(0xFF242424),
+                                        width: 1.0,
+                                      ),
                                     ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        24, 0, 24, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            FlutterFlowIconButton(
-                                              borderColor: Colors.transparent,
-                                              borderRadius: 30,
-                                              borderWidth: 1,
-                                              buttonSize: 60,
-                                              fillColor: Color(0xFFB6BAC1),
-                                              icon: Icon(
-                                                Icons.watch_later_outlined,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                                size: 30,
-                                              ),
-                                              onPressed: () {
-                                                print('IconButton pressed ...');
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        Expanded(
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    24, 0, 0, 0),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  FFLocalizations.of(context)
-                                                      .getText(
-                                                    'pj7mqiyc' /* Пробный доступ */,
-                                                  ),
-                                                  style: FlutterFlowTheme.of(
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          24.0, 0.0, 24.0, 0.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              FlutterFlowIconButton(
+                                                borderColor: Colors.transparent,
+                                                borderRadius: 30.0,
+                                                borderWidth: 1.0,
+                                                buttonSize: 60.0,
+                                                fillColor: Color(0xFFB6BAC1),
+                                                icon: Icon(
+                                                  Icons.watch_later_outlined,
+                                                  color: FlutterFlowTheme.of(
                                                           context)
-                                                      .title3
-                                                      .override(
-                                                        fontFamily:
-                                                            'Montserrat',
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
+                                                      .secondaryBackground,
+                                                  size: 30.0,
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 4, 0, 0),
-                                                  child: Text(
+                                                onPressed: () {
+                                                  print(
+                                                      'IconButton pressed ...');
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      24.0, 0.0, 0.0, 0.0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
                                                     FFLocalizations.of(context)
                                                         .getText(
-                                                      '1h1pa61i' /* Бесплатно 30 дней */,
+                                                      '7lysnqce' /* Пробный доступ */,
                                                     ),
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .subtitle1,
+                                                        .headlineSmall
+                                                        .override(
+                                                          fontFamily:
+                                                              'Montserrat',
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
                                                   ),
-                                                ),
-                                              ],
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 4.0,
+                                                                0.0, 0.0),
+                                                    child: Text(
+                                                      FFLocalizations.of(
+                                                              context)
+                                                          .getText(
+                                                        '62ocl5je' /* Бесплатно 30 дней */,
+                                                      ),
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .titleMedium,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                InkWell(
-                                  onTap: () async {
-                                    await revenue_cat.restorePurchases();
-                                  },
-                                  child: Text(
-                                    FFLocalizations.of(context).getText(
-                                      'nyk699iv' /* Отмена подписки */,
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 12.0, 0.0, 0.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      await revenue_cat.restorePurchases();
+                                    },
+                                    child: Text(
+                                      FFLocalizations.of(context).getText(
+                                        '06vu7j7f' /* Отмена подписки */,
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .titleMedium
+                                          .override(
+                                            fontFamily: 'Montserrat',
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                     ),
-                                    style: FlutterFlowTheme.of(context)
-                                        .subtitle1
-                                        .override(
-                                          fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.w600,
-                                        ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          appBar: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            automaticallyImplyLeading: false,
-            title: Text(
-              FFLocalizations.of(context).getText(
-                'gdkvduyn' /* Главная страница */,
-              ),
-              style: FlutterFlowTheme.of(context).subtitle1,
-            ),
-            actions: [
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 20,
-                borderWidth: 1,
-                buttonSize: 50,
-                icon: Icon(
-                  FFIcons.kfreeIconFontSettings3917058,
-                  color: FlutterFlowTheme.of(context).primaryText,
-                  size: 20,
+            appBar: AppBar(
+              backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+              automaticallyImplyLeading: false,
+              title: Text(
+                FFLocalizations.of(context).getText(
+                  'gdkvduyn' /* Главная страница */,
                 ),
-                onPressed: () async {
-                  scaffoldKey.currentState!.openDrawer();
-                },
+                style: FlutterFlowTheme.of(context).titleMedium,
               ),
-            ],
-            centerTitle: true,
-            elevation: 0,
-          ),
-          body: SafeArea(
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+              actions: [
+                FlutterFlowIconButton(
+                  borderColor: Colors.transparent,
+                  borderRadius: 20.0,
+                  borderWidth: 1.0,
+                  buttonSize: 50.0,
+                  icon: Icon(
+                    FFIcons.kfreeIconFontSettings3917058,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 20.0,
+                  ),
+                  onPressed: () async {
+                    scaffoldKey.currentState!.openDrawer();
+                  },
+                ),
+              ],
+              centerTitle: true,
+              elevation: 0.0,
+            ),
+            body: SafeArea(
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 132,
+                      width: MediaQuery.of(context).size.width * 1.0,
+                      height: 132.0,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
                       ),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 0.0, 16.0, 0.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             AuthUserStreamWidget(
                               builder: (context) => Container(
-                                width: 80,
-                                height: 80,
+                                width: 80.0,
+                                height: 80.0,
                                 clipBehavior: Clip.antiAlias,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
@@ -669,7 +703,7 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                             Expanded(
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    16, 20, 0, 20),
+                                    16.0, 20.0, 0.0, 20.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   crossAxisAlignment:
@@ -680,13 +714,16 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                         '70fgqw00' /* Добро пожаловать, */,
                                       ),
                                       style: FlutterFlowTheme.of(context)
-                                          .subtitle1,
+                                          .titleMedium,
                                     ),
                                     AuthUserStreamWidget(
                                       builder: (context) => Text(
-                                        currentUserDisplayName,
+                                        valueOrDefault<String>(
+                                          currentUserDisplayName,
+                                          'Display Name',
+                                        ),
                                         style: FlutterFlowTheme.of(context)
-                                            .subtitle1
+                                            .titleMedium
                                             .override(
                                               fontFamily: 'Montserrat',
                                               fontWeight: FontWeight.w600,
@@ -695,6 +732,10 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                     ),
                                     Spacer(),
                                     InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
                                       onTap: () async {
                                         FFAppState().update(() {
                                           FFAppState().birthday =
@@ -715,7 +756,7 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                           'v333pgi1' /* Посмотреть профиль */,
                                         ),
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText1,
+                                            .bodyMedium,
                                       ),
                                     ),
                                   ],
@@ -727,15 +768,17 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
                       child: Container(
-                        width: 100,
+                        width: 100.0,
                         decoration: BoxDecoration(
                           color:
                               FlutterFlowTheme.of(context).secondaryBackground,
                         ),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              12.0, 0.0, 12.0, 0.0),
                           child: StreamBuilder<List<ToolsRecord>>(
                             stream: queryToolsRecord(
                               queryBuilder: (toolsRecord) => toolsRecord.where(
@@ -748,11 +791,11 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                               if (!snapshot.hasData) {
                                 return Center(
                                   child: SizedBox(
-                                    width: 50,
-                                    height: 50,
+                                    width: 50.0,
+                                    height: 50.0,
                                     child: CircularProgressIndicator(
                                       color: FlutterFlowTheme.of(context)
-                                          .secondaryColor,
+                                          .secondary,
                                     ),
                                   ),
                                 );
@@ -773,7 +816,7 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 14, 0, 0),
+                                        0.0, 14.0, 0.0, 0.0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
@@ -784,7 +827,7 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                             'vt2osvnv' /* Мои инструменты */,
                                           ),
                                           style: FlutterFlowTheme.of(context)
-                                              .subtitle1,
+                                              .titleMedium,
                                         ),
                                         if ((columnToolsRecord != null) != null)
                                           FFButtonWidget(
@@ -796,27 +839,32 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                               'qc5ogjsq' /* Смотреть все */,
                                             ),
                                             options: FFButtonOptions(
-                                              width: 110,
-                                              height: 31,
+                                              width: 110.0,
+                                              height: 31.0,
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                              iconPadding: EdgeInsetsDirectional
+                                                  .fromSTEB(0.0, 0.0, 0.0, 0.0),
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .secondaryColor,
+                                                      .secondary,
                                               textStyle: FlutterFlowTheme.of(
                                                       context)
-                                                  .subtitle2
+                                                  .titleSmall
                                                   .override(
                                                     fontFamily: 'Montserrat',
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .primaryText,
-                                                    fontSize: 12,
+                                                    fontSize: 12.0,
                                                   ),
+                                              elevation: 2.0,
                                               borderSide: BorderSide(
                                                 color: Colors.transparent,
-                                                width: 1,
+                                                width: 1.0,
                                               ),
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(8.0),
                                             ),
                                           ),
                                       ],
@@ -824,7 +872,7 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 12, 0, 0),
+                                        0.0, 12.0, 0.0, 0.0),
                                     child: FutureBuilder<List<ToolsRecord>>(
                                       future: queryToolsRecordOnce(
                                         queryBuilder: (toolsRecord) =>
@@ -841,12 +889,12 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                         if (!snapshot.hasData) {
                                           return Center(
                                             child: SizedBox(
-                                              width: 50,
-                                              height: 50,
+                                              width: 50.0,
+                                              height: 50.0,
                                               child: CircularProgressIndicator(
                                                 color:
                                                     FlutterFlowTheme.of(context)
-                                                        .secondaryColor,
+                                                        .secondary,
                                               ),
                                             ),
                                           );
@@ -868,8 +916,14 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                     listViewIndex];
                                             return Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 0, 0, 16),
+                                                  .fromSTEB(
+                                                      0.0, 0.0, 0.0, 16.0),
                                               child: InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
                                                 onTap: () async {
                                                   context.pushNamed(
                                                     'ToolDetailPage',
@@ -897,12 +951,15 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                     ClipRRect(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              16),
+                                                              16.0),
                                                       child: Image.network(
-                                                        listViewToolsRecord
-                                                            .photo!,
-                                                        width: 80,
-                                                        height: 116,
+                                                        valueOrDefault<String>(
+                                                          listViewToolsRecord
+                                                              .photo,
+                                                          'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/on-tools-afj9b2/assets/e7eohoj7hn57/uploadImg.png',
+                                                        ),
+                                                        width: 80.0,
+                                                        height: 116.0,
                                                         fit: BoxFit.cover,
                                                       ),
                                                     ),
@@ -910,8 +967,11 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                       child: Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
-                                                                .fromSTEB(12, 0,
-                                                                    0, 0),
+                                                                .fromSTEB(
+                                                                    12.0,
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0),
                                                         child: Column(
                                                           mainAxisSize:
                                                               MainAxisSize.max,
@@ -920,11 +980,15 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                                   .stretch,
                                                           children: [
                                                             Text(
-                                                              listViewToolsRecord
-                                                                  .toolName!,
+                                                              valueOrDefault<
+                                                                  String>(
+                                                                listViewToolsRecord
+                                                                    .toolName,
+                                                                'Tool Name',
+                                                              ),
                                                               style: FlutterFlowTheme
                                                                       .of(context)
-                                                                  .subtitle2
+                                                                  .titleSmall
                                                                   .override(
                                                                     fontFamily:
                                                                         'Montserrat',
@@ -937,17 +1001,21 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                               padding:
                                                                   EdgeInsetsDirectional
                                                                       .fromSTEB(
-                                                                          0,
-                                                                          12,
-                                                                          0,
-                                                                          12),
+                                                                          0.0,
+                                                                          12.0,
+                                                                          0.0,
+                                                                          12.0),
                                                               child: Text(
-                                                                listViewToolsRecord
-                                                                    .description!,
+                                                                valueOrDefault<
+                                                                    String>(
+                                                                  listViewToolsRecord
+                                                                      .description,
+                                                                  'Description',
+                                                                ),
                                                                 maxLines: 2,
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .bodyText1,
+                                                                    .bodyMedium,
                                                               ),
                                                             ),
                                                             Row(
@@ -959,56 +1027,72 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                                       .spaceBetween,
                                                               children: [
                                                                 Text(
-                                                                  '${listViewToolsRecord.price?.toString()} тг',
+                                                                  valueOrDefault<
+                                                                      String>(
+                                                                    '${listViewToolsRecord.price?.toString()} тг',
+                                                                    '1 KZT',
+                                                                  ),
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
-                                                                      .bodyText1,
+                                                                      .bodyMedium,
                                                                 ),
-                                                                Container(
-                                                                  width: 1,
-                                                                  height: 18,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .primaryText,
+                                                                if (false)
+                                                                  Container(
+                                                                    width: 1.0,
+                                                                    height:
+                                                                        18.0,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .primaryText,
+                                                                    ),
                                                                   ),
-                                                                ),
                                                                 Text(
-                                                                  dateTimeFormat(
-                                                                    'd/M/y',
-                                                                    listViewToolsRecord
-                                                                        .buyDate!,
-                                                                    locale: FFLocalizations.of(
-                                                                            context)
-                                                                        .languageCode,
+                                                                  valueOrDefault<
+                                                                      String>(
+                                                                    dateTimeFormat(
+                                                                      'd/M/y',
+                                                                      listViewToolsRecord
+                                                                          .buyDate,
+                                                                      locale: FFLocalizations.of(
+                                                                              context)
+                                                                          .languageCode,
+                                                                    ),
+                                                                    'Date',
                                                                   ),
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
-                                                                      .bodyText1,
+                                                                      .bodyMedium,
                                                                 ),
-                                                                Container(
-                                                                  width: 1,
-                                                                  height: 18,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .primaryText,
+                                                                if (false)
+                                                                  Container(
+                                                                    width: 1.0,
+                                                                    height:
+                                                                        18.0,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .primaryText,
+                                                                    ),
                                                                   ),
-                                                                ),
                                                                 Text(
-                                                                  listViewToolsRecord
-                                                                      .shopName!,
+                                                                  valueOrDefault<
+                                                                      String>(
+                                                                    listViewToolsRecord
+                                                                        .shopName,
+                                                                    'Shop Name',
+                                                                  ),
                                                                   textAlign:
                                                                       TextAlign
                                                                           .end,
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
-                                                                      .bodyText1,
+                                                                      .bodyMedium,
                                                                 ),
                                                               ],
                                                             ),
@@ -1033,7 +1117,8 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
                       child: StreamBuilder<List<ReportsRecord>>(
                         stream: queryReportsRecord(
                           parent: currentUserReference,
@@ -1044,11 +1129,10 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                           if (!snapshot.hasData) {
                             return Center(
                               child: SizedBox(
-                                width: 50,
-                                height: 50,
+                                width: 50.0,
+                                height: 50.0,
                                 child: CircularProgressIndicator(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryColor,
+                                  color: FlutterFlowTheme.of(context).secondary,
                                 ),
                               ),
                             );
@@ -1065,21 +1149,21 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                   ? reportsContainerReportsRecordList.first
                                   : null;
                           return Container(
-                            width: 100,
+                            width: 100.0,
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
                             ),
                             child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 0.0, 12.0, 0.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 14, 0, 0),
+                                        0.0, 14.0, 0.0, 0.0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
@@ -1090,7 +1174,7 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                             'ew9kd6ks' /* Мои отчеты */,
                                           ),
                                           style: FlutterFlowTheme.of(context)
-                                              .subtitle1,
+                                              .titleMedium,
                                         ),
                                         if (reportsContainerReportsRecord!
                                                 .reference ==
@@ -1111,28 +1195,36 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                 'bttsi936' /* Смотреть все */,
                                               ),
                                               options: FFButtonOptions(
-                                                width: 110,
-                                                height: 31,
+                                                width: 110.0,
+                                                height: 31.0,
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        0.0, 0.0, 0.0, 0.0),
+                                                iconPadding:
+                                                    EdgeInsetsDirectional
+                                                        .fromSTEB(
+                                                            0.0, 0.0, 0.0, 0.0),
                                                 color:
                                                     FlutterFlowTheme.of(context)
-                                                        .secondaryColor,
+                                                        .secondary,
                                                 textStyle: FlutterFlowTheme.of(
                                                         context)
-                                                    .subtitle2
+                                                    .titleSmall
                                                     .override(
                                                       fontFamily: 'Montserrat',
                                                       color:
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .primaryText,
-                                                      fontSize: 12,
+                                                      fontSize: 12.0,
                                                     ),
+                                                elevation: 2.0,
                                                 borderSide: BorderSide(
                                                   color: Colors.transparent,
-                                                  width: 1,
+                                                  width: 1.0,
                                                 ),
                                                 borderRadius:
-                                                    BorderRadius.circular(8),
+                                                    BorderRadius.circular(8.0),
                                               ),
                                             ),
                                           ),
@@ -1141,7 +1233,7 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 12, 0, 0),
+                                        0.0, 12.0, 0.0, 0.0),
                                     child: StreamBuilder<List<ReportsRecord>>(
                                       stream: queryReportsRecord(
                                         parent: currentUserReference,
@@ -1152,12 +1244,12 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                         if (!snapshot.hasData) {
                                           return Center(
                                             child: SizedBox(
-                                              width: 50,
-                                              height: 50,
+                                              width: 50.0,
+                                              height: 50.0,
                                               child: CircularProgressIndicator(
                                                 color:
                                                     FlutterFlowTheme.of(context)
-                                                        .secondaryColor,
+                                                        .secondary,
                                               ),
                                             ),
                                           );
@@ -1188,22 +1280,25 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                       MainAxisSize.max,
                                                   children: [
                                                     Text(
-                                                      dateTimeFormat(
-                                                        'd/M/y',
-                                                        listViewReportsRecord
-                                                            .startDate!,
-                                                        locale:
-                                                            FFLocalizations.of(
-                                                                    context)
-                                                                .languageCode,
+                                                      valueOrDefault<String>(
+                                                        dateTimeFormat(
+                                                          'd/M/y',
+                                                          listViewReportsRecord
+                                                              .startDate,
+                                                          locale:
+                                                              FFLocalizations.of(
+                                                                      context)
+                                                                  .languageCode,
+                                                        ),
+                                                        'Date',
                                                       ),
                                                       style: FlutterFlowTheme
                                                               .of(context)
-                                                          .bodyText1
+                                                          .bodyMedium
                                                           .override(
                                                             fontFamily:
                                                                 'Montserrat',
-                                                            fontSize: 16,
+                                                            fontSize: 16.0,
                                                             fontWeight:
                                                                 FontWeight.w300,
                                                           ),
@@ -1216,32 +1311,35 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                       ),
                                                       style: FlutterFlowTheme
                                                               .of(context)
-                                                          .bodyText1
+                                                          .bodyMedium
                                                           .override(
                                                             fontFamily:
                                                                 'Montserrat',
-                                                            fontSize: 16,
+                                                            fontSize: 16.0,
                                                             fontWeight:
                                                                 FontWeight.w300,
                                                           ),
                                                     ),
                                                     Text(
-                                                      dateTimeFormat(
-                                                        'd/M/y',
-                                                        listViewReportsRecord
-                                                            .endDate!,
-                                                        locale:
-                                                            FFLocalizations.of(
-                                                                    context)
-                                                                .languageCode,
+                                                      valueOrDefault<String>(
+                                                        dateTimeFormat(
+                                                          'd/M/y',
+                                                          listViewReportsRecord
+                                                              .endDate,
+                                                          locale:
+                                                              FFLocalizations.of(
+                                                                      context)
+                                                                  .languageCode,
+                                                        ),
+                                                        'Date',
                                                       ),
                                                       style: FlutterFlowTheme
                                                               .of(context)
-                                                          .bodyText1
+                                                          .bodyMedium
                                                           .override(
                                                             fontFamily:
                                                                 'Montserrat',
-                                                            fontSize: 16,
+                                                            fontSize: 16.0,
                                                             fontWeight:
                                                                 FontWeight.w300,
                                                           ),
@@ -1250,7 +1348,8 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(8, 0, 0, 0),
+                                                      .fromSTEB(
+                                                          8.0, 0.0, 0.0, 0.0),
                                                   child: Row(
                                                     mainAxisSize:
                                                         MainAxisSize.max,
@@ -1261,16 +1360,16 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                       FlutterFlowIconButton(
                                                         borderColor:
                                                             Colors.transparent,
-                                                        borderRadius: 30,
-                                                        borderWidth: 1,
-                                                        buttonSize: 50,
+                                                        borderRadius: 30.0,
+                                                        borderWidth: 1.0,
+                                                        buttonSize: 50.0,
                                                         icon: Icon(
                                                           FFIcons
                                                               .kfreeIconFontDownload3917330,
                                                           color: FlutterFlowTheme
                                                                   .of(context)
                                                               .primaryText,
-                                                          size: 24,
+                                                          size: 24.0,
                                                         ),
                                                         onPressed: () {
                                                           print(
@@ -1281,21 +1380,24 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                         padding:
                                                             EdgeInsetsDirectional
                                                                 .fromSTEB(
-                                                                    8, 0, 0, 0),
+                                                                    8.0,
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0),
                                                         child:
                                                             FlutterFlowIconButton(
                                                           borderColor: Colors
                                                               .transparent,
-                                                          borderRadius: 30,
-                                                          borderWidth: 1,
-                                                          buttonSize: 50,
+                                                          borderRadius: 30.0,
+                                                          borderWidth: 1.0,
+                                                          buttonSize: 50.0,
                                                           icon: Icon(
                                                             FFIcons
                                                                 .kfreeIconFontTrash3917378,
                                                             color: FlutterFlowTheme
                                                                     .of(context)
                                                                 .primaryText,
-                                                            size: 24,
+                                                            size: 24.0,
                                                           ),
                                                           onPressed: () async {
                                                             await showModalBottomSheet(
@@ -1304,17 +1406,26 @@ class _ProfileHomePageWidgetState extends State<ProfileHomePageWidget> {
                                                               backgroundColor:
                                                                   Colors
                                                                       .transparent,
+                                                              barrierColor: Color(
+                                                                  0x00000000),
                                                               context: context,
                                                               builder:
-                                                                  (context) {
-                                                                return Padding(
-                                                                  padding: MediaQuery.of(
+                                                                  (bottomSheetContext) {
+                                                                return GestureDetector(
+                                                                  onTap: () => FocusScope.of(
                                                                           context)
-                                                                      .viewInsets,
+                                                                      .requestFocus(
+                                                                          _unfocusNode),
                                                                   child:
-                                                                      ReportDelWidget(
-                                                                    deleteReport:
-                                                                        listViewReportsRecord,
+                                                                      Padding(
+                                                                    padding: MediaQuery.of(
+                                                                            bottomSheetContext)
+                                                                        .viewInsets,
+                                                                    child:
+                                                                        ReportDelWidget(
+                                                                      deleteReport:
+                                                                          listViewReportsRecord,
+                                                                    ),
                                                                   ),
                                                                 );
                                                               },

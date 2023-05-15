@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+import 'dart:async';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime_type/mime_type.dart';
+import 'package:video_player/video_player.dart';
 
-import '../auth/auth_util.dart';
+import '../auth/firebase_auth/auth_util.dart';
 import 'flutter_flow_util.dart';
 
 const allowedFormats = {'image/png', 'image/jpeg', 'video/mp4', 'image/gif'};
@@ -17,10 +18,23 @@ class SelectedMedia {
     this.storagePath = '',
     this.filePath,
     required this.bytes,
+    this.dimensions,
+    this.blurHash,
   });
   final String storagePath;
   final String? filePath;
   final Uint8List bytes;
+  final MediaDimensions? dimensions;
+  final String? blurHash;
+}
+
+class MediaDimensions {
+  const MediaDimensions({
+    this.height,
+    this.width,
+  });
+  final double? height;
+  final double? width;
 }
 
 enum MediaSource {
@@ -40,6 +54,8 @@ Future<List<SelectedMedia>?> selectMediaWithSourceBottomSheet({
   String pickerFontFamily = 'Roboto',
   Color textColor = const Color(0xFF111417),
   Color backgroundColor = const Color(0xFFF5F5F5),
+  bool includeDimensions = false,
+  bool includeBlurHash = false,
 }) async {
   final createUploadMediaListTile =
       (String label, MediaSource mediaSource) => ListTile(
@@ -127,6 +143,8 @@ Future<List<SelectedMedia>?> selectMediaWithSourceBottomSheet({
     isVideo: mediaSource == MediaSource.videoGallery ||
         (mediaSource == MediaSource.camera && allowVideo && !allowPhoto),
     mediaSource: mediaSource,
+    includeDimensions: includeDimensions,
+    includeBlurHash: includeBlurHash,
   );
 }
 
@@ -138,6 +156,8 @@ Future<List<SelectedMedia>?> selectMedia({
   bool isVideo = false,
   MediaSource mediaSource = MediaSource.camera,
   bool multiImage = false,
+  bool includeDimensions = false,
+  bool includeBlurHash = false,
 }) async {
   final picker = ImagePicker();
 
@@ -156,10 +176,17 @@ Future<List<SelectedMedia>?> selectMedia({
       final media = e.value;
       final mediaBytes = await media.readAsBytes();
       final path = _getStoragePath(storageFolderPath, media.name, false, index);
+      final dimensions = includeDimensions
+          ? isVideo
+              ? _getVideoDimensions(media.path)
+              : _getImageDimensions(mediaBytes)
+          : null;
+
       return SelectedMedia(
         storagePath: path,
         filePath: media.path,
         bytes: mediaBytes,
+        dimensions: await dimensions,
       );
     }));
   }
@@ -181,11 +208,18 @@ Future<List<SelectedMedia>?> selectMedia({
     return null;
   }
   final path = _getStoragePath(storageFolderPath, pickedMedia!.name, isVideo);
+  final dimensions = includeDimensions
+      ? isVideo
+          ? _getVideoDimensions(pickedMedia.path)
+          : _getImageDimensions(mediaBytes)
+      : null;
+
   return [
     SelectedMedia(
       storagePath: path,
       filePath: pickedMedia.path,
       bytes: mediaBytes,
+      dimensions: await dimensions,
     ),
   ];
 }
@@ -204,10 +238,10 @@ bool validateFileFormat(String filePath, BuildContext context) {
 
 Future<SelectedMedia?> selectFile({
   String? storageFolderPath,
-  List<String> allowedExtensions = const ['pdf'],
+  List<String>? allowedExtensions,
 }) async {
   final pickedFiles = await FilePicker.platform.pickFiles(
-    type: FileType.custom,
+    type: allowedExtensions != null ? FileType.custom : FileType.any,
     allowedExtensions: allowedExtensions,
     withData: true,
   );
@@ -225,6 +259,22 @@ Future<SelectedMedia?> selectFile({
     filePath: isWeb ? null : file.path,
     bytes: file.bytes!,
   );
+}
+
+Future<MediaDimensions> _getImageDimensions(Uint8List mediaBytes) async {
+  final image = await decodeImageFromList(mediaBytes);
+  return MediaDimensions(
+    width: image.width.toDouble(),
+    height: image.height.toDouble(),
+  );
+}
+
+Future<MediaDimensions> _getVideoDimensions(String path) async {
+  final VideoPlayerController videoPlayerController =
+      VideoPlayerController.asset(path);
+  await videoPlayerController.initialize();
+  final size = videoPlayerController.value.size;
+  return MediaDimensions(width: size.width, height: size.height);
 }
 
 String _getStoragePath(
